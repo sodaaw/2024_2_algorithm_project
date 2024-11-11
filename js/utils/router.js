@@ -1,3 +1,5 @@
+import { render as renderLogin } from "../pages/login.js";
+
 export function router() {
   const routes = {
     "": () => import("../pages/home.js").then((module) => module.render()),
@@ -13,7 +15,15 @@ export function router() {
   };
 
   const path = location.hash;
-  const route = routes[path];
-  if (route) route();
-  else console.error(`Route not found: ${path}`);
+  if (path === "#login") {
+    renderLogin();
+  } else {
+    const route = routes[path];
+    if (route) route();
+    else console.error(`Route not found: ${path}`);
+  }
 }
+
+// 페이지 로드 시 및 해시 변경 시 router 호출
+window.addEventListener("load", router);
+window.addEventListener("hashchange", router);
