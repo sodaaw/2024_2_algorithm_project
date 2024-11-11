@@ -1,0 +1,229 @@
+/* 기본 스타일 */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f4f4;
+}
+
+.navBar {
+  width: 100%;
+  background-color: #333;
+  padding: 10px 0;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: auto;
+  list-style: none;
+  padding: 0 20px;
+}
+
+.logo {
+  width: 100px;
+  height: auto;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+  color: white;
+}
+
+.nav li {
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 18px; /* 크기 증가 */
+}
+
+.btn-group .nav-btn {
+  padding: 10px 20px;
+  margin: 0 5px;
+  background-color: #555;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.loginBox {
+  max-width: 30vw; /* 크기 증가 */
+  width: 30vw;
+  margin: 30px;
+  background-color: white;
+  padding: 50px; /* 여백 증가 */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.text-login {
+  font-size: 28px; /* 크기 증가 */
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 40px; /* 여백 증가 */
+}
+
+.loginForm {
+  width: 100%;
+  padding: 15px; /* 높이 증가 */
+  margin-bottom: 20px; /* 여백 증가 */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.remember-chk {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.chk {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.remember-text {
+  font-size: 16px; /* 크기 증가 */
+  color: #666;
+}
+
+.loginBtn {
+  width: 100%;
+  padding: 15px; /* 높이 증가 */
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px; /* 크기 증가 */
+  margin-top: 30px; /* 여백 증가 */
+}
+
+.findInfo {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+  font-size: 16px; /* 크기 증가 */
+  color: #666;
+}
+
+.signupBox {
+  margin-top: 30px; /* 여백 증가 */
+  text-align: center;
+}
+
+.text-signup {
+  font-size: 18px; /* 크기 증가 */
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.signupBtn {
+  width: 100%;
+  padding: 15px; /* 높이 증가 */
+  background-color: #555;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px; /* 크기 증가 */
+}
+
+.sns-login {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 30px; /* 여백 증가 */
+}
+
+.naver-login,
+.kakao-login {
+  width: 60px; /* 크기 증가 */
+  height: 60px;
+  cursor: pointer;
+}
+
+/* 태블릿 화면 대응 */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .btn-group {
+    margin-top: 15px;
+  }
+
+  .loginBox {
+    padding: 40px; /* 태블릿에서 여백 조정 */
+  }
+
+  .text-login {
+    font-size: 24px; /* 크기 조정 */
+  }
+
+  .signupBox .text-signup {
+    font-size: 16px;
+  }
+
+  .sns-login img {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* 모바일 화면 대응 */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+
+  .logo {
+    width: 80px;
+  }
+
+  .loginBox {
+    padding: 30px; /* 모바일에서 여백 조정 */
+    width: 100%;
+  }
+
+  .text-login {
+    font-size: 22px;
+  }
+
+  .nav li {
+    font-size: 16px;
+  }
+
+  .loginBtn,
+  .signupBtn {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .sns-login img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .remember-text,
+  .findInfo {
+    font-size: 14px;
+  }
+}
