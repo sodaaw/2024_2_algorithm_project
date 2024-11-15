@@ -41,7 +41,7 @@ body {
   color: white;
   cursor: pointer;
   font-weight: 500;
-  font-size: 18px; /* 크기 증가 */
+  font-size: 18px;
 }
 
 .btn-group .nav-btn {
@@ -56,35 +56,39 @@ body {
 }
 
 .loginBox {
-  max-width: 30vw; /* 크기 증가 */
-  width: 30vw;
-  margin: 30px;
+  width: 30vw; /* 화면 크기에 따라 반응하도록 설정 */
+  max-width: 400px; /* 최대 너비 제한 */
+  min-width: 280px; /* 최소 너비 제한 */
   background-color: white;
-  padding: 50px; /* 여백 증가 */
+  padding: 40px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .text-login {
-  font-size: 28px; /* 크기 증가 */
+  font-size: 2rem; /* 반응형 크기 조정 */
   font-weight: bold;
   text-align: center;
-  margin-bottom: 40px; /* 여백 증가 */
 }
 
 .loginForm {
-  width: 100%;
-  padding: 15px; /* 높이 증가 */
-  margin-bottom: 20px; /* 여백 증가 */
+  width: 100%; /* 부모 요소 너비에 맞춰 확장 */
+  padding: 15px;
+  margin-bottom: 20px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 1rem; /* 기본 폰트 크기 */
+  box-sizing: border-box;
 }
 
 .remember-chk {
   display: flex;
   align-items: center;
   margin-bottom: 25px;
+  width: 70%;
 }
 
 .chk {
@@ -93,61 +97,64 @@ body {
 }
 
 .remember-text {
-  font-size: 16px; /* 크기 증가 */
+  font-size: 0.9rem;
   color: #666;
 }
 
 .loginBtn {
   width: 100%;
-  padding: 15px; /* 높이 증가 */
+  padding: 15px;
   background-color: #333;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 18px; /* 크기 증가 */
-  margin-top: 30px; /* 여백 증가 */
+  font-size: 1.1rem;
+  margin-top: 20px;
 }
 
 .findInfo {
   display: flex;
-  justify-content: space-around;
-  margin-top: 15px;
-  font-size: 16px; /* 크기 증가 */
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.9rem;
   color: #666;
+  margin-top: 10px;
 }
 
 .signupBox {
-  margin-top: 30px; /* 여백 증가 */
+  margin-top: 20px;
   text-align: center;
+  width: 100%;
 }
 
 .text-signup {
-  font-size: 18px; /* 크기 증가 */
+  font-size: 1rem;
   color: #666;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .signupBtn {
   width: 100%;
-  padding: 15px; /* 높이 증가 */
+  padding: 15px;
   background-color: #555;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 18px; /* 크기 증가 */
+  font-size: 1.1rem;
 }
 
 .sns-login {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  margin-top: 30px; /* 여백 증가 */
+  margin-top: 20px;
 }
 
 .kakao-login {
-  width: 15vw; /* 크기 증가 */
+  width: 80%;
+  max-width: 180px;
   height: auto;
   cursor: pointer;
 }
@@ -170,20 +177,20 @@ body {
   }
 
   .loginBox {
-    padding: 40px; /* 태블릿에서 여백 조정 */
+    width: 60vw; /* 화면 크기에 맞춰 너비 조정 */
+    padding: 30px;
   }
 
   .text-login {
-    font-size: 24px; /* 크기 조정 */
+    font-size: 1.8rem;
   }
 
   .signupBox .text-signup {
-    font-size: 16px;
+    font-size: 0.9rem;
   }
 
   .sns-login img {
-    width: 30vw;
-    height: auto;
+    width: 70%;
   }
 }
 
@@ -198,31 +205,30 @@ body {
   }
 
   .loginBox {
-    padding: 30px; /* 모바일에서 여백 조정 */
-    width: 100%;
+    width: 80vw;
+    padding: 20px;
   }
 
   .text-login {
-    font-size: 22px;
+    font-size: 1.6rem;
   }
 
   .nav li {
-    font-size: 16px;
+    font-size: 0.9rem;
   }
 
   .loginBtn,
   .signupBtn {
     padding: 12px;
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   .sns-login img {
-    width: 2vw;
-    height: autopx;
+    width: 60%;
   }
 
   .remember-text,
   .findInfo {
-    font-size: 14px;
+    font-size: 0.8rem;
   }
 }
