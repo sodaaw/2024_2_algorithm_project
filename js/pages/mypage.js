@@ -1,4 +1,15 @@
-export function render() {
+// CSS 파일을 동적으로 로드하는 함수
+function loadCSS(href) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = href;
+    document.head.appendChild(link);
+  }
+  
+  // CSS 파일 로드
+  loadCSS("css/pages/mypage.css");
+  
+  export function render() {
     const app = document.getElementById("app");
   
     // localStorage에서 닉네임과 프로필 이미지 가져오기
@@ -27,4 +38,4 @@ export function render() {
       });
     });
   }
-  
+   
