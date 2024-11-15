@@ -1,4 +1,5 @@
 import { KAKAO_API_KEY } from '../apikey.js';
+import { navigateTo } from "../utils/router.js";
 
 function initializeKakao() {
   Kakao.init(KAKAO_API_KEY);
@@ -9,10 +10,11 @@ initializeKakao();
 
 export function loginWithKakao() {
   Kakao.Auth.login({
+    scope: 'profile_nickname, profile_image', // 프로필 닉네임과 이미지 권한 요청
     success: function(authObj) {
       console.log('카카오 로그인 성공:', authObj);
       Kakao.Auth.setAccessToken(authObj.access_token); // 액세스 토큰 저장
-      getUserInfo();
+      getUserInfo(); // 사용자 정보 요청
     },
     fail: function(err) {
       console.error('카카오 로그인 실패:', err);
@@ -25,8 +27,17 @@ function getUserInfo() {
     url: '/v2/user/me',
     success: function(res) {
       console.log('사용자 정보:', res);
+      
+      // 프로필 닉네임과 이미지 정보 저장
       const profileNickname = res.kakao_account.profile.nickname;
+      const profileImage = res.kakao_account.profile.profile_image_url;
+      
+      // 정보를 localStorage에 저장
       localStorage.setItem('nickname', profileNickname);
+      localStorage.setItem('profile_image', profileImage);
+      
+      // 로그인 성공 후 mypage로 이동
+      navigateTo("#mypage");
     },
     fail: function(error) {
       console.error('사용자 정보 요청 실패:', error);
