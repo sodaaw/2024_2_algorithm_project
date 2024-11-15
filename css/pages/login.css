@@ -146,10 +146,9 @@ body {
   margin-top: 30px; /* 여백 증가 */
 }
 
-.naver-login,
 .kakao-login {
-  width: 60px; /* 크기 증가 */
-  height: 60px;
+  width: 15vw; /* 크기 증가 */
+  height: auto;
   cursor: pointer;
 }
 
@@ -183,8 +182,8 @@ body {
   }
 
   .sns-login img {
-    width: 50px;
-    height: 50px;
+    width: 30vw;
+    height: auto;
   }
 }
 
@@ -218,8 +217,8 @@ body {
   }
 
   .sns-login img {
-    width: 40px;
-    height: 40px;
+    width: 2vw;
+    height: autopx;
   }
 
   .remember-text,

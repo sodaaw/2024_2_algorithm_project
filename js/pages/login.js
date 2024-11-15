@@ -44,8 +44,7 @@ export function render() {
       </div>
 
       <div class="sns-login">
-        <img class="naver-login" src="./assets/Naver.svg" />
-        <img class="kakao-login" src="./assets/Kakao.svg" />
+        <img class="kakao-login" src="images/login/kakao_login.png" />
       </div>
     </div>
   `;
