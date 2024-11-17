@@ -50,33 +50,15 @@ export function render() {
   app.innerHTML = `
     <div class="loginBox">
       <div class="text-login">로그인</div>
-      
-      <form class="form">
-        <input type="text" class="loginForm" placeholder="ID">
-      </form>
-      <form class="form">
-        <input type="password" class="loginForm" placeholder="Password">
-      </form>
-      <form class="remember-chk">
-        <svg class="chk" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
-          <circle cx="15" cy="15" r="13" fill="white" stroke="#D6D5D5" stroke-width="4"/>
-        </svg>
-        <span class="remember-text">로그인 정보 기억하기</span>
-      </form>
-      <button class="loginBtn">로그인</button>
-      <div class="findInfo">
-        <div class="findId">아이디 찾기</div>
-        <div class="findPw">비밀번호 찾기</div>
-      </div>
-   
-      <div class="signupBox">
-        <div class="text-signup">처음 오셨나요?</div>
-        <button class="signupBtn">Sign up</button>
-      </div>
-
-      <div class="sns-login">
-        <img class="kakao-login" src="images/login/kakao_login.png" alt="카카오 로그인 버튼" />
-      </div>
+      <p class="welcome-text">환영합니다! 👋</p>
+      <p class="instruction-text">
+        아이디와 비밀번호 입력하기 귀찮으시죠?<br>
+        1초 회원가입으로 입력없이 간편하게 로그인 하세요.
+      </p>
+      <button class="kakao-login">
+        <img src="images/login/kakao_icon.png" alt="카카오 아이콘" class="kakao-icon">
+        카카오 1초 로그인/회원가입
+      </button>
     </div>
   `;
 
