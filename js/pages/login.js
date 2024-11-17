@@ -48,34 +48,20 @@ function getUserInfo() {
 export function render() {
   const app = document.getElementById("app");
   app.innerHTML = `
-    <div class="navBar">
-      <ul class="container">
-        <img class="logo" src="./assets/logo.png" />
-        <div class="nav">
-          <li>home</li>
-          <li>mypage</li>
-        </div>
-        <div class="btn-group">
-          <button class="nav-btn login">로그인</button>
-          <button class="nav-btn signup">회원가입</button>
-        </div>
-      </ul>
-    </div>
-
     <div class="loginBox">
       <div class="text-login">로그인</div>
       
-      <form>
+      <form class="form">
         <input type="text" class="loginForm" placeholder="ID">
       </form>
-      <form>
+      <form class="form">
         <input type="password" class="loginForm" placeholder="Password">
       </form>
       <form class="remember-chk">
         <svg class="chk" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
           <circle cx="15" cy="15" r="13" fill="white" stroke="#D6D5D5" stroke-width="4"/>
         </svg>
-        <span class="remember-text">Remember me</span>
+        <span class="remember-text">로그인 정보 기억하기</span>
       </form>
       <button class="loginBtn">로그인</button>
       <div class="findInfo">

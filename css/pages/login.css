@@ -10,51 +10,6 @@ body {
   background-color: #f4f4f4;
 }
 
-.navBar {
-  width: 100%;
-  background-color: #333;
-  padding: 10px 0;
-}
-
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: auto;
-  list-style: none;
-  padding: 0 20px;
-}
-
-.logo {
-  width: 100px;
-  height: auto;
-}
-
-.nav {
-  display: flex;
-  gap: 20px;
-  color: white;
-}
-
-.nav li {
-  color: white;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 18px;
-}
-
-.btn-group .nav-btn {
-  padding: 10px 20px;
-  margin: 0 5px;
-  background-color: #555;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 16px;
-}
-
 .loginBox {
   width: 30vw; /* 화면 크기에 따라 반응하도록 설정 */
   max-width: 400px; /* 최대 너비 제한 */
@@ -68,10 +23,15 @@ body {
   align-items: center;
 }
 
+.form {
+  width: 100%;
+}
+
 .text-login {
   font-size: 2rem; /* 반응형 크기 조정 */
   font-weight: bold;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 .loginForm {
@@ -88,7 +48,7 @@ body {
   display: flex;
   align-items: center;
   margin-bottom: 25px;
-  width: 70%;
+  width: 100%;
 }
 
 .chk {
@@ -190,7 +150,7 @@ body {
   }
 
   .sns-login img {
-    width: 70%;
+    width: 100%;
   }
 }
 
