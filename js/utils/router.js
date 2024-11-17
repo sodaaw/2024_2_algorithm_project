@@ -1,5 +1,3 @@
-import { render as renderLogin } from "../pages/login.js";
-
 // 라우터 함수 정의
 export function router() {
   const routes = {
@@ -17,7 +15,12 @@ export function router() {
   if (route) {
     route();
   } else {
-    console.error(`Route not found: ${path}`);
+    // 기본 경로로 home 페이지를 렌더링
+    if (path === "") {
+      navigateTo(""); // 빈 경로로 설정
+    } else {
+      console.error(`Route not found: ${path}`);
+    }
   }
 }
 
