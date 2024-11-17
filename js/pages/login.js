@@ -49,7 +49,7 @@ export function render() {
   const app = document.getElementById("app");
   app.innerHTML = `
     <div class="loginBox">
-      <div class="text-login">로그인</div>
+      <div class="text-login">로그인/회원가입</div>
       <p class="welcome-text">환영합니다! 👋</p>
       <p class="instruction-text">
         아이디와 비밀번호 입력하기 귀찮으시죠?<br>
