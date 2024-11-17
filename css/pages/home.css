@@ -1,9 +1,10 @@
 /* 기본 스타일 */
-body {
+html, body {
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background-color: #fff;
+    background-color: #ffffff;
+    height: 100%;
 }
 
 .screen {
@@ -12,6 +13,7 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: 20px;
+    background-color: #ffffff;
 }
 
 .content {
@@ -21,6 +23,8 @@ body {
     max-width: 1200px;
     justify-content: center;
     align-items: center;
+    gap: 0.1vw;
+    background-color: #ffffff;
 }
 
 .left-container {
@@ -29,7 +33,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding: 20px;
+    padding: 40px;
     text-align: left;
 }
 
@@ -47,7 +51,7 @@ body {
     color: #666;
     margin-bottom: 40px;
     line-height: 1.5;
-    text-align: center;
+    text-align: left;
 }
 
 .cta {
@@ -60,7 +64,7 @@ body {
 
 .button-md-sec {
     padding: 10px 20px;
-    background-color: #357a38;
+    background-color: #19552D;
     color: white;
     border: none;
     border-radius: 4px;
@@ -106,6 +110,7 @@ body {
 
     .sub-headline-sec {
         font-size: 16px; /* 글자 크기 줄임 */
+        text-align: center;
     }
 
     .cta {
@@ -120,15 +125,20 @@ body {
     .right-container {
         margin-top: 20px; /* 이미지가 버튼 아래로 이동 */
     }
+
+    .image {
+        max-width: 80%;
+    }
 }
 
 @media (max-width: 480px) {
     .headline-sec {
-        font-size: 20px; /* 더 작은 화면에서는 글자 크기 더 줄임 */
+        font-size: 30px; /* 더 작은 화면에서는 글자 크기 더 줄임 */
     }
 
     .sub-headline-sec {
         font-size: 14px; /* 더 작은 화면에서는 글자 크기 더 줄임 */
+        text-align: center;
     }
 
     .button-md-sec {
@@ -139,6 +149,26 @@ body {
     .right-container {
         margin-top: 20px;
     }
+
+    .image {
+        max-width: 80%;
+    }
 }
+
+/* 텍스트 애니메이션 */
+.text-animated {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.25s forwards ease-in-out;
+  }
+  
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
 
   
