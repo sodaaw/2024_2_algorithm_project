@@ -7,6 +7,7 @@ export function router() {
     "#mypage": () => import("../pages/mypage.js").then((module) => module.render()),
     "#roadmap": () => import("../pages/roadmap.js").then((module) => module.render()),
     "#recommendations": () => import("../pages/recommendations.js").then((module) => module.render()),
+    "#majorsearch": () => import("../pages/majorsearch.js").then((module) => module.render())
   };
 
   const path = window.location.hash || ""; // 기본 경로를 빈 문자열로 설정
