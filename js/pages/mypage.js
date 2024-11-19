@@ -34,8 +34,10 @@ export function render() {
                 .map(
                     (major) => `
                     <div class="major-card">
-                        <p>${major}</p>
-                        <span>➡️</span>
+                        <div class="card-text">
+                          <p>${major}</p>
+                          <span>➡️</span>
+                        </div>
                     </div>`
                 )
                 .join("")
