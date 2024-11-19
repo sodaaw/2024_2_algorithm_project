@@ -56,8 +56,9 @@
 
 /* 헤더에 앱 로고 추가 */
 .app-logo {
-  width: 50px; /* 로고 크기 */
+  width: 140px; /* 로고 크기 */
   height: auto;
+  margin-left: 0.3vw;
 }
 
 /* 프로필 섹션 스타일 */
