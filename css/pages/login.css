@@ -1,4 +1,3 @@
-/* 기본 스타일 */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -7,228 +6,62 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f4f4f4;
-}
-
-.navBar {
-  width: 100%;
-  background-color: #333;
-  padding: 10px 0;
-}
-
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: auto;
-  list-style: none;
-  padding: 0 20px;
-}
-
-.logo {
-  width: 100px;
-  height: auto;
-}
-
-.nav {
-  display: flex;
-  gap: 20px;
-  color: white;
-}
-
-.nav li {
-  color: white;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 18px;
-}
-
-.btn-group .nav-btn {
-  padding: 10px 20px;
-  margin: 0 5px;
-  background-color: #555;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 16px;
+  background-color: #ffffff; /* 새하얀 배경색 */
 }
 
 .loginBox {
-  width: 30vw; /* 화면 크기에 따라 반응하도록 설정 */
-  max-width: 400px; /* 최대 너비 제한 */
-  min-width: 280px; /* 최소 너비 제한 */
+  width: 90%;
+  max-width: 400px;
   background-color: white;
   padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
 }
 
 .text-login {
-  font-size: 2rem; /* 반응형 크기 조정 */
+  font-size: 1.8rem;
   font-weight: bold;
-  text-align: center;
+  color: #333;
+  margin-bottom: 10px;
 }
 
-.loginForm {
-  width: 100%; /* 부모 요소 너비에 맞춰 확장 */
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem; /* 기본 폰트 크기 */
-  box-sizing: border-box;
-}
-
-.remember-chk {
-  display: flex;
-  align-items: center;
-  margin-bottom: 25px;
-  width: 70%;
-}
-
-.chk {
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-.remember-text {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.loginBtn {
-  width: 100%;
-  padding: 15px;
-  background-color: #333;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1.1rem;
-  margin-top: 20px;
-}
-
-.findInfo {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  font-size: 0.9rem;
-  color: #666;
-  margin-top: 10px;
-}
-
-.signupBox {
-  margin-top: 20px;
-  text-align: center;
-  width: 100%;
-}
-
-.text-signup {
+.welcome-text {
   font-size: 1rem;
   color: #666;
   margin-bottom: 10px;
 }
 
-.signupBtn {
-  width: 100%;
-  padding: 15px;
-  background-color: #555;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1.1rem;
-}
-
-.sns-login {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
+.instruction-text {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 20px;
+  line-height: 1.4;
 }
 
 .kakao-login {
-  width: 80%;
-  max-width: 180px;
-  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 15px;
+  background-color: #ffe812;
+  color: #3c1e1e;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
 }
 
-/* 태블릿 화면 대응 */
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .nav {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
-  }
-
-  .btn-group {
-    margin-top: 15px;
-  }
-
-  .loginBox {
-    width: 60vw; /* 화면 크기에 맞춰 너비 조정 */
-    padding: 30px;
-  }
-
-  .text-login {
-    font-size: 1.8rem;
-  }
-
-  .signupBox .text-signup {
-    font-size: 0.9rem;
-  }
-
-  .sns-login img {
-    width: 70%;
-  }
+.kakao-login:hover {
+  background-color: #ffd600;
 }
 
-/* 모바일 화면 대응 */
-@media (max-width: 480px) {
-  .container {
-    padding: 0 10px;
-  }
-
-  .logo {
-    width: 80px;
-  }
-
-  .loginBox {
-    width: 80vw;
-    padding: 20px;
-  }
-
-  .text-login {
-    font-size: 1.6rem;
-  }
-
-  .nav li {
-    font-size: 0.9rem;
-  }
-
-  .loginBtn,
-  .signupBtn {
-    padding: 12px;
-    font-size: 1rem;
-  }
-
-  .sns-login img {
-    width: 60%;
-  }
-
-  .remember-text,
-  .findInfo {
-    font-size: 0.8rem;
-  }
+.kakao-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 }

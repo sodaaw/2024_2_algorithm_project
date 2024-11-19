@@ -129,6 +129,10 @@ html, body {
     .image {
         max-width: 80%;
     }
+
+    .text-animated {
+        font-size: 28px;
+    }
 }
 
 @media (max-width: 480px) {
