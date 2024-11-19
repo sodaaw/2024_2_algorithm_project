@@ -7,9 +7,10 @@ function loadCSS(href) {
     link.href = href;
     document.head.appendChild(link);
   }
-  
-  // CSS 파일 로드
-  loadCSS("css/pages/majorsearch.css");
+// CSS 파일 로드
+loadCSS("css/pages/majorsearch.css");
+var majorWeightYSum = 0; // 사용자가 "예"를 눌렀을 때 weight를 더하는 변수
+var majorWeightTotalSum = 0; // 사용자가 "예" 또는 "아니오"를 눌렀을 때 weight를 더하는 변수 (전공의 전체 스코어가 반환됨)
 
 // JSON 파일에서 전공과 질문 데이터를 불러오기 위한 함수
 async function loadMajors() {
@@ -22,66 +23,18 @@ async function loadMajors() {
       return [];
     }
   }
-  
-  // 전공 선택 후 질문을 렌더링하는 함수
-  function renderQuestions(major) {
-    const app = document.getElementById("app");
-    let questionIndex = 0;
-  
-    // 질문을 렌더링하는 함수
-    function renderQuestion(index) {
-      const questionData = major.questions[index];
-  
-      // 버튼 클릭 이벤트 리스너 추가
-      const optionButtons = document.querySelectorAll('.option-button');
-      optionButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
-          const selectedOption = event.target.dataset.option;
-          const questionIndex = event.target.dataset.index;
-  
-          // 선택한 옵션 저장
-          major.questions[questionIndex].answer = selectedOption;
-  
-          // 다음 질문으로 이동
-          if (questionIndex + 1 < major.questions.length) {
-            renderQuestion(questionIndex + 1);
-          } else {
-            renderResults();
-          }
-        });
-      });
-    }
-  
-    // 첫 번째 질문을 렌더링
-    renderQuestion(questionIndex);
+
+  function calcResult(majorWeightYSum, majorWeightTotalSum) { // 해당 전공이 적합한지 아닌지 계산하는 함수 (전체 가중치의 70% 이상일 시 적합)
+    if (100*majorWeightYSum / majorWeightTotalSum >= 70) return 1; 
+        else return 0;
   }
   
-  // 페이지 로드 후 전공 데이터를 불러와서 전공을 선택하고 질문을 렌더링하는 함수 실행
-  window.onload = async () => {
-    const majors = await loadMajors(); // JSON 파일에서 전공 데이터 불러오기
-  
-    // 전공 선택 버튼 클릭 이벤트 리스너 추가
-    const majorButtons = document.querySelectorAll('.major-button');
-    majorButtons.forEach(button => {
-      button.addEventListener('click', (event) => {
-        const selectedMajorIndex = event.target.dataset.index;
-        const selectedMajor = majors[selectedMajorIndex];
-  
-        // 선택한 전공에 맞는 질문 렌더링
-        renderQuestions(selectedMajor);
-      });
-    });
-  };
-
-  export function render() {
+  // 전공 선택 후 질문을 렌더링하는 함수
+  function renderQuestions(major, questionIndex) {
     const app = document.getElementById("app");
+    const questionData = major.questions[questionIndex];
+   
     app.innerHTML = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="utf-8" />
-      </head>
-      <body>
         <div class="div-wrapper">
           <div class="div">
             <button class="option-button overlap" data-option="N">
@@ -93,16 +46,13 @@ async function loadMajors() {
               <div class="h-sub-headline-sec">예</div>
             </button>
             <div class="overlap-2">
-              <p class="text-wrapper">한국과 중국의 유학 전통에 대해 관심이 있나요?</p>
-              <p class="text-wrapper">한국과 중국의 유학 전통에 대해 관심이 있나요?</p>
+              <p class="text-wrapper">${questionData.question}</p>
             </div>
             <div class="overlap-3">
-              <div class="text-wrapper">1/10</div>
-              <div class="text-wrapper">1/10</div>
+              <div class="text-wrapper">${questionIndex + 1}/10</div>
             </div>
             <div class="overlap-4">
-              <div class="sub-headline-sec-2">문과대학 - 유학·동양학과</div>
-              <div class="sub-headline-sec-2">문과대학 - 유학·동양학과</div>
+              <div class="sub-headline-sec-2">${major.major}</div>
             </div>
             <div class="overlap-5">
             <div class="navbar">
@@ -122,9 +72,41 @@ async function loadMajors() {
             </div>
           </div>
         </div>
-      </body>
-    </html>
-`;    
-
+`;   
+      // 버튼 클릭 이벤트 리스너 추가
+      const optionButtons = document.querySelectorAll('.option-button');
+      optionButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+          const selectedOption = event.currentTarget.dataset.option;
+          console.log(selectedOption);
+          if (selectedOption == "Y") { // 예를 눌렀을 경우
+            majorWeightYSum += questionData.weight;
+            majorWeightTotalSum += questionData.weight;
+        } else { // 아니오를 눌렀을 경우
+            majorWeightTotalSum += questionData.weight;
+        }
+        console.log("Total: "+majorWeightTotalSum);
+        console.log("Yes: "+majorWeightYSum); 
+         
+          // 다음 질문으로 이동
+          if (questionIndex + 1 < 10) {
+            renderQuestions(major, questionIndex + 1);
+          } else {
+            if (calcResult(majorWeightYSum, majorWeightTotalSum) == 1) {
+                console.log("Yeessss"); // majorresult 페이지에서 적합 띄우기
+            } else {
+                console.log("Nooooo"); // majorresult 페이지에서 부적합 띄우기
+            }
+            console.log("navigate to majorresult.js"); // 10개를 다 끝내면 결과 페이지로 이동하는 함수 실행
+          }
+        });
+      });
+  }
+  
+ 
+  export async function render() {
+    const majors = await loadMajors(); // JSON 파일에서 전공 데이터 불러오기
+    const selectedMajor = majors[50]; // 임시로 유동으로 정함 (로드맵에서 클릭시 데이터 넘어와서 인덱스로 넣을 예정)
+    renderQuestions(selectedMajor, 0); // 첫 번째 질문부터 시작
 }
   
