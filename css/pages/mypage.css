@@ -1,0 +1,197 @@
+.mypage-header {
+  width: 100vw; /* 페이지 전체 너비로 확장 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  position: fixed; /* 상단 고정 */
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 프로필 이미지와 이름 사이 간격 */
+}
+
+.header-right {
+  display: flex;
+  gap: 15px; /* 버튼 사이 간격 */
+  margin-right: 40px;
+}
+
+.profile-header-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.profile-header-name {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.logout-btn, .home-btn {
+  padding: 10px 15px;
+  background-color: #ffffff;
+  color: #19552D;
+  border: solid;
+  border-color: #19552D;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover, .home-btn:hover {
+  background-color: #19552D;
+  color: #ffffff;
+}
+
+/* 헤더에 앱 로고 추가 */
+.app-logo {
+  width: 140px; /* 로고 크기 */
+  height: auto;
+  margin-left: 0.3vw;
+}
+
+/* 프로필 섹션 스타일 */
+.profile-section {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px; /* 프로필 이미지와 텍스트 간 간격 */
+}
+
+.profile-page-image {
+  width: 60px; /* 프로필 사진 크기 */
+  height: auto;
+  margin-top: 20px;
+  border-radius: 50%;
+}
+
+.mypage-container {
+  justify-items: center;
+}
+
+.mypage-container h1 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+  justify-content: center;
+}
+
+.mypage-container p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 60px;
+}
+
+/* 관심 전공 카드 스타일 */
+.majors-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 기본: 3열 */
+  grid-template-rows: repeat(2, auto); /* 기본: 최대 2행 */
+  gap: 20px;
+  margin-top: 10px;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%; /* 가로 크기 제한 */
+  overflow-y: auto; /* 행이 초과되면 스크롤 */
+}
+
+/* 카드 기본 스타일 */
+.major-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 50px; /* 카드 높이 설정 */
+  padding: 15px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.major-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 카드 내부 텍스트 컨테이너 */
+.card-text {
+  display: flex;
+  justify-content: space-between; /* major와 화살표를 양쪽 끝에 배치 */
+  align-items: center; /* 세로 중앙 정렬 */
+  width: 100%; /* 부모 너비에 맞게 확장 */
+  padding: 20px;
+}
+
+/* major 텍스트 스타일 */
+.card-text p {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0; /* 기본 여백 제거 */
+}
+
+/* 화살표 스타일 */
+.card-text span {
+  font-size: 1.2rem;
+  color: #19552D;
+}
+
+/* 반응형: 화면 크기가 좁아질 때 (최대 768px) */
+@media (max-width: 768px) {
+  .majors-container {
+    grid-template-columns: repeat(2, 1fr); /* 2열 */
+    grid-template-rows: repeat(auto-fill, auto); /* 필요한 만큼 행 생성 */
+  }
+
+  .major-card {
+    width: 180px; /* 카드 너비 줄이기 */
+    height: 60px; /* 카드 높이 줄이기 */
+    padding: 10px; /* 내부 여백 줄이기 */
+  }
+
+  .card-text p {
+    font-size: 1rem; /* 텍스트 크기 줄이기 */
+  }
+
+  .card-text span {
+    font-size: 1rem; /* 화살표 크기 줄이기 */
+  }
+}
+
+/* 반응형: 화면 크기가 더 좁아질 때 (최대 480px) */
+@media (max-width: 480px) {
+  .majors-container {
+    grid-template-columns: repeat(1, 1fr); /* 1열 */
+    grid-template-rows: repeat(auto-fill, auto); /* 필요한 만큼 행 생성 */
+  }
+
+  .major-card {
+    width: 160px; /* 카드 너비 더 줄이기 */
+    height: 40px; /* 카드 높이 더 줄이기 */
+    padding: 8px; /* 내부 여백 더 줄이기 */
+  }
+
+  .card-text p {
+    font-size: 0.9rem; /* 텍스트 크기 더 줄이기 */
+  }
+
+  .card-text span {
+    font-size: 0.9rem; /* 화살표 크기 더 줄이기 */
+  }
+}
