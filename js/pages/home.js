@@ -57,5 +57,5 @@ export function render() {
 
   loginButton.addEventListener("click", () => navigateTo("#login")); // 로그인 페이지로 이동
   signupButton.addEventListener("click", () => navigateTo("#login")); // 회원가입 페이지로 이동
-  justStartButton.addEventListener("click", () => navigateTo("#roadmap"));
+  justStartButton.addEventListener("click", () => navigateTo("#main"));
 }

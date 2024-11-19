@@ -15,7 +15,17 @@ export function render() {
   // localStorage에서 닉네임과 프로필 이미지, 관심 전공 목록 가져오기
   const nickname = localStorage.getItem("nickname") || "사용자";
   const profileImage = localStorage.getItem("profile_image") || "images/default_profile.png"; // 기본 이미지 경로
-  const interestMajors = JSON.parse(localStorage.getItem("interest_majors")) || []; // 관심 전공 배열
+  //const interestMajors = JSON.parse(localStorage.getItem("interest_majors")) || []; // 관심 전공 배열
+
+  // 테스트용 임시 관심 전공 데이터
+  const interestMajors = [
+    "디자인학과",
+    "소프트웨어학과",
+    "경영학과",
+    "경제학과",
+    "스포츠과학과",
+    "심리학과",
+  ];
 
   // 관심 전공이 없는 경우 메시지 설정
   const majorContent =
@@ -24,8 +34,10 @@ export function render() {
                 .map(
                     (major) => `
                     <div class="major-card">
-                        <p>${major}</p>
-                        <span>➡️</span>
+                        <div class="card-text">
+                          <p>${major}</p>
+                          <span>➡️</span>
+                        </div>
                     </div>`
                 )
                 .join("")
@@ -34,7 +46,7 @@ export function render() {
           app.innerHTML = `
             <header class="mypage-header">
               <div class="header-left">
-                <img src="images/logo.png" alt="앱 로고" class="app-logo"/> <!-- 앱 로고 추가 -->
+                <id="logo-button" img src="images/logo.png" alt="앱 로고" class="app-logo"/> <!-- 앱 로고 추가 -->
               </div>
               <div class="header-right">
                 <button id="home-btn" class="home-btn">Home</button>
@@ -56,6 +68,12 @@ export function render() {
   // Home 버튼 클릭 시 메인 페이지로 이동
   const homeButton = document.getElementById("home-btn");
   homeButton.addEventListener("click", () => {
+      window.location.hash = "#main"; // 메인 페이지로 이동
+  });
+
+  // 로고 누르면 메인페이지로 가게끔
+  const logoButton = document.getElementById("logo-button");
+  logoButton.addEventListener("click", () => {
       window.location.hash = "#main"; // 메인 페이지로 이동
   });
 
