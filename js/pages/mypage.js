@@ -46,7 +46,7 @@ export function render() {
           app.innerHTML = `
             <header class="mypage-header">
               <div class="header-left">
-                <img src="images/logo.png" alt="앱 로고" class="app-logo"/> <!-- 앱 로고 추가 -->
+                <id="logo-button" img src="images/logo.png" alt="앱 로고" class="app-logo"/> <!-- 앱 로고 추가 -->
               </div>
               <div class="header-right">
                 <button id="home-btn" class="home-btn">Home</button>
@@ -68,6 +68,12 @@ export function render() {
   // Home 버튼 클릭 시 메인 페이지로 이동
   const homeButton = document.getElementById("home-btn");
   homeButton.addEventListener("click", () => {
+      window.location.hash = "#main"; // 메인 페이지로 이동
+  });
+
+  // 로고 누르면 메인페이지로 가게끔
+  const logoButton = document.getElementById("logo-button");
+  logoButton.addEventListener("click", () => {
       window.location.hash = "#main"; // 메인 페이지로 이동
   });
 

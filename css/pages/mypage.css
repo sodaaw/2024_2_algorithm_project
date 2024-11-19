@@ -73,6 +73,7 @@
 .profile-page-image {
   width: 60px; /* 프로필 사진 크기 */
   height: auto;
+  margin-top: 20px;
   border-radius: 50%;
 }
 
@@ -91,7 +92,7 @@
 .mypage-container p {
   font-size: 1rem;
   color: #666;
-  margin-bottom: 50px;
+  margin-bottom: 60px;
 }
 
 /* 관심 전공 카드 스타일 */
