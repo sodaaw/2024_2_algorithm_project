@@ -50,6 +50,11 @@ function loadCSS(href) {
     document.getElementById("dept-link-btn").addEventListener("click", () => {
       alert(`${selectedMajor} 학과 홈페이지로 이동합니다.`);
     });
+
+    // 돌아가기 버튼 이벤트
+    document.getElementById("back-btn").addEventListener("click", () => {
+        window.location.hash = "#mypage"; // 마이페이지로 이동
+    });
   }
   
   
