@@ -64,6 +64,14 @@ export function render() {
               </div>
             </div>
         `;
+  // 카드 클릭 이벤트 추가
+  const majorCards = document.querySelectorAll(".major-card");
+  majorCards.forEach((card, index) => {
+    card.addEventListener("click", () => {
+      const selectedMajor = interestMajors[index];
+      window.location.hash = `#roadmap/${selectedMajor}`; // 전공 이름을 경로로 전달
+    });
+  });
 
   // Home 버튼 클릭 시 메인 페이지로 이동
   const homeButton = document.getElementById("home-btn");
@@ -89,4 +97,3 @@ export function render() {
       });
   });
 }
-

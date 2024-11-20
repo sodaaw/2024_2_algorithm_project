@@ -7,11 +7,15 @@ export function router() {
     "#mypage": () => import("../pages/mypage.js").then((module) => module.render()),
     "#roadmap": () => import("../pages/roadmap.js").then((module) => module.render()),
     "#recommendations": () => import("../pages/recommendations.js").then((module) => module.render()),
-    "#majorsearch": () => import("../pages/majorsearch.js").then((module) => module.render())
+    "#majorsearch": () => import("../pages/majorsearch.js").then((module) => module.render()),
+    "#roadmap/:major": () =>
+      import("../pages/roadmap.js").then((module) =>
+        module.render(window.location.hash.split("/")[1]) // 선택된 전공 이름 전달
+      )
   };
 
-  const path = window.location.hash || ""; // 기본 경로를 빈 문자열로 설정
-  const route = routes[path];
+  const path = window.location.hash.split("/")[0]; // 기본 경로 설정
+  const route = routes[path] || routes[""]; // 해당 경로가 없으면 홈으로 이동
   
   if (route) {
     route();
