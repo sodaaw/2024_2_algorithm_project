@@ -8,6 +8,8 @@ function loadCSS(href) {
 
 // CSS 파일 로드
 loadCSS("css/pages/mypage.css");
+// 전공 url 영어로 하기 위한 json 파일 로드
+import linkData from "../../lib/data/link.json";
 
 export function render() {
   const app = document.getElementById("app");
