@@ -1,4 +1,3 @@
-// 라우터 함수 정의
 export function router() {
   const routes = {
     "": () => import("../pages/home.js").then((module) => module.render()),
@@ -10,15 +9,21 @@ export function router() {
     "#majorsearch": () => import("../pages/majorsearch.js").then((module) => module.render())
   };
 
-  const path = window.location.hash || ""; // 기본 경로를 빈 문자열로 설정
-  const route = routes[path];
-  
-  if (route) {
-    route();
+  const hash = window.location.hash; // 현재 해시값
+  const path = hash.split("/")[0]; // 기본 경로 설정
+  const dynamicSegment = hash.split("/")[1]; // 동적 경로 값 추출
+
+  console.log("Current hash:", hash); // 디버깅용
+  console.log("Path:", path); // 디버깅용
+  console.log("Dynamic segment:", dynamicSegment); // 디버깅용
+
+  if (path === "#roadmap" && dynamicSegment) {
+    // 동적 경로 처리
+    import("../pages/roadmap.js").then((module) => module.render(dynamicSegment));
   } else {
-    // 기본 경로로 home 페이지를 렌더링
-    if (path === "") {
-      navigateTo(""); // 빈 경로로 설정
+    const route = routes[path] || routes[""];
+    if (route) {
+      route();
     } else {
       console.error(`Route not found: ${path}`);
     }
@@ -33,3 +38,4 @@ export function navigateTo(path) {
 // 페이지 로드 시 및 해시 변경 시 router 호출
 window.addEventListener("load", router);
 window.addEventListener("hashchange", router);
+

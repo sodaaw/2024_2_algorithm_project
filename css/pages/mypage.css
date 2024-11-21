@@ -188,7 +188,7 @@
   }
 
   .card-text p {
-    font-size: 0.9rem; /* 텍스트 크기 더 줄이기 */
+    font-size: 1rem; /* 텍스트 크기 더 줄이기 */
   }
 
   .card-text span {
