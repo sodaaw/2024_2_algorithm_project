@@ -18,8 +18,7 @@ function loadCSS(href) {
       (key) => departments[key]?.eng_name === selectedMajorEng
     );
 
-    console.log(selectedMajorEng);
-    console.log(selectedMajor);
+    const deptUrl = selectedMajor ? departments[selectedMajor]?.url : null;
   
     // 로드맵 페이지 내용 렌더링
     app.innerHTML = `
@@ -57,8 +56,8 @@ function loadCSS(href) {
   
     // 학과 홈페이지 이동 버튼 이벤트
     document.getElementById("dept-link-btn").addEventListener("click", () => {
-      if (deptUrl !== "#") {
-        window.location.href = deptUrl; // 학과 홈페이지로 이동
+      if (deptUrl) {
+        window.open(deptUrl, "_blank", "noopener,noreferrer"); // 새 탭에서 학과 홈페이지 열기
       } else {
         alert("해당 전공의 학과 홈페이지 URL을 찾을 수 없습니다.");
       }
