@@ -60,7 +60,7 @@ const roadmapImages = {
       "images/roadmap/gun3.png"
     ],
     "시스템경영공학과": "images/roadmap/SystemsManagementEngineering.png",
-    "건축학과(건축학계열)": "images/roadmap/Architectrue.png",
+    "건축학과": "images/roadmap/Architectrue.png",
     "나노공학과": "images/roadmap/NanoEngineering.png",
     "약학과": [
       "images/roadmap/ph1.png",

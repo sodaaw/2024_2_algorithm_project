@@ -53,7 +53,7 @@ const departments = {
     "기계공학부": { "url": "https://mech.skku.edu/me/index.do", "eng_name": "mechanical_engineering" },
     "건설환경공학부": { "url": "https://cal.skku.edu/", "eng_name": "civil_environmental_engineering" },
     "시스템경영공학과": { "url": "https://sme.skku.edu/iesys/index.do", "eng_name": "industrial_engineering" },
-    "건축학과(건축학계열)": { "url": "https://arch.skku.edu/arch/index.do", "eng_name": "architecture" },
+    "건축학과": { "url": "https://arch.skku.edu/arch/index.do", "eng_name": "architecture" },
     "나노공학과": { "url": "https://nano.skku.edu/", "eng_name": "nano_engineering" },
     "약학과": { "url": "https://pharm.skku.edu/", "eng_name": "pharmacy" },
     "식품생명공학과": { "url": "https://skb.skku.edu/foodlife/index.do", "eng_name": "food_biotechnology" },

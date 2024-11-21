@@ -6,12 +6,21 @@ function loadCSS(href) {
   document.head.appendChild(link);
 }
 
-// CSS 파일 로드
-loadCSS("css/pages/mypage.css");
+// CSS 파일을 제거하는 함수
+function removeCSS(href) {
+  const links = document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`);
+  links.forEach((link) => link.remove());
+}
+
 // 전공 url 영어로 하기 위한 데이터 파일 로드
 import departments from './data/link_data.js'; // 데이터 파일 불러오기
 
 export function render() {
+  // 이전 CSS 제거
+  removeCSS("css/pages/roadmap.css");
+
+  // 새로운 CSS 로드
+  loadCSS("css/pages/mypage.css");
   const app = document.getElementById("app");
 
   // localStorage에서 닉네임과 프로필 이미지, 관심 전공 목록 가져오기
@@ -23,10 +32,10 @@ export function render() {
   const interestMajors = [
     "컴퓨터교육과",
     "소프트웨어학과",
-    "경영학과",
-    "경제학과",
-    "스포츠과학과",
-    "심리학과",
+    "건설환경공학부",
+    "철학과",
+    "영어영문학과",
+    "한문학과",
   ];
 
   // 관심 전공이 없는 경우 메시지 설정
