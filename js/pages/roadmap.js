@@ -1,3 +1,5 @@
+import departments from './data/link_data.js'; // 학과 데이터 불러오기
+
 // CSS 파일을 동적으로 로드하는 함수
 function loadCSS(href) {
     const link = document.createElement("link");
@@ -9,14 +11,21 @@ function loadCSS(href) {
   // CSS 파일 로드
   loadCSS("css/pages/roadmap.css");
   
-  export function render(selectedMajor) {
+  export function render(selectedMajorEng) {
     const app = document.getElementById("app");
+
+    const selectedMajor = Object.keys(departments).find(
+      (key) => departments[key]?.eng_name === selectedMajorEng
+    );
+
+    console.log(selectedMajorEng);
+    console.log(selectedMajor);
   
     // 로드맵 페이지 내용 렌더링
     app.innerHTML = `
         <header class="roadmap-header">
             <div class="header-left">
-                <id="logo-button" img src="images/logo.png" alt="앱 로고" class="app-logo"/> <!-- 앱 로고 추가 -->
+            <img id="logo-button" src="./images/logo.png" alt="앱 로고" class="app-logo"/> <!-- 앱 로고 추가 -->
             </div>
             <div class="header-right">
                 <button id="home-btn" class="home-btn">Home</button>
@@ -48,13 +57,20 @@ function loadCSS(href) {
   
     // 학과 홈페이지 이동 버튼 이벤트
     document.getElementById("dept-link-btn").addEventListener("click", () => {
-      alert(`${selectedMajor} 학과 홈페이지로 이동합니다.`);
+      if (deptUrl !== "#") {
+        window.location.href = deptUrl; // 학과 홈페이지로 이동
+      } else {
+        alert("해당 전공의 학과 홈페이지 URL을 찾을 수 없습니다.");
+      }
     });
 
     // 돌아가기 버튼 이벤트
     document.getElementById("back-btn").addEventListener("click", () => {
         window.location.hash = "#mypage"; // 마이페이지로 이동
     });
+
+    // 로고 클릭 시 메인 페이지로 이동
+    document.getElementById("logo-button").addEventListener("click", () => {
+      window.location.hash = "#main";
+    });
   }
-  
-  

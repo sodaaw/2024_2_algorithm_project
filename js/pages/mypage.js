@@ -8,7 +8,8 @@ function loadCSS(href) {
 
 // CSS 파일 로드
 loadCSS("css/pages/mypage.css");
-// 전공 url 영어로 하기 위한 json 파일 로드
+// 전공 url 영어로 하기 위한 데이터 파일 로드
+import departments from './data/link_data.js'; // 데이터 파일 불러오기
 
 export function render() {
   const app = document.getElementById("app");
@@ -20,7 +21,7 @@ export function render() {
 
   // 테스트용 임시 관심 전공 데이터
   const interestMajors = [
-    "디자인학과",
+    "컴퓨터교육과",
     "소프트웨어학과",
     "경영학과",
     "경제학과",
@@ -30,24 +31,26 @@ export function render() {
 
   // 관심 전공이 없는 경우 메시지 설정
   const majorContent =
-      interestMajors.length > 0
-          ? interestMajors
-                .map(
-                    (major) => `
-                    <div class="major-card">
-                        <div class="card-text">
-                          <p>${major}</p>
-                          <span>➡️</span>
-                        </div>
-                    </div>`
-                )
-                .join("")
-          : `<p class="no-majors">등록한 관심 전공이 없습니다.</p>`;
+  interestMajors.length > 0
+    ? interestMajors
+        .map((major) => {
+          // departments에서 영어 이름 검색
+          const engName = departments[major]?.eng_name || ""; // 존재하지 않을 경우 빈 문자열
+          return `
+            <div class="major-card" data-eng-name="${engName}">
+                <div class="card-text">
+                  <p>${major}</p>
+                  <span>➡️</span>
+                </div>
+            </div>`;
+        })
+        .join("")
+    : `<p class="no-majors">등록한 관심 전공이 없습니다.</p>`;
 
           app.innerHTML = `
             <header class="mypage-header">
               <div class="header-left">
-                <id="logo-button" img src="images/logo.png" alt="앱 로고" class="app-logo"/> <!-- 앱 로고 추가 -->
+                <img id="logo-button" src="./images/logo.png" alt="앱 로고" class="app-logo"/> <!-- 앱 로고 추가 -->
               </div>
               <div class="header-right">
                 <button id="home-btn" class="home-btn">Home</button>
@@ -65,14 +68,20 @@ export function render() {
               </div>
             </div>
         `;
+
   // 카드 클릭 이벤트 추가
   const majorCards = document.querySelectorAll(".major-card");
-  majorCards.forEach((card, index) => {
+  majorCards.forEach((card) => {
     card.addEventListener("click", () => {
-      const selectedMajor = interestMajors[index];
-      window.location.hash = `#roadmap/${selectedMajor}`; // 전공 이름을 경로로 전달
+      const engName = card.getAttribute("data-eng-name"); // 영어 이름 가져오기
+      if (engName) {
+        window.location.hash = `#roadmap/${engName}`; // 영어 이름을 URL에 사용
+      } else {
+        alert("해당 전공의 URL 정보를 찾을 수 없습니다."); // 예외 처리
+      }
     });
   });
+
 
   // Home 버튼 클릭 시 메인 페이지로 이동
   const homeButton = document.getElementById("home-btn");
