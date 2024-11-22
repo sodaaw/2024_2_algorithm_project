@@ -1,3 +1,53 @@
+.mypage-header {
+  width: 100vw; /* 페이지 전체 너비로 확장 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  position: fixed; /* 상단 고정 */
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 프로필 이미지와 이름 사이 간격 */
+}
+
+.header-right {
+  display: flex;
+  gap: 15px; /* 버튼 사이 간격 */
+  margin-right: 40px;
+}
+
+.logout-btn, .home-btn {
+  padding: 10px 15px;
+  background-color: #ffffff;
+  color: #19552D;
+  border: solid;
+  border-color: #19552D;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover, .home-btn:hover {
+  background-color: #19552D;
+  color: #ffffff;
+}
+
+/* 헤더에 앱 로고 추가 */
+.app-logo {
+  width: 140px; /* 로고 크기 */
+  height: auto;
+  margin-left: 0.3vw;
+}
+
 .div-wrapper {
   background-color: #ffffff;
   display: flex;
