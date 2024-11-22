@@ -6,7 +6,8 @@ export function router() {
     "#mypage": () => import("../pages/mypage.js").then((module) => module.render()),
     "#roadmap": () => import("../pages/roadmap.js").then((module) => module.render()),
     "#recommendations": () => import("../pages/recommendations.js").then((module) => module.render()),
-    "#majorsearch": () => import("../pages/majorsearch.js").then((module) => module.render())
+    "#majorsearch": () => import("../pages/majorsearch.js").then((module) => module.render()),
+    "#majorresult": () => import("../pages/majorresult.js").then((module) => module.render())
   };
 
   const hash = window.location.hash; // 현재 해시값
