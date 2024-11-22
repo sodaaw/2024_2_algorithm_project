@@ -96,6 +96,7 @@ function renderQuestions(major, questionIndex) {
         } else {
           console.log("Nooooo"); // majorresult 페이지에서 부적합 띄우기
         }
+        navigateTo("#majorresult")
         console.log("navigate to majorresult.js"); // 10개를 다 끝내면 결과 페이지로 이동하는 함수 실행
       }
     });
