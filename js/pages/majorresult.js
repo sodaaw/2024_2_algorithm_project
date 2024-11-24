@@ -45,7 +45,7 @@ function renderResultPage() {
 
 function renderMajorData() {
   const majorName = sessionStorage.getItem("majorName");
-  const majorScore = sessionStorage.getItem("majorScore");
+  const majorScore = ~~(sessionStorage.getItem("majorScore"));
 
   return [majorName, majorScore];
 }
