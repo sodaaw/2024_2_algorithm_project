@@ -14,7 +14,8 @@ var majorWeightTotalSum = 0; // 사용자가 "예" 또는 "아니오"를 눌렀�
 
 export async function render() {
   const majors = await loadMajors(); // JSON 파일에서 전공 데이터 불러오기
-  const selectedMajor = majors[0]; // 임시로 유동으로 정함 (로드맵에서 클릭시 데이터 넘어와서 인덱스로 넣을 예정)
+  const selectedMajor = majors[28]; // 임시로 유동으로 정함 (로드맵에서 클릭시 데이터 넘어와서 인덱스로 넣을 예정)
+  sessionStorage.setItem("majorName", selectedMajor.major);
   renderQuestions(selectedMajor, 0); // 첫 번째 질문부터 시작
 }
 
@@ -31,6 +32,7 @@ async function loadMajors() {
 }
 
 function calcResult(majorWeightYSum, majorWeightTotalSum) { // 해당 전공이 적합한지 아닌지 계산하는 함수 (전체 가중치의 70% 이상일 시 적합)
+  sessionStorage.setItem("majorScore", 100 * majorWeightYSum / majorWeightTotalSum);
   if (100 * majorWeightYSum / majorWeightTotalSum >= 70) return 1;
   else return 0;
 }
@@ -93,10 +95,13 @@ function renderQuestions(major, questionIndex) {
       } else {
         if (calcResult(majorWeightYSum, majorWeightTotalSum) == 1) {
           console.log("Yeessss"); // majorresult 페이지에서 적합 띄우기
+          sessionStorage.setItem("majorResult", "1");
+          navigateTo("#majorresult");
         } else {
           console.log("Nooooo"); // majorresult 페이지에서 부적합 띄우기
         }
         navigateTo("#majorresult")
+        sessionStorage.setItem("majorResult", "1");
         console.log("navigate to majorresult.js"); // 10개를 다 끝내면 결과 페이지로 이동하는 함수 실행
       }
     });
