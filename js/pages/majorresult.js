@@ -1,4 +1,11 @@
 import { navigateTo } from "../utils/router.js";
+import { KAKAO_API_KEY } from '../apikey.js';
+
+// Kakao SDK 초기화
+if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
+Kakao.init(KAKAO_API_KEY); // 카카오 API 키로 초기화
+console.log('Kakao SDK Initialized:', Kakao.isInitialized());
+}
 
 // CSS 파일을 동적으로 로드하는 함수
 function loadCSS(href) {
@@ -83,4 +90,37 @@ export function render() {
     </div>
 
             `;
+ // Home 버튼 클릭 시 메인 페이지로 이동
+  const homeButton = document.getElementById("home-btn");
+  homeButton.addEventListener("click", () => {
+      window.location.hash = "#main"; // 메인 페이지로 이동
+  });
+
+  // 로고 누르면 메인페이지로 가게끔
+  const logoButton = document.getElementById("logo-button");
+  logoButton.addEventListener("click", () => {
+      window.location.hash = "#main"; // 메인 페이지로 이동
+  });
+// 로그아웃 버튼 클릭 이벤트
+const logoutButton = document.getElementById("logout-btn");
+
+if (logoutButton) {
+logoutButton.addEventListener("click", () => {
+// 카카오 로그아웃 호출
+if (Kakao.Auth) {
+Kakao.Auth.logout(() => {
+alert("로그아웃 되었습니다.");
+localStorage.removeItem("nickname"); // 닉네임 삭제
+localStorage.removeItem("profile_image"); // 프로필 이미지 삭제
+localStorage.removeItem("interest_majors"); // 관심 전공 삭제
+window.location.hash = ""; // 로그인 페이지로 이동
+});
+} else {
+alert("Kakao 로그아웃 기능을 사용할 수 없습니다.");
+}
+});
+} else {
+console.error("로그아웃 버튼을 찾을 수 없습니다.");
+}
+      
 }

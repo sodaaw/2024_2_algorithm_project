@@ -117,17 +117,27 @@ function renderQuestions(major, questionIndex) {
     window.location.hash = "#main"; // 메인 페이지로 이동
   });
 
-  // 로그아웃 버튼 클릭 시
-  const logoutButton = document.getElementById("logout-btn");
-  logoutButton.addEventListener("click", () => {
-    Kakao.Auth.logout(() => {
-      alert("로그아웃 되었습니다.");
-      localStorage.removeItem("nickname"); // 닉네임 정보 삭제
-      localStorage.removeItem("profile_image"); // 프로필 이미지 삭제
-      localStorage.removeItem("interest_majors"); // 관심 전공 삭제
-      window.location.hash = ""; // 시작페이지로 이동
-    });
-  });
+  // 로그아웃 버튼 클릭 이벤트
+const logoutButton = document.getElementById("logout-btn");
+
+if (logoutButton) {
+logoutButton.addEventListener("click", () => {
+// 카카오 로그아웃 호출
+if (Kakao.Auth) {
+Kakao.Auth.logout(() => {
+alert("로그아웃 되었습니다.");
+localStorage.removeItem("nickname"); // 닉네임 삭제
+localStorage.removeItem("profile_image"); // 프로필 이미지 삭제
+localStorage.removeItem("interest_majors"); // 관심 전공 삭제
+window.location.hash = ""; // 로그인 페이지로 이동
+});
+} else {
+alert("Kakao 로그아웃 기능을 사용할 수 없습니다.");
+}
+});
+} else {
+console.error("로그아웃 버튼을 찾을 수 없습니다.");
+}
 }
 
 
