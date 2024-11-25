@@ -1,6 +1,6 @@
-// routes를 전역으로 정의
+// routes 객체 정의
 const routes = {
-  "": () => import("../pages/home.js").then((module) => module.render()),
+  "": () => import("../pages/home.js").then((module) => module.render()), // 기본 페이지
   "#login": () => import("../pages/login.js").then((module) => module.render()),
   "#main": () => import("../pages/main.js").then((module) => module.render()),
   "#mypage": () => import("../pages/mypage.js").then((module) => module.render()),
@@ -28,6 +28,7 @@ const routes = {
     }),
 };
 
+// 라우터 함수 정의
 export function router() {
   const hash = window.location.hash;
   const [path, queryString] = hash.includes("?") ? hash.split("?") : [hash, ""];
@@ -59,16 +60,18 @@ export function router() {
     });
 }
 
+// 페이지 이동 함수
 export function navigateTo(path) {
   console.log(`[NavigateTo] Attempting to navigate to: ${path}`);
   window.location.hash = path; // 해시 변경
 }
 
+// 초기화 로직
 window.addEventListener("load", () => {
   console.log("[Router] Initializing...");
   if (!window.location.hash) {
-    console.log("[Router] No hash found, navigating to #main");
-    navigateTo("#main"); // 기본 경로 설정
+    console.log("[Router] No hash found, navigating to ''");
+    navigateTo(""); // 기본 페이지를 설정 (home.js)
   } else {
     router();
   }
