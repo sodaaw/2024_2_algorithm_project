@@ -1,25 +1,6 @@
 import { renderHeader, setupHeaderEvents } from "./header.js";
 import { humanitiesData } from "./data/humanities_major.js";
 
-// 배경 이미지 설정 함수
-function setBackground(imagePath) {
-  const app = document.getElementById("app");
-  if (app) {
-    app.style.backgroundImage = `url('../../images/main/P1290908.jpg')`;
-    app.style.backgroundSize = "cover";
-    app.style.backgroundPosition = "center";
-    app.style.backgroundRepeat = "no-repeat";
-  }
-}
-
-// 배경 이미지 제거 함수
-function removeBackground() {
-  const app = document.getElementById("app");
-  if (app) {
-    app.style.backgroundImage = ""; // 배경 이미지 제거
-  }
-}
-
 // 데이터 렌더링 함수
 function renderTree(treeContainer) {
   humanitiesData.forEach((collegeData) => {
@@ -63,8 +44,8 @@ export function render() {
     return;
   }
 
-  // 특정 화면에 배경 이미지 적용
-  setBackground("../../images/main/P1290908.jpg");
+  // 배경 이미지 설정 제거
+  // setBackground("../../images/main/P1290908.jpg"); <-- 주석 처리 또는 삭제
 
   // `app` 컨테이너에 HTML 구조 추가
   app.innerHTML = `
