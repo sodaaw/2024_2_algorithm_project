@@ -182,26 +182,16 @@
   color: #555;
 }
 
-/* 팝업 이미지의 좌우 화살표 버튼 */
+/* 버튼 스타일 */
 .arrow-btn {
   position: absolute;
   top: 50%;
-  transform: translateY(-60%);
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  display: flex; /* 플렉스박스 활성화 */
-  justify-content: center; /* 가로 정렬 */
-  align-items: center; /* 세로 정렬 */
+  transform: translateY(-50%);
+  background: none; /* 배경 제거 */
   border: none;
-  font-size: 2rem;
+  padding: 0;
   cursor: pointer;
   z-index: 2100;
-  padding: 0 15px;
-  border-radius: 50%;
-}
-
-.arrow-btn:hover {
-  background: rgba(0, 0, 0, 0.7);
 }
 
 .arrow-btn.left {
@@ -210,6 +200,24 @@
 
 .arrow-btn.right {
   right: 8px;
+}
+
+/* 버튼 안의 이미지 스타일 */
+.arrow-img {
+  width: 40px; /* 이미지 크기 조정 */
+  height: 40px;
+  opacity: 0.8; /* 투명도 설정 (80%) */
+  transition: opacity 0.3s; /* 호버 시 부드럽게 변경 */
+}
+
+/* 왼쪽 버튼 이미지 좌우반전 */
+.arrow-btn.left .arrow-img {
+  transform: scaleX(-1);
+}
+
+/* 호버 시 효과 */
+.arrow-img:hover {
+  opacity: 1; /* 호버 시 투명도 제거 */
 }
 
 .hidden {

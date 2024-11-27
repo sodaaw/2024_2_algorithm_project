@@ -81,10 +81,13 @@ export function render(selectedMajorEng) {
     </div>
     <div id="overlay" class="overlay hidden">
       <div class="popup">
-        <button id="close-popup" class="close-popup">×</button>
-        <button id="prev-img" class="arrow-btn left hidden">‹</button>
-        <img id="popup-image" src="${roadmapImagesArray[0]}" alt="${selectedMajor} 로드맵" class="popup-image"/>
-        <button id="next-img" class="arrow-btn right hidden">›</button>
+      <button id="prev-img" class="arrow-btn left hidden">
+        <img src="./images/roadmap/arrow_button.png" alt="Previous" class="arrow-img" />
+      </button>
+      <img id="popup-image" src="${roadmapImagesArray[0]}" alt="${selectedMajor} 로드맵" class="popup-image"/>
+      <button id="next-img" class="arrow-btn right hidden">
+        <img src="./images/roadmap/arrow_button.png" alt="Next" class="arrow-img" />
+      </button>
       </div>
     </div>
   `;
