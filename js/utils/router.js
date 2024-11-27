@@ -4,7 +4,16 @@ const routes = {
   "#login": () => import("../pages/login.js").then((module) => module.render()),
   "#main": () => import("../pages/main.js").then((module) => module.render()),
   "#mypage": () => import("../pages/mypage.js").then((module) => module.render()),
-  "#roadmap": () => import("../pages/roadmap.js").then((module) => module.render()),
+  "#roadmap": (field) => {
+    // 동적 필드 처리
+    return import("../pages/roadmap.js").then((module) => {
+      if (module.render) {
+        module.render(field); // render에 동적 데이터 전달
+      } else {
+        console.error("[Router] render method not found in roadmap module");
+      }
+    });
+  },
   "#recommendations": () =>
     import("../pages/recommendations.js").then((module) => module.render()),
   "#majorresult": () =>
@@ -31,27 +40,28 @@ const routes = {
 // 라우터 함수 정의
 export function router() {
   const hash = window.location.hash;
-  const [path, queryString] = hash.includes("?") ? hash.split("?") : [hash, ""];
+  let [path, queryString] = hash.includes("?") ? hash.split("?") : [hash, ""];
 
   console.log("[Router] Current hash:", hash);
   console.log("[Router] Path:", path);
   console.log("[Router] Query String:", queryString);
 
-  let dynamicSegment;
-  if (queryString) {
-    const params = new URLSearchParams(queryString);
-    dynamicSegment = params.get("major");
-    console.log("[Router] Extracted dynamicSegment (major):", dynamicSegment);
+  // 동적 경로 처리
+  let dynamicSegment = null;
+  if (path.startsWith("#roadmap/")) {
+    dynamicSegment = path.replace("#roadmap/", ""); // 동적 세그먼트 추출
+    path = "#roadmap"; // 기본 경로로 매핑
+    console.log("[Router] Dynamic segment extracted:", dynamicSegment);
   }
 
-  const route = routes[path] || routes[""];
+  const route = routes[path];
   if (!route) {
     console.error(`[Router] Route not found for path: ${path}`);
-    window.location.hash = ""; // 기본 페이지로 리디렉션
+    navigateTo(""); // 기본 페이지로 리디렉션
     return;
   }
 
-  route()
+  route(dynamicSegment) // 동적 데이터를 route에 전달
     .then(() => {
       console.log(`[Router] Successfully loaded route for path: ${path}`);
     })
@@ -71,7 +81,7 @@ window.addEventListener("load", () => {
   console.log("[Router] Initializing...");
   if (!window.location.hash) {
     console.log("[Router] No hash found, navigating to ''");
-    navigateTo(""); // 기본 페이지를 설정 (home.js)
+    navigateTo(""); // 기본 페이지 설정 (home.js)
   } else {
     router();
   }

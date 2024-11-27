@@ -1,6 +1,25 @@
 // 데이터를 humanities_major.js에서 가져옴
 import { humanitiesData } from "./data/humanities_major.js";
 
+// 배경 이미지 설정 함수
+function setBackground(imagePath) {
+  const app = document.getElementById("app");
+  if (app) {
+    app.style.backgroundImage = `url('../../images/main/P1290908.jpg')`;
+    app.style.backgroundSize = "cover";
+    app.style.backgroundPosition = "center";
+    app.style.backgroundRepeat = "no-repeat";
+  }
+}
+
+// 배경 이미지 제거 함수
+function removeBackground() {
+  const app = document.getElementById("app");
+  if (app) {
+    app.style.backgroundImage = ""; // 배경 이미지 제거
+  }
+}
+
 // 헤더 렌더링 함수
 function renderHeader() {
   return `
@@ -92,10 +111,16 @@ function renderTree(treeContainer) {
 export function render() {
   const app = document.getElementById("app");
 
-  // `app` 컨테이너가 없을 경우 에러 출력 및 함수 종료
   if (!app) {
     console.error("앱 컨테이너를 찾을 수 없습니다.");
     return;
+  }
+
+  // 특정 화면에 배경 이미지 적용
+  if (window.location.hash === "#specificPage") {
+    setBackground("../../images/main/P1290908.jpg"); // 특정 화면에서 배경 설정
+  } else {
+    removeBackground(); // 다른 화면에서는 배경 제거
   }
 
   // `app` 컨테이너에 HTML 구조 추가
@@ -112,3 +137,6 @@ export function render() {
   // 공통 버튼 이벤트 설정
   setupNavigationButtons();
 }
+
+// 해시 변경 시 render 함수 재호출
+window.addEventListener("hashchange", render);

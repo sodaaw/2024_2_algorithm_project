@@ -22,46 +22,32 @@ export function render() {
     <div class="main-container">
       <h1>알아보고 싶은 학과는 어디에 있나요?</h1>
       <div class="buttons">
-        <button id="humanities-btn" class="btn">인문사회과학캠퍼스</button>
-        <button id="sciences-btn" class="btn">자연과학캠퍼스</button>
+        <button id="humanities-btn" class="btn humanities-btn">인문사회과학캠퍼스</button>
+        <button id="sciences-btn" class="btn sciences-btn">자연과학캠퍼스</button>
       </div>
     </div>
     <div class="footer-background"></div>
   `;
 
-  // Home 버튼 클릭 이벤트
-  const homeButton = document.getElementById("home-btn");
-  if (homeButton) {
-    homeButton.addEventListener("click", () => {
-      window.location.hash = "#main"; // 메인 페이지로 이동
-    });
-  }
+  // 버튼에 이벤트 리스너 추가
+  const setupButton = (id, hash) => {
+    const button = document.getElementById(id);
+    if (button) {
+      button.addEventListener("click", () => {
+        window.location.hash = hash;
+      });
+    }
+  };
 
-  // 로고 클릭 이벤트
-  const logoButton = document.getElementById("logo-button");
-  if (logoButton) {
-    logoButton.addEventListener("click", () => {
-      window.location.hash = "#main"; // 메인 페이지로 이동
-    });
-  }
+  // 로고 및 홈 버튼 이벤트
+  setupButton("home-btn", "#main");
+  setupButton("logo-button", "#main");
 
-  // Humanities 버튼 클릭 이벤트
-  const humanitiesButton = document.getElementById("humanities-btn");
-  if (humanitiesButton) {
-    humanitiesButton.addEventListener("click", () => {
-      window.location.hash = "#humanities";
-    });
-  }
+  // Humanities 및 Sciences 버튼 이벤트
+  setupButton("humanities-btn", "#humanities");
+  setupButton("sciences-btn", "#sciences");
 
-  // Sciences 버튼 클릭 이벤트
-  const sciencesButton = document.getElementById("sciences-btn");
-  if (sciencesButton) {
-    sciencesButton.addEventListener("click", () => {
-      window.location.hash = "#sciences";
-    });
-  }
-
-  // 로그아웃 버튼 클릭 이벤트
+  // 로그아웃 버튼 이벤트
   const logoutButton = document.getElementById("logout-btn");
   if (logoutButton) {
     logoutButton.addEventListener("click", () => {
@@ -79,3 +65,8 @@ export function render() {
     });
   }
 }
+
+// DOMContentLoaded 이후 render 함수 실행
+document.addEventListener("DOMContentLoaded", () => {
+  render();
+});
