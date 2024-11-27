@@ -1,15 +1,9 @@
-import departments from './data/link_data.js'; // 학과 데이터 불러오기
-import roadmapImages from './data/roadmap_img.js'; // 로드맵 이미지 불러오기
-import relatedMajors from './data/recommendation.js'; // 비슷한 전공 데이터 불러오기
-import { KAKAO_API_KEY } from '../apikey.js';
+import { renderHeader, setupHeaderEvents } from "./header.js";
+import departments from "./data/link_data.js"; // 학과 데이터
+import roadmapImages from "./data/roadmap_img.js"; // 로드맵 이미지
+import relatedMajors from "./data/recommendation.js"; // 비슷한 전공 데이터
 
-// Kakao SDK 초기화
-if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
-  Kakao.init(KAKAO_API_KEY); // 카카오 API 키로 초기화
-  console.log('Kakao SDK Initialized:', Kakao.isInitialized());
-}
-
-// CSS 파일을 동적으로 로드하는 함수
+// CSS 파일을 동적으로 로드 및 제거하는 함수
 function loadCSS(href) {
   const link = document.createElement("link");
   link.rel = "stylesheet";
@@ -17,17 +11,14 @@ function loadCSS(href) {
   document.head.appendChild(link);
 }
 
-// CSS 파일을 제거하는 함수
 function removeCSS(href) {
   const links = document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`);
   links.forEach((link) => link.remove());
 }
 
 export function render(selectedMajorEng) {
-  // 이전 CSS 제거
+  // 이전 CSS 제거 및 새로운 CSS 로드
   removeCSS("css/pages/mypage.css");
-
-  // 새로운 CSS 로드
   loadCSS("css/pages/roadmap.css");
 
   const app = document.getElementById("app");
@@ -57,17 +48,9 @@ export function render(selectedMajorEng) {
   const roadmapImagesArray = Array.isArray(roadmapImg) ? roadmapImg : [roadmapImg];
   let currentImageIndex = 0;
 
-  // 로드맵 페이지 내용 렌더링
+  // HTML 렌더링
   app.innerHTML = `
-    <header class="roadmap-header">
-      <div class="header-left">
-        <img id="logo-button" src="./images/logo.png" alt="앱 로고" class="app-logo"/>
-      </div>
-      <div class="header-right">
-        <button id="home-btn" class="home-btn">Home</button>
-        <button id="logout-btn" class="logout-btn">Logout</button>
-      </div>
-    </header>
+    ${renderHeader()} <!-- 공통 헤더 렌더링 -->
     <div class="roadmap-page">
       <h1>${selectedMajor} 더 알아보기</h1>
       <div class="roadmap-buttons">
@@ -91,25 +74,17 @@ export function render(selectedMajorEng) {
 
   // 비슷한 전공 보기 버튼 이벤트
   document.getElementById("similar-dept-btn").addEventListener("click", () => {
-    const similarMajors = relatedMajors[selectedMajor] || []; // 비슷한 전공 가져오기
+    const similarMajors = relatedMajors[selectedMajor] || [];
 
     if (similarMajors.length === 0) {
       alert(`${selectedMajor}와 관련된 비슷한 전공이 없습니다.`);
       return;
     }
 
-    // 카드 HTML 생성
     const cards = similarMajors
-      .map(
-        (major) => `
-          <div class="major-card animate-card">
-            <p>${major}</p>
-          </div>
-        `
-      )
+      .map((major) => `<div class="major-card animate-card"><p>${major}</p></div>`)
       .join("");
 
-    // 카드 컨테이너 생성
     const cardContainer = `
       <div class="card-container">
         <h2>비슷한 전공 추천</h2>
@@ -118,11 +93,8 @@ export function render(selectedMajorEng) {
       </div>
     `;
 
-    // 기존 페이지에 추가
-    const roadmapPage = document.querySelector(".roadmap-page");
-    roadmapPage.insertAdjacentHTML("beforeend", cardContainer);
+    document.querySelector(".roadmap-page").insertAdjacentHTML("beforeend", cardContainer);
 
-    // 닫기 버튼 이벤트 추가
     document.getElementById("close-similar-majors").addEventListener("click", () => {
       document.querySelector(".card-container").remove();
     });
@@ -137,81 +109,46 @@ export function render(selectedMajorEng) {
 
     overlay.classList.remove("hidden");
 
-    // 화살표 버튼 보이기/숨기기
     if (roadmapImagesArray.length > 1) {
       nextBtn.classList.remove("hidden");
     }
 
-    // 이전 버튼 클릭 이벤트
     prevBtn.addEventListener("click", () => {
       if (currentImageIndex > 0) {
         currentImageIndex--;
         popupImage.src = roadmapImagesArray[currentImageIndex];
-        if (currentImageIndex === 0) {
-          prevBtn.classList.add("hidden");
-        }
+        if (currentImageIndex === 0) prevBtn.classList.add("hidden");
         nextBtn.classList.remove("hidden");
       }
     });
 
-    // 다음 버튼 클릭 이벤트
     nextBtn.addEventListener("click", () => {
       if (currentImageIndex < roadmapImagesArray.length - 1) {
         currentImageIndex++;
         popupImage.src = roadmapImagesArray[currentImageIndex];
-        if (currentImageIndex === roadmapImagesArray.length - 1) {
-          nextBtn.classList.add("hidden");
-        }
+        if (currentImageIndex === roadmapImagesArray.length - 1) nextBtn.classList.add("hidden");
         prevBtn.classList.remove("hidden");
       }
     });
   });
 
-  // 팝업 닫기 버튼 이벤트
   document.getElementById("close-popup").addEventListener("click", () => {
-    const overlay = document.getElementById("overlay");
-    overlay.classList.add("hidden");
-    currentImageIndex = 0; // 초기화
+    document.getElementById("overlay").classList.add("hidden");
+    currentImageIndex = 0;
   });
 
-  // 학과 홈페이지 이동 버튼 이벤트
   document.getElementById("dept-link-btn").addEventListener("click", () => {
     if (deptUrl) {
-      window.open(deptUrl, "_blank", "noopener,noreferrer"); // 새 탭에서 학과 홈페이지 열기
+      window.open(deptUrl, "_blank", "noopener,noreferrer");
     } else {
       alert("해당 전공의 학과 홈페이지 URL을 찾을 수 없습니다.");
     }
   });
 
-  // 돌아가기 버튼 이벤트
   document.getElementById("back-btn").addEventListener("click", () => {
-    window.location.hash = "#mypage"; // 마이페이지로 이동
+    window.location.hash = "#mypage";
   });
 
-  // 로고 클릭 시 메인 페이지로 이동
-  document.getElementById("logo-button").addEventListener("click", () => {
-    window.location.hash = "#main";
-  });
-
-  // 로그아웃 버튼 클릭 이벤트
-  const logoutButton = document.getElementById("logout-btn");
-
-  if (logoutButton) {
-    logoutButton.addEventListener("click", () => {
-      // 카카오 로그아웃 호출
-      if (Kakao.Auth) {
-        Kakao.Auth.logout(() => {
-          alert("로그아웃 되었습니다.");
-          localStorage.removeItem("nickname"); // 닉네임 삭제
-          localStorage.removeItem("profile_image"); // 프로필 이미지 삭제
-          localStorage.removeItem("interest_majors"); // 관심 전공 삭제
-          window.location.hash = ""; // 로그인 페이지로 이동
-        });
-      } else {
-        alert("Kakao 로그아웃 기능을 사용할 수 없습니다.");
-      }
-    });
-  } else {
-    console.error("로그아웃 버튼을 찾을 수 없습니다.");
-  }
+  // 헤더 이벤트 설정
+  setupHeaderEvents();
 }

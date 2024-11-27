@@ -1,4 +1,4 @@
-// 데이터를 humanities_major.js에서 가져옴
+import { renderHeader, setupHeaderEvents } from "./header.js";
 import { humanitiesData } from "./data/humanities_major.js";
 
 // 배경 이미지 설정 함수
@@ -20,61 +20,8 @@ function removeBackground() {
   }
 }
 
-// 헤더 렌더링 함수
-function renderHeader() {
-  return `
-    <header class="mypage-header">
-      <div class="header-left">
-        <img id="logo-button" src="./images/logo.png" alt="앱 로고" class="app-logo"/>
-      </div>
-      <div class="header-right">
-        <button id="home-btn" class="home-btn">Home</button>
-        <button id="logout-btn" class="logout-btn">Logout</button>
-      </div>
-    </header>
-  `;
-}
-
-// 공통 버튼 이벤트 설정 함수
-function setupNavigationButtons() {
-  // Home 버튼 클릭 이벤트
-  const homeButton = document.getElementById("home-btn");
-  if (homeButton) {
-    homeButton.addEventListener("click", () => {
-      window.location.hash = "#main"; // 메인 페이지로 이동
-    });
-  }
-
-  // 로고 클릭 이벤트
-  const logoButton = document.getElementById("logo-button");
-  if (logoButton) {
-    logoButton.addEventListener("click", () => {
-      window.location.hash = "#main"; // 메인 페이지로 이동
-    });
-  }
-
-  // 로그아웃 버튼 클릭 이벤트
-  const logoutButton = document.getElementById("logout-btn");
-  if (logoutButton) {
-    logoutButton.addEventListener("click", () => {
-      if (typeof Kakao !== "undefined" && Kakao.Auth) {
-        Kakao.Auth.logout(() => {
-          alert("로그아웃 되었습니다.");
-          localStorage.removeItem("nickname");
-          localStorage.removeItem("profile_image");
-          localStorage.removeItem("interest_majors");
-          window.location.hash = ""; // 로그인 페이지로 이동
-        });
-      } else {
-        alert("Kakao 로그아웃 기능을 사용할 수 없습니다.");
-      }
-    });
-  }
-}
-
 // 데이터 렌더링 함수
 function renderTree(treeContainer) {
-  // 데이터 렌더링
   humanitiesData.forEach((collegeData) => {
     // 대학 이름 추가
     const collegeElement = document.createElement("div");
@@ -117,11 +64,7 @@ export function render() {
   }
 
   // 특정 화면에 배경 이미지 적용
-  if (window.location.hash === "#specificPage") {
-    setBackground("../../images/main/P1290908.jpg"); // 특정 화면에서 배경 설정
-  } else {
-    removeBackground(); // 다른 화면에서는 배경 제거
-  }
+  setBackground("../../images/main/P1290908.jpg");
 
   // `app` 컨테이너에 HTML 구조 추가
   app.innerHTML = `
@@ -134,8 +77,8 @@ export function render() {
   // 데이터 렌더링
   renderTree(treeContainer);
 
-  // 공통 버튼 이벤트 설정
-  setupNavigationButtons();
+  // 헤더 버튼 이벤트 설정
+  setupHeaderEvents();
 }
 
 // 해시 변경 시 render 함수 재호출

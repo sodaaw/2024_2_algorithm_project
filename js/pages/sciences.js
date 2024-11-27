@@ -1,11 +1,12 @@
-// 데이터를 humanities_major.js에서 가져옴
-import { sciencesData } from "./data/sciences_major.js";
+import { sciencesData } from "./data/sciences_major.js"; // 데이터를 가져옴
+import { renderHeader, setupHeaderEvents } from "./header.js"; // 공통 헤더 가져오기
 
 export function render() {
   const app = document.getElementById("app");
 
-  // app에 기본 HTML 구조 추가
+  // HTML 구조 렌더링
   app.innerHTML = `
+    ${renderHeader()} <!-- 공통 헤더 렌더링 -->
     <div id="tree-container" class="tree-container"></div>
   `;
 
@@ -42,4 +43,7 @@ export function render() {
     collegeElement.appendChild(majorList);
     treeContainer.appendChild(collegeElement);
   });
+
+  // 헤더 이벤트 설정
+  setupHeaderEvents();
 }

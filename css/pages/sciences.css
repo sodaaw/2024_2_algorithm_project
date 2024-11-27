@@ -11,6 +11,25 @@ body, html {
   padding-bottom: 20px; /* 상단 여백 추가 */
 }
 
+
+.app-logo {
+  width: 100px;
+  height: auto;
+}
+
+.home-btn, .logout-btn {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.home-btn:hover, .logout-btn:hover {
+  background-color: #0056b3;
+}
+
 .tree-container {
   display: grid;
   gap: 20px;

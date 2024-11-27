@@ -1,10 +1,7 @@
-// CSS 파일을 동적으로 제거하는 함수
-function removeCSS(href) {
-  const links = document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`);
-  links.forEach((link) => link.remove());
-}
+import { renderHeader, setupHeaderEvents } from "./header.js";
+import departments from "./data/link_data.js";
 
-// CSS 파일을 동적으로 로드하는 함수
+// CSS 파일을 동적으로 로드 및 제거하는 함수
 function loadCSS(href) {
   const link = document.createElement("link");
   link.rel = "stylesheet";
@@ -12,21 +9,14 @@ function loadCSS(href) {
   document.head.appendChild(link);
 }
 
-// Kakao SDK 초기화 코드
-import { KAKAO_API_KEY } from "../apikey.js";
-if (typeof Kakao !== "undefined" && !Kakao.isInitialized()) {
-  Kakao.init(KAKAO_API_KEY);
-  console.log("Kakao SDK Initialized:", Kakao.isInitialized());
+function removeCSS(href) {
+  const links = document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`);
+  links.forEach((link) => link.remove());
 }
 
-// 전공 url 영어로 하기 위한 데이터 파일 로드
-import departments from "./data/link_data.js"; // 데이터 파일 불러오기
-
 export function render() {
-  // 이전 CSS 제거
+  // 이전 CSS 제거 및 새로운 CSS 로드
   removeCSS("css/pages/roadmap.css");
-
-  // 새로운 CSS 로드
   loadCSS("css/pages/mypage.css");
 
   const app = document.getElementById("app");
@@ -61,16 +51,9 @@ export function render() {
           .join("")
       : `<p class="no-majors">등록한 관심 전공이 없습니다.</p>`;
 
+  // HTML 렌더링
   app.innerHTML = `
-    <header class="mypage-header">
-      <div class="header-left">
-        <img id="logo-button" src="./images/logo.png" alt="앱 로고" class="app-logo"/>
-      </div>
-      <div class="header-right">
-        <button id="home-btn" class="home-btn">Home</button>
-        <button id="logout-btn" class="logout-btn">Logout</button>
-      </div>
-    </header>
+    ${renderHeader()} <!-- 공통 헤더 렌더링 -->
     <div class="mypage-container">
       <div class="profile-section">
         <img src="${profileImage}" alt="프로필 이미지" class="profile-page-image"/>
@@ -96,28 +79,6 @@ export function render() {
     });
   });
 
-  // 홈 버튼 및 로고 클릭 이벤트
-  document.getElementById("home-btn").addEventListener("click", () => {
-    window.location.hash = "#main";
-  });
-
-  document.getElementById("logo-button").addEventListener("click", () => {
-    window.location.hash = "#main";
-  });
-
-  // 로그아웃 버튼 클릭 이벤트
-  const logoutButton = document.getElementById("logout-btn");
-  if (logoutButton) {
-    logoutButton.addEventListener("click", () => {
-      if (Kakao.Auth) {
-        Kakao.Auth.logout(() => {
-          alert("로그아웃 되었습니다.");
-          localStorage.clear();
-          window.location.hash = "";
-        });
-      } else {
-        alert("Kakao 로그아웃 기능을 사용할 수 없습니다.");
-      }
-    });
-  }
+  // 헤더 버튼 이벤트 설정
+  setupHeaderEvents();
 }
