@@ -46,6 +46,7 @@
   width: 140px; /* 로고 크기 */
   height: auto;
   margin-left: 0.3vw;
+  
 }
 
 .div-wrapper {
@@ -53,7 +54,11 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  width: 100%;
+  overflow:hidden;
+  width: 100vw; /* 전체 화면 너비 */
+  height: 100vh; /* 전체 화면 높이 */
+  align-items:center;
+
 }
 
 .div-wrapper .div {
