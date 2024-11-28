@@ -64,6 +64,7 @@
 /* 프로필 섹션 스타일 */
 .profile-section {
   display: flex;
+  margin-top: 40px;
   align-items: center;
   flex-direction: column;
   justify-content: center;
