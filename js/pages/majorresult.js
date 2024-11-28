@@ -3,64 +3,64 @@ import { KAKAO_API_KEY } from '../apikey.js';
 
 // Kakao SDK 초기화
 if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
-Kakao.init(KAKAO_API_KEY); // 카카오 API 키로 초기화
-console.log('Kakao SDK Initialized:', Kakao.isInitialized());
+  Kakao.init(KAKAO_API_KEY); // 카카오 API 키로 초기화
+  console.log('Kakao SDK Initialized:', Kakao.isInitialized());
 }
 
 // CSS 파일을 동적으로 로드하는 함수
 function loadCSS(href) {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = href;
-    document.head.appendChild(link);
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = href;
+  document.head.appendChild(link);
 }
 
 // CSS 파일을 제거하는 함수
 function removeCSS(href) {
-    const links = document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`);
-    links.forEach((link) => link.remove());
+  const links = document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`);
+  links.forEach((link) => link.remove());
 }
 
 // 해당 전공이 적합한지 아닌지 출력하는 함수
 function renderResultPage() {
-    // sessionStorage에서 데이터 가져오기 (majorsearch 페이지에서 넘기며 저장)
-    const result = sessionStorage.getItem("majorResult");
+  // sessionStorage에서 데이터 가져오기 (majorsearch 페이지에서 넘기며 저장)
+  const result = sessionStorage.getItem("majorResult");
 
-    if (result === "1") {
-        console.log("return is 1 yes")
-        return `
+  if (result === "1") {
+    console.log("return is 1 yes")
+    return `
         <span class="text-wrapper-2">적합</span>
     `;
-    } else if (result === "0") {
-        console.log("return is 0 no")
-        return `
+  } else if (result === "0") {
+    console.log("return is 0 no")
+    return `
         <span class="text-wrapper-3">부적합</span>
     `;
-    } else {
-        return `
+  } else {
+    return `
       ERROR
     `;
-    }
+  }
 }
 
 function renderMajorData() {
-    const majorName = sessionStorage.getItem("majorName");
-    const majorScore = sessionStorage.getItem("majorScore");
+  const majorName = sessionStorage.getItem("majorName");
+  const majorScore = ~~(sessionStorage.getItem("majorScore"));
 
-    return [majorName, majorScore];
+  return [majorName, majorScore];
 }
 
 export function render() {
 
-    const [majorName, majorScore] = renderMajorData();
+  const [majorName, majorScore] = renderMajorData();
 
-    // 이전 CSS 제거
-    removeCSS("css/pages/majorsearch.css");
+  // 이전 CSS 제거
+  removeCSS("css/pages/majorsearch.css");
 
-    // 새로운 CSS 로드
-    loadCSS("css/pages/majorresult.css");
-    const app = document.getElementById("app");
-    app.innerHTML = `
+  // 새로운 CSS 로드
+  loadCSS("css/pages/majorresult.css");
+  const app = document.getElementById("app");
+  app.innerHTML = `
             <header class="mypage-header">
               <div class="header-left">
                 <img id="logo-button" src="./images/logo.png" alt="앱 로고" class="app-logo"/> <!-- 앱 로고 추가 -->
@@ -90,37 +90,37 @@ export function render() {
     </div>
 
             `;
- // Home 버튼 클릭 시 메인 페이지로 이동
+  // Home 버튼 클릭 시 메인 페이지로 이동
   const homeButton = document.getElementById("home-btn");
   homeButton.addEventListener("click", () => {
-      window.location.hash = "#main"; // 메인 페이지로 이동
+    window.location.hash = "#main"; // 메인 페이지로 이동
   });
 
   // 로고 누르면 메인페이지로 가게끔
   const logoButton = document.getElementById("logo-button");
   logoButton.addEventListener("click", () => {
-      window.location.hash = "#main"; // 메인 페이지로 이동
+    window.location.hash = "#main"; // 메인 페이지로 이동
   });
-// 로그아웃 버튼 클릭 이벤트
-const logoutButton = document.getElementById("logout-btn");
+  // 로그아웃 버튼 클릭 이벤트
+  const logoutButton = document.getElementById("logout-btn");
 
-if (logoutButton) {
-logoutButton.addEventListener("click", () => {
-// 카카오 로그아웃 호출
-if (Kakao.Auth) {
-Kakao.Auth.logout(() => {
-alert("로그아웃 되었습니다.");
-localStorage.removeItem("nickname"); // 닉네임 삭제
-localStorage.removeItem("profile_image"); // 프로필 이미지 삭제
-localStorage.removeItem("interest_majors"); // 관심 전공 삭제
-window.location.hash = ""; // 로그인 페이지로 이동
-});
-} else {
-alert("Kakao 로그아웃 기능을 사용할 수 없습니다.");
-}
-});
-} else {
-console.error("로그아웃 버튼을 찾을 수 없습니다.");
-}
-      
+  if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+      // 카카오 로그아웃 호출
+      if (Kakao.Auth) {
+        Kakao.Auth.logout(() => {
+          alert("로그아웃 되었습니다.");
+          localStorage.removeItem("nickname"); // 닉네임 삭제
+          localStorage.removeItem("profile_image"); // 프로필 이미지 삭제
+          localStorage.removeItem("interest_majors"); // 관심 전공 삭제
+          window.location.hash = ""; // 로그인 페이지로 이동
+        });
+      } else {
+        alert("Kakao 로그아웃 기능을 사용할 수 없습니다.");
+      }
+    });
+  } else {
+    console.error("로그아웃 버튼을 찾을 수 없습니다.");
+  }
+
 }
