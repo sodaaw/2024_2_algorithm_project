@@ -64,6 +64,7 @@
 /* 프로필 섹션 스타일 */
 .profile-section {
   display: flex;
+  margin-top: 40px;
   align-items: center;
   flex-direction: column;
   justify-content: center;
@@ -79,6 +80,7 @@
 
 .mypage-container {
   justify-items: center;
+  padding-top: 40px;
 }
 
 .mypage-container h1 {
@@ -150,6 +152,57 @@
 .card-text span {
   font-size: 1.2rem;
   color: #19552D;
+}
+
+/* 버튼 스타일 */
+.arrow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none; /* 배경 제거 */
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 2100;
+}
+
+.arrow-btn.left {
+  left: 8px;
+}
+
+.arrow-btn.right {
+  right: 8px;
+}
+
+/* 버튼 안의 이미지 스타일 */
+.arrow-img {
+  width: 25px; /* 이미지 크기 조정 */
+  height: 25px;
+  opacity: 0.6; /* 투명도 설정 (80%) */
+  transition: opacity 0.3s; /* 호버 시 부드럽게 변경 */
+}
+
+.arrow-img:hover {
+  opacity: 1; /* 호버 시 불투명 */
+}
+
+/* 카드 내부 화살표 버튼 스타일 */
+.card-arrow-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.card-arrow-btn img {
+  width: 20px; /* 이미지 크기 조정 */
+  height: 20px;
+  opacity: 0.8; /* 투명도 설정 */
+  transition: opacity 0.3s ease; /* 호버 시 부드럽게 */
+}
+
+.card-arrow-btn img:hover {
+  opacity: 1; /* 호버 시 불투명 */
 }
 
 /* 반응형: 화면 크기가 좁아질 때 (최대 768px) */

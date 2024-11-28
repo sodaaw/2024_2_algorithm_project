@@ -1,9 +1,7 @@
-import { KAKAO_API_KEY } from '../apikey.js';
-
-// Kakao SDK 초기화
-if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
-  Kakao.init(KAKAO_API_KEY); // 카카오 API 키로 초기화
-  console.log('Kakao SDK Initialized:', Kakao.isInitialized());
+// CSS 파일을 동적으로 제거하는 함수
+function removeCSS(href) {
+  const links = document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`);
+  links.forEach((link) => link.remove());
 }
 
 // CSS 파일을 동적으로 로드하는 함수
@@ -14,14 +12,15 @@ function loadCSS(href) {
   document.head.appendChild(link);
 }
 
-// CSS 파일을 제거하는 함수
-function removeCSS(href) {
-  const links = document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`);
-  links.forEach((link) => link.remove());
+// Kakao SDK 초기화 코드
+import { KAKAO_API_KEY } from "../apikey.js";
+if (typeof Kakao !== "undefined" && !Kakao.isInitialized()) {
+  Kakao.init(KAKAO_API_KEY);
+  console.log("Kakao SDK Initialized:", Kakao.isInitialized());
 }
 
 // 전공 url 영어로 하기 위한 데이터 파일 로드
-import departments from './data/link_data.js'; // 데이터 파일 불러오기
+import departments from "./data/link_data.js"; // 데이터 파일 불러오기
 
 export function render() {
   // 이전 CSS 제거
@@ -29,14 +28,14 @@ export function render() {
 
   // 새로운 CSS 로드
   loadCSS("css/pages/mypage.css");
+
   const app = document.getElementById("app");
 
   // localStorage에서 닉네임과 프로필 이미지, 관심 전공 목록 가져오기
   const nickname = localStorage.getItem("nickname") || "사용자";
-  const profileImage = localStorage.getItem("profile_image") || "images/default_profile.png"; // 기본 이미지 경로
-  //const interestMajors = JSON.parse(localStorage.getItem("interest_majors")) || []; // 관심 전공 배열
+  const profileImage = localStorage.getItem("profile_image") || "images/default_profile.png";
 
-  // 테스트용 임시 관심 전공 데이터
+  // 테스트용 관심 전공 데이터
   const interestMajors = [
     "컴퓨터교육과",
     "소프트웨어학과",
@@ -46,91 +45,79 @@ export function render() {
     "한문학과",
   ];
 
-  // 관심 전공이 없는 경우 메시지 설정
   const majorContent =
-  interestMajors.length > 0
-    ? interestMajors
-        .map((major) => {
-          // departments에서 영어 이름 검색
-          const engName = departments[major]?.eng_name || ""; // 존재하지 않을 경우 빈 문자열
-          return `
-            <div class="major-card" data-eng-name="${engName}">
+    interestMajors.length > 0
+      ? interestMajors
+          .map((major) => {
+            const engName = departments[major]?.eng_name || "";
+            return `
+              <div class="major-card" data-eng-name="${engName}">
                 <div class="card-text">
                   <p>${major}</p>
-                  <span>➡️</span>
+                  <img src="./images/roadmap/arrow_button.png" alt="화살표 이미지" class="arrow-img">
                 </div>
-            </div>`;
-        })
-        .join("")
-    : `<p class="no-majors">등록한 관심 전공이 없습니다.</p>`;
+              </div>`;
+          })
+          .join("")
+      : `<p class="no-majors">등록한 관심 전공이 없습니다.</p>`;
 
-          app.innerHTML = `
-            <header class="mypage-header">
-              <div class="header-left">
-                <img id="logo-button" src="./images/logo.png" alt="앱 로고" class="app-logo"/> <!-- 앱 로고 추가 -->
-              </div>
-              <div class="header-right">
-                <button id="home-btn" class="home-btn">Home</button>
-                <button id="logout-btn" class="logout-btn">Logout</button>
-              </div>
-            </header>
-            <div class="mypage-container">
-              <div class="profile-section">
-                <img src="${profileImage}" alt="프로필 이미지" class="profile-page-image"/> <!-- 프로필 사진 -->
-                <h1>${nickname} 님의 관심 전공 모아보기</h1>
-              </div>
-              <p>전공을 클릭하면 로드맵 조회, 비슷한 학과 조회가 가능합니다.</p>
-              <div class="majors-container">
-                ${majorContent}
-              </div>
-            </div>
-        `;
+  app.innerHTML = `
+    <header class="mypage-header">
+      <div class="header-left">
+        <img id="logo-button" src="./images/logo.png" alt="앱 로고" class="app-logo"/>
+      </div>
+      <div class="header-right">
+        <button id="home-btn" class="home-btn">Home</button>
+        <button id="logout-btn" class="logout-btn">Logout</button>
+      </div>
+    </header>
+    <div class="mypage-container">
+      <div class="profile-section">
+        <img src="${profileImage}" alt="프로필 이미지" class="profile-page-image"/>
+        <h1>${nickname} 님의 관심 전공 모아보기</h1>
+      </div>
+      <p>전공을 클릭하면 로드맵 조회, 비슷한 학과 조회가 가능합니다.</p>
+      <div class="majors-container">
+        ${majorContent}
+      </div>
+    </div>
+  `;
 
-  // 카드 클릭 이벤트 추가
+  // 전공 카드 클릭 이벤트 추가
   const majorCards = document.querySelectorAll(".major-card");
   majorCards.forEach((card) => {
     card.addEventListener("click", () => {
-      const engName = card.getAttribute("data-eng-name"); // 영어 이름 가져오기
+      const engName = card.getAttribute("data-eng-name");
       if (engName) {
-        window.location.hash = `#roadmap/${engName}`; // 영어 이름을 URL에 사용
+        window.location.hash = `#roadmap/${engName}`;
       } else {
-        alert("해당 전공의 URL 정보를 찾을 수 없습니다."); // 예외 처리
+        alert("해당 전공의 URL 정보를 찾을 수 없습니다.");
       }
     });
   });
 
-
-  // Home 버튼 클릭 시 메인 페이지로 이동
-  const homeButton = document.getElementById("home-btn");
-  homeButton.addEventListener("click", () => {
-      window.location.hash = "#main"; // 메인 페이지로 이동
+  // 홈 버튼 및 로고 클릭 이벤트
+  document.getElementById("home-btn").addEventListener("click", () => {
+    window.location.hash = "#main";
   });
 
-  // 로고 누르면 메인페이지로 가게끔
-  const logoButton = document.getElementById("logo-button");
-  logoButton.addEventListener("click", () => {
-      window.location.hash = "#main"; // 메인 페이지로 이동
+  document.getElementById("logo-button").addEventListener("click", () => {
+    window.location.hash = "#main";
   });
 
   // 로그아웃 버튼 클릭 이벤트
   const logoutButton = document.getElementById("logout-btn");
-
   if (logoutButton) {
     logoutButton.addEventListener("click", () => {
-      // 카카오 로그아웃 호출
       if (Kakao.Auth) {
         Kakao.Auth.logout(() => {
           alert("로그아웃 되었습니다.");
-          localStorage.removeItem("nickname"); // 닉네임 삭제
-          localStorage.removeItem("profile_image"); // 프로필 이미지 삭제
-          localStorage.removeItem("interest_majors"); // 관심 전공 삭제
-          window.location.hash = ""; // 로그인 페이지로 이동
+          localStorage.clear();
+          window.location.hash = "";
         });
       } else {
         alert("Kakao 로그아웃 기능을 사용할 수 없습니다.");
       }
     });
-  } else {
-    console.error("로그아웃 버튼을 찾을 수 없습니다.");
   }
 }
