@@ -68,3 +68,14 @@ export function render() {
     kakaoLoginButton.addEventListener("click", loginWithKakao);
   }
 }
+
+const guestLoginButton = document.getElementById("guest-login");
+if (guestLoginButton) {
+  guestLoginButton.addEventListener("click", () => {
+    console.log("비회원 로그인 버튼 클릭됨"); // 디버깅용 로그
+    navigateTo("#main");
+  });
+} else {
+  console.error("비회원 로그인 버튼을 찾을 수 없습니다."); // 버튼이 제대로 렌더링되었는지 확인
+}
+

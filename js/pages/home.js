@@ -24,38 +24,41 @@ export function render() {
   applyTextAnimation();
 
   function applyTextAnimation() {
-    const textArray = [
-      "성균관대 전공",
-      "추천 프로그램"
-    ];
+    const textArray = ["성균관대 전공", "추천 프로그램"];
     const textContainer = document.getElementById("animated-text");
-  
+    
     if (textContainer) {
+      let htmlContent = "";
       textArray.forEach((line, lineIndex) => {
         line.split("").forEach((letter, letterIndex) => {
-          const span = document.createElement("span");
-          span.textContent = letter === " " ? "\xa0" : letter; // 공백 처리
-          span.style.animationDelay = `${(lineIndex * 10 + letterIndex) * 50}ms`;
-          span.classList.add("text-animated");
-          textContainer.appendChild(span);
+          const delay = (lineIndex * 10 + letterIndex) * 50;
+          htmlContent += `<span class="text-animated" style="animation-delay: ${delay}ms;">${letter === " " ? "&nbsp;" : letter}</span>`;
         });
-  
-        // 줄바꿈 추가
         if (lineIndex < textArray.length - 1) {
-          const br = document.createElement("br");
-          textContainer.appendChild(br);
+          htmlContent += "<br>"; // 줄바꿈
         }
       });
+      textContainer.innerHTML = htmlContent;
     }
   }
-  
 
   // 버튼 클릭 이벤트 추가
   const loginButton = document.getElementById("login-btn");
   const signupButton = document.getElementById("signup-btn");
   const justStartButton = document.getElementById("juststart");
 
-  loginButton.addEventListener("click", () => navigateTo("#login")); // 로그인 페이지로 이동
-  signupButton.addEventListener("click", () => navigateTo("#login")); // 회원가입 페이지로 이동
-  justStartButton.addEventListener("click", () => navigateTo("#main"));
+  loginButton.addEventListener("click", () => {
+    console.log("Navigating to login page...");
+    navigateTo("#login");
+  });
+
+  signupButton.addEventListener("click", () => {
+    console.log("Navigating to signup page...");
+    navigateTo("#signup");
+  });
+
+  justStartButton.addEventListener("click", () => {
+    console.log("Navigating to main page...");
+    navigateTo("#main");
+  });
 }

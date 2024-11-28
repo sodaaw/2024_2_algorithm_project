@@ -12,24 +12,32 @@ loadCSS("css/pages/majorsearch.css");
 var majorWeightYSum = 0; // 사용자가 "예"를 눌렀을 때 weight를 더하는 변수
 var majorWeightTotalSum = 0; // 사용자가 "예" 또는 "아니오"를 눌렀을 때 weight를 더하는 변수 (전공의 전체 스코어가 반환됨)
 
-export async function render() {
+export async function render(decodedMajor) {
   const majors = await loadMajors(); // JSON 파일에서 전공 데이터 불러오기
-  const selectedMajor = majors[28]; // 임시로 유동으로 정함 (로드맵에서 클릭시 데이터 넘어와서 인덱스로 넣을 예정)
+  const selectedMajor = majors.find((major) => major.major === decodedMajor);
+
+  if (!selectedMajor) {
+    console.error(`Major "${decodedMajor}" not found in data.`);
+    return;
+  }
+
   sessionStorage.setItem("majorName", selectedMajor.major);
   renderQuestions(selectedMajor, 0); // 첫 번째 질문부터 시작
 }
 
+
 // JSON 파일에서 전공과 질문 데이터를 불러오기 위한 함수
 async function loadMajors() {
   try {
-    const response = await fetch('../../questions.json');
+    const response = await fetch("/questions.json"); // 경로 확인
     const data = await response.json();
-    return data.majors; // JSON 파일에서 'majors' 데이터를 반환
+    return data.majors;
   } catch (error) {
-    console.error('전공 데이터를 불러오는 데 실패했습니다:', error);
+    console.error("전공 데이터를 불러오는 데 실패했습니다:", error);
     return [];
   }
 }
+
 
 function calcResult(majorWeightYSum, majorWeightTotalSum) { // 해당 전공이 적합한지 아닌지 계산하는 함수 (전체 가중치의 70% 이상일 시 적합)
   sessionStorage.setItem("majorScore", 100 * majorWeightYSum / majorWeightTotalSum);
@@ -139,5 +147,3 @@ function renderQuestions(major, questionIndex) {
     console.error("로그아웃 버튼을 찾을 수 없습니다.");
   }
 }
-
-

@@ -81,13 +81,18 @@ export function render(selectedMajorEng) {
     </div>
     <div id="overlay" class="overlay hidden">
       <div class="popup">
-        <button id="close-popup" class="close-popup">×</button>
-        <button id="prev-img" class="arrow-btn left hidden">‹</button>
-        <img id="popup-image" src="${roadmapImagesArray[0]}" alt="${selectedMajor} 로드맵" class="popup-image"/>
-        <button id="next-img" class="arrow-btn right hidden">›</button>
+        <button id="close-popup" class="close-popup-btn">×</button>
+        <button id="prev-img" class="arrow-btn left hidden">
+          <img src="./images/roadmap/arrow_button.png" alt="Previous" class="arrow-img" />
+        </button>
+        <img id="popup-image" src="${roadmapImagesArray[0]}" alt="${selectedMajor} 로드맵" class="popup-image" />
+        <button id="next-img" class="arrow-btn right hidden">
+          <img src="./images/roadmap/arrow_button.png" alt="Next" class="arrow-img" />
+        </button>
       </div>
-    </div>
+  </div>
   `;
+
 
   // 비슷한 전공 보기 버튼 이벤트
   document.getElementById("similar-dept-btn").addEventListener("click", () => {
@@ -125,6 +130,19 @@ export function render(selectedMajorEng) {
     // 닫기 버튼 이벤트 추가
     document.getElementById("close-similar-majors").addEventListener("click", () => {
       document.querySelector(".card-container").remove();
+    });
+
+    // 전공 카드 클릭 이벤트 추가
+    document.querySelectorAll(".major-card, .major-item").forEach((element) => {
+      element.addEventListener("click", () => {
+        const major = element.getAttribute("data-major") || element.textContent; // 전공 이름 가져오기
+        if (major) {
+          const encodedMajor = encodeURIComponent(major); // URL 인코딩
+          window.location.hash = `#majorsearch?major=${encodedMajor}`; // #majorsearch로 이동
+        } else {
+          alert("선택된 전공의 정보를 찾을 수 없습니다."); // 예외 처리
+        }
+      });
     });
   });
 
