@@ -54,7 +54,7 @@ export function render() {
               <div class="major-card" data-eng-name="${engName}">
                 <div class="card-text">
                   <p>${major}</p>
-                  <span>➡️</span>
+                  <img src="./images/roadmap/arrow_button.png" alt="화살표 이미지" class="arrow-img">
                 </div>
               </div>`;
           })
