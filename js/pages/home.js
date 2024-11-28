@@ -42,6 +42,19 @@ export function render() {
     }
   }
 
+  // CSS 제거 로직
+  function resetStyles() {
+    const app = document.getElementById("app");
+    app.innerHTML = ""; // 기존 DOM 초기화
+    const styleSheets = document.styleSheets;
+    for (let i = 0; i < styleSheets.length; i++) {
+      const styleSheet = styleSheets[i];
+      if (styleSheet.href && styleSheet.href.includes("home")) {
+        styleSheet.disabled = true; // 특정 스타일시트를 비활성화
+      }
+    }
+  }
+
   // 버튼 클릭 이벤트 추가
   const loginButton = document.getElementById("login-btn");
   const signupButton = document.getElementById("signup-btn");
@@ -49,16 +62,19 @@ export function render() {
 
   loginButton.addEventListener("click", () => {
     console.log("Navigating to login page...");
+    resetStyles(); // 스타일 초기화
     navigateTo("#login");
   });
 
   signupButton.addEventListener("click", () => {
     console.log("Navigating to signup page...");
-    navigateTo("#signup");
+    resetStyles(); // 스타일 초기화
+    navigateTo("#login");
   });
 
   justStartButton.addEventListener("click", () => {
     console.log("Navigating to main page...");
+    resetStyles(); // 스타일 초기화
     navigateTo("#main");
   });
 }
