@@ -6,6 +6,15 @@ export function render() {
 
   // app에 기본 HTML 구조 추가
   app.innerHTML = `
+    <header class="mypage-header">
+      <div class="header-left">
+        <img id="logo-button" src="./images/logo.png" alt="앱 로고" class="app-logo"/>
+      </div>
+      <div class="header-right">
+        <button id="home-btn" class="home-btn">Home</button>
+        <button id="logout-btn" class="logout-btn">Logout</button>
+      </div>
+    </header>
     <div id="tree-container" class="tree-container"></div>
   `;
 
@@ -42,4 +51,34 @@ export function render() {
     collegeElement.appendChild(majorList);
     treeContainer.appendChild(collegeElement);
   });
+
+  const homeButton = document.getElementById("home-btn");
+  if (homeButton) {
+    homeButton.addEventListener("click", () => {
+      window.location.hash = "#main"; // 메인 페이지로 이동
+    });
+  }
+
+  const logoButton = document.getElementById("logo-button");
+  if (logoButton) {
+    logoButton.addEventListener("click", () => {
+      window.location.hash = "#main"; // 메인 페이지로 이동
+    });
+  }
+
+  const logoutButton = document.getElementById("logout-btn");
+  if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+      if (typeof Kakao !== "undefined" && Kakao.Auth) {
+        Kakao.Auth.logout(() => {
+          alert("로그아웃 되었습니다.");
+          localStorage.clear(); // 모든 로컬 스토리지 데이터 제거
+          window.location.hash = ""; // 로그인 페이지로 이동
+        });
+      } else {
+        alert("Kakao 로그아웃 기능을 사용할 수 없습니다.");
+      }
+    });
+  }
+
 }

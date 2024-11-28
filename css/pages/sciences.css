@@ -4,6 +4,32 @@ body, html {
   box-sizing: border-box;
 }
 
+.mypage-header {
+  width: 100vw; /* 페이지 전체 너비로 확장 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  position: fixed; /* 상단 고정 */
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 프로필 이미지와 이름 사이 간격 */
+}
+
+.header-right {
+  display: flex;
+  gap: 15px; /* 버튼 사이 간격 */
+  margin-right: 40px;
+}
+
 #app {
   min-height: 100vh;
   position: relative;
