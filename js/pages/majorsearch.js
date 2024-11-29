@@ -59,6 +59,7 @@ function renderQuestions(major, questionIndex) {
               <div class="header-right">
                 <button id="home-btn" class="home-btn">Home</button>
                 <button id="logout-btn" class="logout-btn">Logout</button>
+                <button id="mypage-btn" class="mypage-btn">Mypage</button>
               </div>
             </header>
         <div class="div-wrapper">
@@ -125,6 +126,13 @@ function renderQuestions(major, questionIndex) {
   logoButton.addEventListener("click", () => {
     window.location.hash = "#main"; // 메인 페이지로 이동
   });
+
+  const mypageButton = document.getElementById("mypage-btn");
+  if (mypageButton) {
+    mypageButton.addEventListener("click", () => {
+      window.location.hash = "#mypage"; // 메인 페이지로 이동
+    });
+  }
 
   // 로그아웃 버튼 클릭 이벤트
   const logoutButton = document.getElementById("logout-btn");

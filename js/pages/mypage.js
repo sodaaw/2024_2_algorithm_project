@@ -98,10 +98,14 @@ export function render() {
 
   // 홈 버튼 및 로고 클릭 이벤트
   document.getElementById("home-btn").addEventListener("click", () => {
+    removeCSS("css/pages/mypage.css");
+    loadCSS("css/pages/main.css");
     window.location.hash = "#main";
   });
 
   document.getElementById("logo-button").addEventListener("click", () => {
+    removeCSS("css/pages/mypage.css");
+    loadCSS("css/pages/main.css");
     window.location.hash = "#main";
   });
 
