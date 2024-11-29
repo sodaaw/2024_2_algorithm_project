@@ -1,5 +1,21 @@
 import { navigateTo } from "../utils/router.js"; // navigateTo 함수 임포트
 
+// CSS 관리 객체
+const CSSManager = {
+  load: (href) => {
+    if (!document.querySelector(`link[rel="stylesheet"][href="${href}"]`)) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = href;
+      document.head.appendChild(link);
+    }
+  },
+  remove: (href) => {
+    const links = document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`);
+    links.forEach((link) => link.remove());
+  }
+};
+
 function resetStyles() {
   const app = document.getElementById("app");
   if (app) {
@@ -31,7 +47,19 @@ function setupNavigation(buttonId, targetHash) {
     button.addEventListener("click", () => {
       console.log(`Navigating to ${targetHash} page...`);
       resetStyles();
-      navigateTo(targetHash);
+
+      if (targetHash === "#login") {
+        CSSManager.remove("css/pages/home.css");
+        CSSManager.load("css/pages/login.css");
+      } else if (targetHash === "#main") {
+        CSSManager.remove("css/pages/mypage.css");
+        CSSManager.load("css/pages/home.css");
+      }
+
+      // Delay rendering to allow CSS to apply
+      setTimeout(() => {
+        navigateTo(targetHash);
+      }, 50);
     });
   }
 }
@@ -58,6 +86,10 @@ function renderTemplate() {
 }
 
 export function render() {
+  // CSS 업데이트
+  CSSManager.remove("css/pages/previous.css"); // 이전 CSS 제거 (예: 이전 페이지 CSS)
+  CSSManager.load("css/pages/home.css"); // 현재 페이지 CSS 로드
+
   const app = document.getElementById("app");
   if (app) {
     app.innerHTML = renderTemplate();

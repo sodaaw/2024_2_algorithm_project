@@ -79,6 +79,13 @@ function setupNavigation(buttonId, targetHash, currentCSS, nextCSS) {
       removeCSS(currentCSS);
       loadCSS(nextCSS);
       navigateTo(targetHash);
+
+      // 새로고침이 필요한 경우 실행
+      if (shouldReload) {
+        setTimeout(() => {
+          window.location.reload(); // 강제로 새로고침
+        }, 100); // 약간의 딜레이를 추가해 navigateTo가 완료된 후 새로고침
+      }
     });
   }
 }
@@ -123,8 +130,8 @@ export function render() {
   });
 
   // 홈 버튼 및 로고 클릭 이벤트 설정
-  setupNavigation("home-btn", "#main", "css/pages/mypage.css", "css/pages/main.css");
-  setupNavigation("logo-button", "#main", "css/pages/mypage.css", "css/pages/main.css");
+  setupNavigation("home-btn", "#main", "css/pages/mypage.css", "css/pages/main.css", true);
+  setupNavigation("logo-button", "#main", "css/pages/mypage.css", "css/pages/main.css", true);
 
   // 로그아웃 버튼 이벤트 추가
   const logoutButton = document.getElementById("logout-btn");
