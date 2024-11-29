@@ -19,10 +19,12 @@
 }
 
 .header-right {
-  margin-right: 30px;
+  display: flex;
+  gap: 15px; /* 버튼 사이 간격 */
+  margin-right: 40px;
 }
 
-.logout-btn, .home-btn, .mypage-btn {
+.logout-btn, .home-btn {
   padding: 10px 15px;
   background-color: #ffffff;
   color: #19552D;
@@ -31,7 +33,6 @@
   border-radius: 7px;
   cursor: pointer;
   font-size: 0.8rem;
-  margin-left: 6px;
   transition: background-color 0.3s ease;
 }
 
@@ -136,9 +137,9 @@
 }
 
 .div-wrapper .text-wrapper {
-  width: 870px;
+  width: 1000px;
   top: 0;
-  left: 0;
+  left: -80px;
   font-family: "Montserrat-Bold", Helvetica;
   font-weight: 700;
   font-size: 30px;
