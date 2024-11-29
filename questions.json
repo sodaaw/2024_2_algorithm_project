@@ -1,7 +1,7 @@
 {
     "majors": [
       {
-        "major": "유학·동양학과",
+        "major": "유학동양학과",
         "questions": [
           { "id": 1, "question": "한국과 중국의 유학 전통에 대해 관심이 있나요?", "weight": 8 },
           { "id": 2, "question": "동양 철학 사상, 예를 들어 유교나 도교에 대해 알고 있나요?", "weight": 7 },

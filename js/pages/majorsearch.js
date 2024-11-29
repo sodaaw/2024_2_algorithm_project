@@ -20,7 +20,8 @@ export async function render(decodedMajor) {
     console.error(`Major "${decodedMajor}" not found in data.`);
     return;
   }
-
+  
+  loadCSS("css/pages/majorsearch.css");
   sessionStorage.setItem("majorName", selectedMajor.major);
   renderQuestions(selectedMajor, 0); // 첫 번째 질문부터 시작
 }
@@ -107,9 +108,9 @@ function renderQuestions(major, questionIndex) {
           navigateTo("#majorresult");
         } else {
           console.log("Nooooo"); // majorresult 페이지에서 부적합 띄우기
+          sessionStorage.setItem("majorResult", "0");
         }
         navigateTo("#majorresult")
-        sessionStorage.setItem("majorResult", "1");
         console.log("navigate to majorresult.js"); // 10개를 다 끝내면 결과 페이지로 이동하는 함수 실행
       }
     });
