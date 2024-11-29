@@ -17,6 +17,7 @@ export function render() {
       <div class="header-right">
         <button id="home-btn" class="home-btn">Home</button>
         <button id="logout-btn" class="logout-btn">Logout</button>
+        <button id="mypage-btn" class="logout-btn">Mypage</button>
       </div>
     </header>
     <div class="main-container">
@@ -29,23 +30,44 @@ export function render() {
     <div class="footer-background"></div>
   `;
 
+  // 기존 CSS 제거 함수
+  const removeExistingStyles = () => {
+    const styleSheets = document.querySelectorAll('link[rel="stylesheet"], style');
+    styleSheets.forEach((sheet) => {
+      sheet.parentNode.removeChild(sheet); // 해당 CSS 노드 제거
+    });
+  };
+
+  // 새로운 CSS 로드 함수
+  const loadCSS = (cssPath) => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = cssPath;
+    document.head.appendChild(link);
+  };
+
   // 버튼에 이벤트 리스너 추가
-  const setupButton = (id, hash) => {
+  const setupButton = (id, hash, cssPath) => {
     const button = document.getElementById(id);
     if (button) {
       button.addEventListener("click", () => {
+        removeExistingStyles(); // 기존 CSS 제거
+        if (cssPath) {
+          loadCSS(cssPath); // 해당 페이지 CSS 로드
+        }
         window.location.hash = hash;
       });
     }
   };
 
   // 로고 및 홈 버튼 이벤트
-  setupButton("home-btn", "#main");
-  setupButton("logo-button", "#main");
+  setupButton("home-btn", "#home", "./css/home.css");
+  setupButton("mypage-btn", "#mypage", "./css/mypage.css");
+  setupButton("logo-button", "#main", "./css/main.css");
 
   // Humanities 및 Sciences 버튼 이벤트
-  setupButton("humanities-btn", "#humanities");
-  setupButton("sciences-btn", "#sciences");
+  setupButton("humanities-btn", "#humanities", "./css/humanities.css");
+  setupButton("sciences-btn", "#sciences", "./css/sciences.css");
 
   // 로그아웃 버튼 이벤트
   const logoutButton = document.getElementById("logout-btn");
@@ -57,6 +79,7 @@ export function render() {
           localStorage.removeItem("nickname"); // 닉네임 삭제
           localStorage.removeItem("profile_image"); // 프로필 이미지 삭제
           localStorage.removeItem("interest_majors"); // 관심 전공 삭제
+          removeExistingStyles(); // CSS 제거
           window.location.hash = ""; // 로그인 페이지로 이동
         });
       } else {

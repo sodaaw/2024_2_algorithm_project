@@ -1,6 +1,14 @@
 // 데이터를 humanities_major.js에서 가져옴
 import { humanitiesData } from "./data/humanities_major.js";
 
+// CSS 파일을 동적으로 로드하는 함수
+function loadCSS(href) {
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = href;
+  document.head.appendChild(link);
+}
+
 // 배경 이미지 설정 함수
 function setBackground(imagePath) {
   const app = document.getElementById("app");
@@ -20,6 +28,14 @@ function removeBackground() {
   }
 }
 
+// 기존 CSS 제거 함수
+function removeExistingStyles() {
+  const styleSheets = document.querySelectorAll('link[rel="stylesheet"], style');
+  styleSheets.forEach((sheet) => {
+    sheet.parentNode.removeChild(sheet); // 해당 CSS 노드 제거
+  });
+}
+
 // 헤더 렌더링 함수
 function renderHeader() {
   return `
@@ -30,6 +46,7 @@ function renderHeader() {
       <div class="header-right">
         <button id="home-btn" class="home-btn">Home</button>
         <button id="logout-btn" class="logout-btn">Logout</button>
+        <button id="mypage-btn" class="logout-btn">Mypage</button>
       </div>
     </header>
   `;
@@ -49,7 +66,19 @@ function setupNavigationButtons() {
   const logoButton = document.getElementById("logo-button");
   if (logoButton) {
     logoButton.addEventListener("click", () => {
+      removeExistingStyles();
+      loadCSS("css/pages/main.css");
       window.location.hash = "#main"; // 메인 페이지로 이동
+    });
+  }
+
+  // mypage 버튼 클릭 이벤트
+  const mypageButton = document.getElementById("mypage-btn");
+  if (mypageButton) {
+    mypageButton.addEventListener("click", () => {
+      removeExistingStyles();
+      loadCSS("css/pages/mypage.css");
+      window.location.hash = "#mypage"; // 메인 페이지로 이동
     });
   }
 
@@ -109,6 +138,14 @@ function renderTree(treeContainer) {
 
 // 메인 렌더링 함수
 export function render() {
+  // 기존 CSS 제거 함수
+  const removeExistingStyles = () => {
+    const styleSheets = document.querySelectorAll('link[rel="stylesheet"], style');
+    styleSheets.forEach((sheet) => {
+      sheet.parentNode.removeChild(sheet); // 해당 CSS 노드 제거
+    });
+  };
+
   const app = document.getElementById("app");
 
   if (!app) {

@@ -13,6 +13,48 @@ body, html {
 
 }
 
+.mypage-header {
+  width: 100vw; /* 페이지 전체 너비로 확장 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  position: fixed; /* 상단 고정 */
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.header-right {
+  margin-right: 30px;
+}
+
+.logout-btn, .home-btn, .mypage-btn {
+  padding: 10px 15px;
+  background-color: #ffffff;
+  color: #19552D;
+  border: solid;
+  border-color: #19552D;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-left: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover, .home-btn:hover {
+  background-color: #19552D;
+  color: #ffffff;
+}
+
+.app-logo {
+  width: 140px; /* 로고 크기 */
+  height: auto;
+  margin-left: 0.3vw;
+}
+
 .tree-container {
   display: grid;
   gap: 20px;
