@@ -65,7 +65,7 @@ export function render() {
 
     // Setup navigation
     setupNavigation("login-btn", "#login");
-    setupNavigation("signup-btn", "#signup");
+    setupNavigation("signup-btn", "#login");
     setupNavigation("juststart", "#main");
   }
 }

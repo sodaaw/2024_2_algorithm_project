@@ -1,67 +1,54 @@
-// CSS 파일을 동적으로 제거하는 함수
+import { navigateTo } from "../utils/router.js"; // navigateTo 함수 임포트
+import { KAKAO_API_KEY } from "../apikey.js";
+import departments from "./data/link_data.js"; // 데이터 파일 불러오기
+
+// Kakao SDK 초기화
+if (typeof Kakao !== "undefined") {
+  if (!Kakao.isInitialized()) {
+    Kakao.init(KAKAO_API_KEY);
+    console.log("Kakao SDK Initialized:", Kakao.isInitialized());
+  } else {
+    console.log("Kakao SDK already initialized.");
+  }
+}
+
+// CSS 파일 로드 및 제거 함수
+function loadCSS(href) {
+  const existingLink = document.querySelector(`link[rel="stylesheet"][href="${href}"]`);
+  if (!existingLink) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = href;
+    document.head.appendChild(link);
+  }
+}
+
 function removeCSS(href) {
   const links = document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`);
   links.forEach((link) => link.remove());
 }
 
-// CSS 파일을 동적으로 로드하는 함수
-function loadCSS(href) {
-  const link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.href = href;
-  document.head.appendChild(link);
+// 관심 전공 HTML 템플릿 생성
+function createMajorCards(interestMajors) {
+  return interestMajors.length > 0
+    ? interestMajors
+        .map((major) => {
+          const engName = departments[major]?.eng_name || "";
+          return `
+            <div class="major-card" data-eng-name="${engName}">
+              <div class="card-text">
+                <p>${major}</p>
+                <img src="./images/roadmap/arrow_button.png" alt="화살표 이미지" class="arrow-img">
+              </div>
+            </div>`;
+        })
+        .join("")
+    : `<p class="no-majors">등록한 관심 전공이 없습니다.</p>`;
 }
 
-// Kakao SDK 초기화 코드
-import { KAKAO_API_KEY } from "../apikey.js";
-if (typeof Kakao !== "undefined" && !Kakao.isInitialized()) {
-  Kakao.init(KAKAO_API_KEY);
-  console.log("Kakao SDK Initialized:", Kakao.isInitialized());
-}
-
-// 전공 url 영어로 하기 위한 데이터 파일 로드
-import departments from "./data/link_data.js"; // 데이터 파일 불러오기
-
-export function render() {
-  // 이전 CSS 제거
-  removeCSS("css/pages/roadmap.css");
-
-  // 새로운 CSS 로드
-  loadCSS("css/pages/mypage.css");
-
-  const app = document.getElementById("app");
-
-  // localStorage에서 닉네임과 프로필 이미지, 관심 전공 목록 가져오기
-  const nickname = localStorage.getItem("nickname") || "사용자";
-  const profileImage = localStorage.getItem("profile_image") || "images/default_profile.png";
-
-  // 테스트용 관심 전공 데이터
-  const interestMajors = [
-    "컴퓨터교육과",
-    "소프트웨어학과",
-    "건설환경공학부",
-    "철학과",
-    "영어영문학과",
-    "한문학과",
-  ];
-
-  const majorContent =
-    interestMajors.length > 0
-      ? interestMajors
-          .map((major) => {
-            const engName = departments[major]?.eng_name || "";
-            return `
-              <div class="major-card" data-eng-name="${engName}">
-                <div class="card-text">
-                  <p>${major}</p>
-                  <img src="./images/roadmap/arrow_button.png" alt="화살표 이미지" class="arrow-img">
-                </div>
-              </div>`;
-          })
-          .join("")
-      : `<p class="no-majors">등록한 관심 전공이 없습니다.</p>`;
-
-  app.innerHTML = `
+// HTML 템플릿 생성
+function renderTemplate(nickname, profileImage, majorContent) {
+  return `
     <header class="mypage-header">
       <div class="header-left">
         <img id="logo-button" src="./images/logo.png" alt="앱 로고" class="app-logo"/>
@@ -82,6 +69,45 @@ export function render() {
       </div>
     </div>
   `;
+}
+
+// 버튼 이벤트 설정 함수
+function setupNavigation(buttonId, targetHash, currentCSS, nextCSS) {
+  const button = document.getElementById(buttonId);
+  if (button) {
+    button.addEventListener("click", () => {
+      removeCSS(currentCSS);
+      loadCSS(nextCSS);
+      navigateTo(targetHash);
+    });
+  }
+}
+
+// 메인 렌더링 함수
+export function render() {
+  // 이전 CSS 제거 및 새 CSS 로드
+  removeCSS("css/pages/roadmap.css");
+  loadCSS("css/pages/mypage.css");
+
+  const app = document.getElementById("app");
+
+  // 사용자 데이터 가져오기
+  const nickname = localStorage.getItem("nickname") || "사용자";
+  const profileImage = localStorage.getItem("profile_image") || "images/default_profile.png";
+
+  // 테스트용 관심 전공 데이터
+  const interestMajors = [
+    "컴퓨터교육과",
+    "소프트웨어학과",
+    "건설환경공학부",
+    "철학과",
+    "영어영문학과",
+    "한문학과",
+  ];
+
+  // HTML 렌더링
+  const majorContent = createMajorCards(interestMajors);
+  app.innerHTML = renderTemplate(nickname, profileImage, majorContent);
 
   // 전공 카드 클릭 이벤트 추가
   const majorCards = document.querySelectorAll(".major-card");
@@ -89,27 +115,18 @@ export function render() {
     card.addEventListener("click", () => {
       const engName = card.getAttribute("data-eng-name");
       if (engName) {
-        window.location.hash = `#roadmap/${engName}`;
+        navigateTo(`#roadmap/${engName}`);
       } else {
         alert("해당 전공의 URL 정보를 찾을 수 없습니다.");
       }
     });
   });
 
-  // 홈 버튼 및 로고 클릭 이벤트
-  document.getElementById("home-btn").addEventListener("click", () => {
-    removeCSS("css/pages/mypage.css");
-    loadCSS("css/pages/main.css");
-    window.location.hash = "#main";
-  });
+  // 홈 버튼 및 로고 클릭 이벤트 설정
+  setupNavigation("home-btn", "#main", "css/pages/mypage.css", "css/pages/main.css");
+  setupNavigation("logo-button", "#main", "css/pages/mypage.css", "css/pages/main.css");
 
-  document.getElementById("logo-button").addEventListener("click", () => {
-    removeCSS("css/pages/mypage.css");
-    loadCSS("css/pages/main.css");
-    window.location.hash = "#main";
-  });
-
-  // 로그아웃 버튼 클릭 이벤트
+  // 로그아웃 버튼 이벤트 추가
   const logoutButton = document.getElementById("logout-btn");
   if (logoutButton) {
     logoutButton.addEventListener("click", () => {
@@ -117,7 +134,7 @@ export function render() {
         Kakao.Auth.logout(() => {
           alert("로그아웃 되었습니다.");
           localStorage.clear();
-          window.location.hash = "";
+          navigateTo("");
         });
       } else {
         alert("Kakao 로그아웃 기능을 사용할 수 없습니다.");
