@@ -20,7 +20,8 @@ export async function render(decodedMajor) {
     console.error(`Major "${decodedMajor}" not found in data.`);
     return;
   }
-
+  
+  loadCSS("css/pages/majorsearch.css");
   sessionStorage.setItem("majorName", selectedMajor.major);
   renderQuestions(selectedMajor, 0); // 첫 번째 질문부터 시작
 }
