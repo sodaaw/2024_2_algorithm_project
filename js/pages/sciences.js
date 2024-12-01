@@ -4,42 +4,6 @@ import { sciencesData } from "./data/sciences_major.js";
 export function render() {
   const app = document.getElementById("app");
 
-  // 기존 CSS 제거 함수
-  const removeExistingStyles = () => {
-    const styleSheets = document.querySelectorAll('link[rel="stylesheet"], style');
-    styleSheets.forEach((sheet) => {
-      sheet.parentNode.removeChild(sheet); // 해당 CSS 노드 제거
-    });
-  };
-
-  // 새로운 CSS 로드 함수 (캐시 무효화 포함)
-  const loadCSS = (cssPath) => {
-    const timestamp = new Date().getTime(); // 현재 시간 타임스탬프
-    const cssUrlWithVersion = `${cssPath}?ver=${timestamp}`; // 쿼리 파라미터 추가
-    const existingLink = document.querySelector(`link[rel="stylesheet"][href^="${cssPath}"]`);
-    if (existingLink) {
-      existingLink.parentNode.removeChild(existingLink); // 기존 CSS 제거
-    }
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = cssUrlWithVersion; // 새로운 URL 사용
-    document.head.appendChild(link);
-  };
-
-  // 버튼에 이벤트 리스너 추가
-  const setupButton = (id, hash, cssPath) => {
-    const button = document.getElementById(id);
-    if (button) {
-      button.addEventListener("click", () => {
-        removeExistingStyles(); // 기존 CSS 제거
-        if (cssPath) {
-          loadCSS(cssPath); // 해당 페이지 CSS 로드
-        }
-        window.location.hash = hash;
-      });
-    }
-  };
-
   // app에 기본 HTML 구조 추가
   app.innerHTML = `
     <header class="mypage-header">
@@ -89,17 +53,64 @@ export function render() {
     treeContainer.appendChild(collegeElement);
   });
 
-  setupButton("home-btn", "#main", "./css/pages/home.css?ver=1");
-  setupButton("mypage-btn", "#mypage", "./css/pages/mypage.css?ver=1");
-  setupButton("logo-button", "#main", "./css/pages/main.css?ver=1");
+  // CSS 관리를 위한 현재 페이지 상태 추적 변수 추가
+  let currentPage = 'main';
 
+  // 개선된 CSS 로드 함수
+  const loadCSS = (cssPath, pageName) => {
+    // 이미 같은 페이지의 CSS라면 다시 로드하지 않음
+    if (currentPage === pageName) return;
+
+    // 기존 페이지 CSS 제거
+    const existingPageCSS = document.querySelector(`link[data-page="${currentPage}"]`);
+    if (existingPageCSS) {
+      existingPageCSS.remove();
+    }
+
+    // 새로운 CSS 로드
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = cssPath;
+    link.dataset.page = pageName; // 페이지 식별자 추가
+    document.head.appendChild(link);
+
+    // 현재 페이지 업데이트
+    currentPage = pageName;
+  };
+
+  // 버튼에 이벤트 리스너 추가 (개선)
+  const setupButton = (id, hash, cssPath, pageName) => {
+    const button = document.getElementById(id);
+    if (button) {
+      button.addEventListener("click", () => {
+        loadCSS(cssPath, pageName); // CSS 로드 방식 변경
+        window.location.hash = hash;
+      });
+    }
+  };
+
+  // 버튼 이벤트 설정 (페이지 이름 추가)
+  setupButton("home-btn", "#main", "./css/pages/main.css", "main");
+  setupButton("mypage-btn", "#mypage", "./css/pages/mypage.css", "mypage");
+  setupButton("logo-button", "#main", "./css/pages/main.css", "main");
+  setupButton("humanities-btn", "#humanities", "./css/pages/humanities.css", "humanities");
+  setupButton("sciences-btn", "#sciences", "./css/pages/sciences.css", "sciences");
+
+  // 로그아웃 버튼 이벤트 (기존 코드 유지)
   const logoutButton = document.getElementById("logout-btn");
   if (logoutButton) {
     logoutButton.addEventListener("click", () => {
       if (typeof Kakao !== "undefined" && Kakao.Auth) {
         Kakao.Auth.logout(() => {
           alert("로그아웃 되었습니다.");
-          localStorage.clear(); // 모든 로컬 스토리지 데이터 제거
+          localStorage.removeItem("nickname");
+          localStorage.removeItem("profile_image");
+          localStorage.removeItem("interest_majors");
+          
+          // CSS 초기화
+          const existingCSS = document.querySelector('link[data-page]');
+          if (existingCSS) existingCSS.remove();
+          
           window.location.hash = ""; // 로그인 페이지로 이동
         });
       } else {
@@ -107,5 +118,4 @@ export function render() {
       }
     });
   }
-
 }
