@@ -1,4 +1,5 @@
 export function render() {
+  
   // `app` 컨테이너를 가져옵니다.
   const app = document.getElementById("app");
 
@@ -67,13 +68,13 @@ export function render() {
   };
 
   // 로고 및 홈 버튼 이벤트
-  setupButton("home-btn", "#home", "./css/pages/home.css");
-  setupButton("mypage-btn", "#mypage", "./css/pages/mypage.css");
-  setupButton("logo-button", "#main", "./css/pages/main.css");
+  setupButton("home-btn", "#home", "./css/pages/home.css?ver=1");
+  setupButton("mypage-btn", "#mypage", "./css/pages/mypage.css?ver=1");
+  setupButton("logo-button", "#main", "./css/pages/main.css?ver=1");
 
   // Humanities 및 Sciences 버튼 이벤트
-  setupButton("humanities-btn", "#humanities", "./css/pages/humanities.css");
-  setupButton("sciences-btn", "#sciences", "./css/pages/sciences.css");
+  setupButton("humanities-btn", "#humanities", "./css/pages/humanities.css?ver=1");
+  setupButton("sciences-btn", "#sciences", "./css/pages/sciences.css?ver=1");
 
   // 로그아웃 버튼 이벤트
   const logoutButton = document.getElementById("logout-btn");

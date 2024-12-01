@@ -4,6 +4,42 @@ import { sciencesData } from "./data/sciences_major.js";
 export function render() {
   const app = document.getElementById("app");
 
+  // 기존 CSS 제거 함수
+  const removeExistingStyles = () => {
+    const styleSheets = document.querySelectorAll('link[rel="stylesheet"], style');
+    styleSheets.forEach((sheet) => {
+      sheet.parentNode.removeChild(sheet); // 해당 CSS 노드 제거
+    });
+  };
+
+  // 새로운 CSS 로드 함수 (캐시 무효화 포함)
+  const loadCSS = (cssPath) => {
+    const timestamp = new Date().getTime(); // 현재 시간 타임스탬프
+    const cssUrlWithVersion = `${cssPath}?ver=${timestamp}`; // 쿼리 파라미터 추가
+    const existingLink = document.querySelector(`link[rel="stylesheet"][href^="${cssPath}"]`);
+    if (existingLink) {
+      existingLink.parentNode.removeChild(existingLink); // 기존 CSS 제거
+    }
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = cssUrlWithVersion; // 새로운 URL 사용
+    document.head.appendChild(link);
+  };
+
+  // 버튼에 이벤트 리스너 추가
+  const setupButton = (id, hash, cssPath) => {
+    const button = document.getElementById(id);
+    if (button) {
+      button.addEventListener("click", () => {
+        removeExistingStyles(); // 기존 CSS 제거
+        if (cssPath) {
+          loadCSS(cssPath); // 해당 페이지 CSS 로드
+        }
+        window.location.hash = hash;
+      });
+    }
+  };
+
   // app에 기본 HTML 구조 추가
   app.innerHTML = `
     <header class="mypage-header">
@@ -53,26 +89,9 @@ export function render() {
     treeContainer.appendChild(collegeElement);
   });
 
-  const homeButton = document.getElementById("home-btn");
-  if (homeButton) {
-    homeButton.addEventListener("click", () => {
-      window.location.hash = "#main"; // 메인 페이지로 이동
-    });
-  }
-
-  const logoButton = document.getElementById("logo-button");
-  if (logoButton) {
-    logoButton.addEventListener("click", () => {
-      window.location.hash = "#main"; // 메인 페이지로 이동
-    });
-  }
-
-  const mypageButton = document.getElementById("mypage-btn");
-  if (mypageButton) {
-    mypageButton.addEventListener("click", () => {
-      window.location.hash = "#mypage"; // 메인 페이지로 이동
-    });
-  }
+  setupButton("home-btn", "#main", "./css/pages/home.css?ver=1");
+  setupButton("mypage-btn", "#mypage", "./css/pages/mypage.css?ver=1");
+  setupButton("logo-button", "#main", "./css/pages/main.css?ver=1");
 
   const logoutButton = document.getElementById("logout-btn");
   if (logoutButton) {
