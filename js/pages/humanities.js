@@ -99,7 +99,7 @@ export function render() {
   renderTree(treeContainer);
 
   // CSS 관리를 위한 현재 페이지 상태 추적 변수 추가
-  let currentPage = 'main';
+  let currentPage = 'humanities';
 
   // 개선된 CSS 로드 함수
   const loadCSS = (cssPath, pageName) => {
@@ -138,8 +138,6 @@ export function render() {
   setupButton("home-btn", "#main", "./css/pages/main.css", "main");
   setupButton("mypage-btn", "#mypage", "./css/pages/mypage.css", "mypage");
   setupButton("logo-button", "#main", "./css/pages/main.css", "main");
-  setupButton("humanities-btn", "#humanities", "./css/pages/humanities.css", "humanities");
-  setupButton("sciences-btn", "#sciences", "./css/pages/sciences.css", "sciences");
 
   // 로그아웃 버튼 이벤트 (기존 코드 유지)
   const logoutButton = document.getElementById("logout-btn");
