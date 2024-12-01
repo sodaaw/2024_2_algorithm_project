@@ -94,7 +94,7 @@ function setupNavigation(buttonId, targetHash, currentCSS, nextCSS) {
 export function render() {
   // 이전 CSS 제거 및 새 CSS 로드
   removeCSS("css/pages/roadmap.css");
-  loadCSS("css/pages/mypage.css");
+  loadCSS("css/pages/mypage.css?ver=1");
 
   const app = document.getElementById("app");
 

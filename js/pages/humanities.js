@@ -1,14 +1,6 @@
 // 데이터를 humanities_major.js에서 가져옴
 import { humanitiesData } from "./data/humanities_major.js";
 
-// CSS 파일을 동적으로 로드하는 함수
-function loadCSS(href) {
-  const link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.href = href;
-  document.head.appendChild(link);
-}
-
 // 배경 이미지 설정 함수
 function setBackground(imagePath) {
   const app = document.getElementById("app");
@@ -28,14 +20,6 @@ function removeBackground() {
   }
 }
 
-// 기존 CSS 제거 함수
-function removeExistingStyles() {
-  const styleSheets = document.querySelectorAll('link[rel="stylesheet"], style');
-  styleSheets.forEach((sheet) => {
-    sheet.parentNode.removeChild(sheet); // 해당 CSS 노드 제거
-  });
-}
-
 // 헤더 렌더링 함수
 function renderHeader() {
   return `
@@ -50,55 +34,6 @@ function renderHeader() {
       </div>
     </header>
   `;
-}
-
-// 공통 버튼 이벤트 설정 함수
-function setupNavigationButtons() {
-  // Home 버튼 클릭 이벤트
-  const homeButton = document.getElementById("home-btn");
-  if (homeButton) {
-    homeButton.addEventListener("click", () => {
-      window.location.hash = "#main"; // 메인 페이지로 이동
-    });
-  }
-
-  // 로고 클릭 이벤트
-  const logoButton = document.getElementById("logo-button");
-  if (logoButton) {
-    logoButton.addEventListener("click", () => {
-      removeExistingStyles();
-      loadCSS("css/pages/main.css");
-      window.location.hash = "#main"; // 메인 페이지로 이동
-    });
-  }
-
-  // mypage 버튼 클릭 이벤트
-  const mypageButton = document.getElementById("mypage-btn");
-  if (mypageButton) {
-    mypageButton.addEventListener("click", () => {
-      removeExistingStyles();
-      loadCSS("css/pages/mypage.css");
-      window.location.hash = "#mypage"; // 메인 페이지로 이동
-    });
-  }
-
-  // 로그아웃 버튼 클릭 이벤트
-  const logoutButton = document.getElementById("logout-btn");
-  if (logoutButton) {
-    logoutButton.addEventListener("click", () => {
-      if (typeof Kakao !== "undefined" && Kakao.Auth) {
-        Kakao.Auth.logout(() => {
-          alert("로그아웃 되었습니다.");
-          localStorage.removeItem("nickname");
-          localStorage.removeItem("profile_image");
-          localStorage.removeItem("interest_majors");
-          window.location.hash = ""; // 로그인 페이지로 이동
-        });
-      } else {
-        alert("Kakao 로그아웃 기능을 사용할 수 없습니다.");
-      }
-    });
-  }
 }
 
 // 데이터 렌더링 함수
@@ -138,14 +73,6 @@ function renderTree(treeContainer) {
 
 // 메인 렌더링 함수
 export function render() {
-  // 기존 CSS 제거 함수
-  const removeExistingStyles = () => {
-    const styleSheets = document.querySelectorAll('link[rel="stylesheet"], style');
-    styleSheets.forEach((sheet) => {
-      sheet.parentNode.removeChild(sheet); // 해당 CSS 노드 제거
-    });
-  };
-
   const app = document.getElementById("app");
 
   if (!app) {
@@ -171,8 +98,69 @@ export function render() {
   // 데이터 렌더링
   renderTree(treeContainer);
 
-  // 공통 버튼 이벤트 설정
-  setupNavigationButtons();
+  // CSS 관리를 위한 현재 페이지 상태 추적 변수 추가
+  let currentPage = 'humanities';
+
+  // 개선된 CSS 로드 함수
+  const loadCSS = (cssPath, pageName) => {
+    // 이미 같은 페이지의 CSS라면 다시 로드하지 않음
+    if (currentPage === pageName) return;
+
+    // 기존 페이지 CSS 제거
+    const existingPageCSS = document.querySelector(`link[data-page="${currentPage}"]`);
+    if (existingPageCSS) {
+      existingPageCSS.remove();
+    }
+
+    // 새로운 CSS 로드
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = cssPath;
+    link.dataset.page = pageName; // 페이지 식별자 추가
+    document.head.appendChild(link);
+
+    // 현재 페이지 업데이트
+    currentPage = pageName;
+  };
+
+  // 버튼에 이벤트 리스너 추가 (개선)
+  const setupButton = (id, hash, cssPath, pageName) => {
+    const button = document.getElementById(id);
+    if (button) {
+      button.addEventListener("click", () => {
+        loadCSS(cssPath, pageName); // CSS 로드 방식 변경
+        window.location.hash = hash;
+      });
+    }
+  };
+
+  // 버튼 이벤트 설정 (페이지 이름 추가)
+  setupButton("home-btn", "#main", "./css/pages/main.css", "main");
+  setupButton("mypage-btn", "#mypage", "./css/pages/mypage.css", "mypage");
+  setupButton("logo-button", "#main", "./css/pages/main.css", "main");
+
+  // 로그아웃 버튼 이벤트 (기존 코드 유지)
+  const logoutButton = document.getElementById("logout-btn");
+  if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+      if (typeof Kakao !== "undefined" && Kakao.Auth) {
+        Kakao.Auth.logout(() => {
+          alert("로그아웃 되었습니다.");
+          localStorage.removeItem("nickname");
+          localStorage.removeItem("profile_image");
+          localStorage.removeItem("interest_majors");
+          
+          // CSS 초기화
+          const existingCSS = document.querySelector('link[data-page]');
+          if (existingCSS) existingCSS.remove();
+          
+          window.location.hash = ""; // 로그인 페이지로 이동
+        });
+      } else {
+        alert("Kakao 로그아웃 기능을 사용할 수 없습니다.");
+      }
+    });
+  }
 }
 
 // 해시 변경 시 render 함수 재호출

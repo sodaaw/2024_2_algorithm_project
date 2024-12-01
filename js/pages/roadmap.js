@@ -28,7 +28,7 @@ const CSSManager = {
 export function render(selectedMajorEng) {
   // CSS 업데이트
   CSSManager.remove("css/pages/mypage.css");
-  CSSManager.load("css/pages/roadmap.css");
+  CSSManager.load("css/pages/roadmap.css?ver=1");
 
   const app = document.getElementById("app");
 
