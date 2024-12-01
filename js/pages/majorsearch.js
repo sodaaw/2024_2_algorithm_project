@@ -8,7 +8,7 @@ function loadCSS(href) {
   document.head.appendChild(link);
 }
 // CSS 파일 로드
-loadCSS("css/pages/majorsearch.css");
+loadCSS("css/pages/majorsearch.css?ver=1");
 var majorWeightYSum = 0; // 사용자가 "예"를 눌렀을 때 weight를 더하는 변수
 var majorWeightTotalSum = 0; // 사용자가 "예" 또는 "아니오"를 눌렀을 때 weight를 더하는 변수 (전공의 전체 스코어가 반환됨)
 
@@ -21,7 +21,7 @@ export async function render(decodedMajor) {
     return;
   }
   
-  loadCSS("css/pages/majorsearch.css");
+  loadCSS("css/pages/majorsearch.css?ver=1");
   sessionStorage.setItem("majorName", selectedMajor.major);
   renderQuestions(selectedMajor, 0); // 첫 번째 질문부터 시작
 }

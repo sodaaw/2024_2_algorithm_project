@@ -58,7 +58,7 @@ export function render() {
   removeCSS("css/pages/majorsearch.css");
 
   // 새로운 CSS 로드
-  loadCSS("css/pages/majorresult.css");
+  loadCSS("css/pages/majorresult.css?ver=1");
   const app = document.getElementById("app");
   app.innerHTML = `
             <header class="mypage-header">

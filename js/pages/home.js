@@ -50,10 +50,10 @@ function setupNavigation(buttonId, targetHash) {
 
       if (targetHash === "#login") {
         CSSManager.remove("css/pages/home.css");
-        CSSManager.load("css/pages/login.css");
+        CSSManager.load("css/pages/login.css?ver=1");
       } else if (targetHash === "#main") {
         CSSManager.remove("css/pages/mypage.css");
-        CSSManager.load("css/pages/home.css");
+        CSSManager.load("css/pages/home.css?ver=1");
       }
 
       // Delay rendering to allow CSS to apply
@@ -88,7 +88,7 @@ function renderTemplate() {
 export function render() {
   // CSS 업데이트
   CSSManager.remove("css/pages/previous.css"); // 이전 CSS 제거 (예: 이전 페이지 CSS)
-  CSSManager.load("css/pages/home.css"); // 현재 페이지 CSS 로드
+  CSSManager.load("css/pages/home.css?ver=1"); // 현재 페이지 CSS 로드
 
   const app = document.getElementById("app");
   if (app) {

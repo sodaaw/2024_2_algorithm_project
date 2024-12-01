@@ -67,7 +67,7 @@ function setupNavigationButtons() {
   if (logoButton) {
     logoButton.addEventListener("click", () => {
       removeExistingStyles();
-      loadCSS("css/pages/main.css");
+      loadCSS("css/pages/main.css?ver=1");
       window.location.hash = "#main"; // 메인 페이지로 이동
     });
   }
@@ -77,7 +77,7 @@ function setupNavigationButtons() {
   if (mypageButton) {
     mypageButton.addEventListener("click", () => {
       removeExistingStyles();
-      loadCSS("css/pages/mypage.css");
+      loadCSS("css/pages/mypage.css?ver=1");
       window.location.hash = "#mypage"; // 메인 페이지로 이동
     });
   }

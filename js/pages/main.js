@@ -38,11 +38,17 @@ export function render() {
     });
   };
 
-  // 새로운 CSS 로드 함수
+  // 새로운 CSS 로드 함수 (캐시 무효화 포함)
   const loadCSS = (cssPath) => {
+    const timestamp = new Date().getTime(); // 현재 시간 타임스탬프
+    const cssUrlWithVersion = `${cssPath}?ver=${timestamp}`; // 쿼리 파라미터 추가
+    const existingLink = document.querySelector(`link[rel="stylesheet"][href^="${cssPath}"]`);
+    if (existingLink) {
+      existingLink.parentNode.removeChild(existingLink); // 기존 CSS 제거
+    }
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = cssPath;
+    link.href = cssUrlWithVersion; // 새로운 URL 사용
     document.head.appendChild(link);
   };
 
@@ -61,13 +67,13 @@ export function render() {
   };
 
   // 로고 및 홈 버튼 이벤트
-  setupButton("home-btn", "#home", "./css/home.css");
-  setupButton("mypage-btn", "#mypage", "./css/mypage.css");
-  setupButton("logo-button", "#main", "./css/main.css");
+  setupButton("home-btn", "#home", "./css/pages/home.css");
+  setupButton("mypage-btn", "#mypage", "./css/pages/mypage.css");
+  setupButton("logo-button", "#main", "./css/pages/main.css");
 
   // Humanities 및 Sciences 버튼 이벤트
-  setupButton("humanities-btn", "#humanities", "./css/humanities.css");
-  setupButton("sciences-btn", "#sciences", "./css/sciences.css");
+  setupButton("humanities-btn", "#humanities", "./css/pages/humanities.css");
+  setupButton("sciences-btn", "#sciences", "./css/pages/sciences.css");
 
   // 로그아웃 버튼 이벤트
   const logoutButton = document.getElementById("logout-btn");
@@ -93,3 +99,4 @@ export function render() {
 document.addEventListener("DOMContentLoaded", () => {
   render();
 });
+
