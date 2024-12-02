@@ -88,26 +88,26 @@ function renderQuestions(major, questionIndex) {
 
 // 버튼 이벤트 설정 함수
 function setupNavigationButtons() {
-  const setupButton = (id, targetHash, nextCSS) => {
+  const setupButton = (id, targetHash, nextCSS, pageName) => {
     const button = document.getElementById(id);
     if (button) {
       button.addEventListener("click", () => {
         removeAllCSS(); // 기존 CSS 제거
-        loadCSS(nextCSS); // 다음 페이지 CSS 로드
+        loadCSS(nextCSS, pageName); // 다음 페이지 CSS 로드
         navigateTo(targetHash);
       });
     }
   };
 
   // Home 버튼
-  setupButton("home-btn", "#main", "css/pages/main.css");
+  setupButton("home-btn", "#main", "css/pages/main.css", "main");
 
   // 로고 버튼
-  setupButton("logo-button", "#main", "css/pages/main.css");
+  setupButton("logo-button", "#main", "css/pages/main.css", "main");
 
   // Mypage 버튼
-  setupButton("mypage-btn", "#mypage", "css/pages/mypage.css");
-
+  setupButton("mypage-btn", "#mypage", "css/pages/mypage.css", "mypage");
+  
   // 로그아웃 버튼
   const logoutButton = document.getElementById("logout-btn");
   if (logoutButton) {
@@ -138,7 +138,7 @@ export async function render(decodedMajor) {
 
   // CSS 업데이트
   removeAllCSS();
-  loadCSS("css/pages/majorsearch.css");
+  loadCSS("css/pages/majorsearch.css", "majorsearch"); // 페이지 이름 추가
 
   sessionStorage.setItem("majorName", selectedMajor.major);
   renderQuestions(selectedMajor, 0);

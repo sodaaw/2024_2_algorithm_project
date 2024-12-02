@@ -22,7 +22,7 @@
   margin-right: 30px;
 }
 
-.logout-btn, .home-btn {
+.logout-btn, .home-btn, .mypage-btn {
   padding: 10px 15px;
   background-color: #ffffff;
   color: #19552D;
@@ -31,6 +31,7 @@
   border-radius: 7px;
   cursor: pointer;
   font-size: 0.8rem;
+  margin-left: 6px;
   transition: background-color 0.3s ease;
 }
 
@@ -44,7 +45,6 @@
   width: 140px; /* 로고 크기 */
   height: auto;
   margin-left: 0.3vw;
-  
 }
 
 .div-wrapper {
@@ -321,4 +321,3 @@
 .option-button:hover {
   text-decoration: underline; /* 호버 시 밑줄 */
 }
-
