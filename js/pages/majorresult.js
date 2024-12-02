@@ -1,5 +1,6 @@
 import { navigateTo } from "../utils/router.js";
 import { KAKAO_API_KEY } from '../apikey.js';
+import relatedMajors from './data/recommendation.js'; // 비슷한 전공 데이터 불러오기
 
 // Kakao SDK 초기화
 if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
@@ -71,6 +72,7 @@ export function render() {
                 <button id="mypage-btn" class="mypage-btn">Mypage</button>
               </div>
             </header>
+            <div class = "majorResult-page">
             <div class="div-wrapper">
       <div class="div">
         <button id="interestedMajorAdd-btn"><div class="button-md-sec"><div class="btn-text">관심 전공 추가하기</div></div></button>
@@ -89,6 +91,7 @@ export function render() {
         </p>
       </div>
     </div>
+    </div>
 
             `;
   // 유사 전공 탐색하기 버튼 클릭 시 유사 전공 창을 띄움
@@ -100,7 +103,48 @@ export function render() {
   // 유사 전공 탐색하기 버튼 클릭 시 유사 전공 창을 띄움
   const similarMajorSearchBtn = document.getElementById("similarMajorSearch-btn");
   similarMajorSearchBtn.addEventListener("click", () => {
-    console.log("유사 전공 탐색하기 버튼 클릭!");
+    const similarMajors = relatedMajors[majorName] || [];
+
+    if (similarMajors.length === 0) {
+      alert(`${majorName}와 관련된 비슷한 전공이 없습니다.`);
+      return;
+    }
+
+    const cards = similarMajors
+      .map(
+        (major) => `
+          <div class="major-card animate-card">
+            <p>${major}</p>
+          </div>
+        `
+      )
+      .join("");
+
+    const cardContainer = `
+      <div class="card-container">
+        <h2>비슷한 전공 추천</h2>
+        ${cards}
+        <button id="close-similar-majors" class="close-btn">닫기</button>
+      </div>
+    `;
+
+    const majorResultPage = document.querySelector(".majorResult-page");
+    majorResultPage.insertAdjacentHTML("beforeend", cardContainer);
+
+    document.getElementById("close-similar-majors").addEventListener("click", () => {
+      document.querySelector(".card-container").remove();
+    });
+
+    document.querySelectorAll(".major-card").forEach((element) => {
+      element.addEventListener("click", () => {
+        const major = element.textContent.trim();
+        if (major) {
+          window.location.hash = `#majorsearch?major=${encodeURIComponent(major)}`;
+        } else {
+          alert("선택된 전공의 정보를 찾을 수 없습니다.");
+        }
+      });
+    });
   });
 
   // Home 버튼 클릭 시 메인 페이지로 이동
