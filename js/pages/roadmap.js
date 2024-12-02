@@ -71,7 +71,7 @@ export function render(selectedMajorEng) {
     <div class="roadmap-page">
       <h1>${selectedMajor} 더 알아보기</h1>
       <div class="roadmap-buttons">
-        <button id="similar-dept-btn" class="roadmap-btn">비슷한 전공 보기</button>
+        <button id="similar-dept-btn" class="roadmap-btn">유사 전공 보기</button>
         <button id="roadmap-img-btn" class="roadmap-btn">로드맵 이미지 보기</button>
         <button id="dept-link-btn" class="roadmap-btn">학과 홈페이지로 이동</button>
       </div>
@@ -98,7 +98,7 @@ export function render(selectedMajorEng) {
     const similarMajors = relatedMajors[selectedMajor] || [];
 
     if (similarMajors.length === 0) {
-      alert(`${selectedMajor}와 관련된 비슷한 전공이 없습니다.`);
+      alert(`${selectedMajor}와 관련된 유사 전공이 없습니다.`);
       return;
     }
 
@@ -114,7 +114,7 @@ export function render(selectedMajorEng) {
 
     const cardContainer = `
       <div class="card-container">
-        <h2>비슷한 전공 추천</h2>
+        <h2>유사 전공 추천</h2>
         ${cards}
         <button id="close-similar-majors" class="close-btn">닫기</button>
       </div>
