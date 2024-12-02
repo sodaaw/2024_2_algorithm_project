@@ -160,21 +160,21 @@ export function render() {
     const majorContent = deleteMode
       ? createDeleteModeTemplate(interestMajors)
       : createMajorCards(interestMajors);
-
+  
     app.innerHTML = renderTemplate(nickname, profileImage, majorContent);
-
+  
     const deleteButton = document.getElementById("delete-majors-btn");
-
+  
     if (!deleteMode) {
       if (!deleteButton) {
         const newDeleteButton = document.createElement("button");
         newDeleteButton.id = "delete-majors-btn";
         newDeleteButton.textContent = "관심 전공 삭제하기 ";
         newDeleteButton.className = "delete-majors-btn";
-
+  
         const majorsContainer = app.querySelector(".majors-container");
         majorsContainer.insertAdjacentElement("afterend", newDeleteButton);
-
+  
         newDeleteButton.addEventListener("click", () => {
           deleteMode = true;
           renderMajors();
@@ -186,7 +186,7 @@ export function render() {
       if (deleteButton) {
         deleteButton.style.display = "none";
       }
-
+  
       const footer = document.createElement("div");
       footer.className = "delete-footer";
       footer.innerHTML = `
@@ -194,37 +194,37 @@ export function render() {
         <button id="confirm-delete" class="confirm-delete-btn">선택 삭제</button>
       `;
       app.appendChild(footer);
-
+  
       document.getElementById("cancel-delete").addEventListener("click", () => {
         deleteMode = false;
         renderMajors();
       });
-
+  
       document.getElementById("confirm-delete").addEventListener("click", () => {
         const selectedIndexes = Array.from(
           document.querySelectorAll(".delete-checkbox:checked")
         ).map((checkbox) => parseInt(checkbox.dataset.index, 10));
-
+  
         interestMajors = interestMajors.filter(
           (_, index) => !selectedIndexes.includes(index)
         );
-
+  
         alert("선택한 관심 전공이 삭제되었습니다.");
         deleteMode = false;
         renderMajors();
       });
     }
-
+  
     // 관심 전공 카드 클릭 이벤트 설정
     setupMajorCardEvents();
+  
+    // 버튼 이벤트 설정 (렌더링 이후로 이동)
+    setupNavigation("home-btn", "#main", "css/pages/mypage.css", "css/pages/main.css", false);
+    setupNavigation("logo-button", "#main", "css/pages/mypage.css", "css/pages/main.css", false);
   };
-
+  
   // 초기 렌더링
   renderMajors();
-
-  // 홈 버튼 및 로고 클릭 이벤트 설정
-  setupNavigation("home-btn", "#main", "css/pages/mypage.css", "css/pages/main.css", false);
-  setupNavigation("logo-button", "#main", "css/pages/mypage.css", "css/pages/main.css", false);
 
   // 로그아웃 버튼 이벤트 추가
   const logoutButton = document.getElementById("logout-btn");
