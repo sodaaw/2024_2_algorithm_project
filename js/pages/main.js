@@ -68,7 +68,7 @@ export function render() {
 
   // 버튼 이벤트 설정 (페이지 이름 추가)
   setupButton("home-btn", "#main", "./css/pages/main.css", "main");
-  setupButton("mypage-btn", "#mypage", "./css/pages/mypage.css", "mypage");
+  setupButton("mypage-btn", "#mypage", "./css/pages/mypage.css?ver=1", "mypage");
   setupButton("logo-button", "#main", "./css/pages/main.css", "main");
   setupButton("humanities-btn", "#humanities", "./css/pages/humanities.css", "humanities");
   setupButton("sciences-btn", "#sciences", "./css/pages/sciences.css", "sciences");
