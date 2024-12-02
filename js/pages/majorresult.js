@@ -73,8 +73,8 @@ export function render() {
             </header>
             <div class="div-wrapper">
       <div class="div">
-        <div class="button-md-sec"><div class="btn-text">관심 전공 추가하기</div></div>
-        <div class="btn-text-wrapper"><div class="text-wrapper">유사 전공 탐색하기</div></div>
+        <button id="interestedMajorAdd-btn"><div class="button-md-sec"><div class="btn-text">관심 전공 추가하기</div></div></button>
+        <button id="similarMajorSearch-btn"><div class="btn-text-wrapper"><div class="text-wrapper">유사 전공 탐색하기</div></div></button>
         <p class="p">
           <span class="span">탐색 결과는<br /></span>
           ${renderResultPage()}
@@ -91,6 +91,18 @@ export function render() {
     </div>
 
             `;
+  // 유사 전공 탐색하기 버튼 클릭 시 유사 전공 창을 띄움
+  const interestedMajorAddBtn = document.getElementById("interestedMajorAdd-btn");
+  interestedMajorAddBtn.addEventListener("click", () => {
+    console.log("관심 전공 추가하기 버튼 클릭!");
+  });
+
+  // 유사 전공 탐색하기 버튼 클릭 시 유사 전공 창을 띄움
+  const similarMajorSearchBtn = document.getElementById("similarMajorSearch-btn");
+  similarMajorSearchBtn.addEventListener("click", () => {
+    console.log("유사 전공 탐색하기 버튼 클릭!");
+  });
+
   // Home 버튼 클릭 시 메인 페이지로 이동
   const homeButton = document.getElementById("home-btn");
   homeButton.addEventListener("click", () => {
