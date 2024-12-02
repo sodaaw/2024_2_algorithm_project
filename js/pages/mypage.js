@@ -65,7 +65,7 @@ function renderTemplate(nickname, profileImage, majorContent) {
         <img src="${profileImage}" alt="프로필 이미지" class="profile-page-image"/>
         <h1>${nickname} 님의 관심 전공 모아보기</h1>
       </div>
-      <p>전공을 클릭하면 로드맵 조회, 비슷한 학과 조회가 가능합니다.</p>
+      <p>전공을 클릭하면 전공 로드맵, 학과 홈페이지, 유사 학과 조회가 가능합니다.</p>
       <div class="majors-container">
         ${majorContent}
       </div>
