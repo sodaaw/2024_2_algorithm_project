@@ -142,15 +142,8 @@ export function render() {
   const nickname = localStorage.getItem("nickname") || "사용자";
   const profileImage = localStorage.getItem("profile_image") || "images/default_profile.png";
 
-  // 테스트용 관심 전공 데이터
-  let interestMajors = [
-    "컴퓨터교육과",
-    "소프트웨어학과",
-    "건설환경공학부",
-    "철학과",
-    "영어영문학과",
-    "한문학과",
-  ];
+  // 로컬 스토리지에서 관심 전공 데이터 가져오기
+  let interestMajors = JSON.parse(localStorage.getItem("interest_majors")) || [];
 
   // 관심 전공 삭제 모드 활성화 상태
   let deleteMode = false;
@@ -160,21 +153,21 @@ export function render() {
     const majorContent = deleteMode
       ? createDeleteModeTemplate(interestMajors)
       : createMajorCards(interestMajors);
-  
+
     app.innerHTML = renderTemplate(nickname, profileImage, majorContent);
-  
+
     const deleteButton = document.getElementById("delete-majors-btn");
-  
+
     if (!deleteMode) {
       if (!deleteButton) {
         const newDeleteButton = document.createElement("button");
         newDeleteButton.id = "delete-majors-btn";
-        newDeleteButton.textContent = "관심 전공 삭제하기 ";
+        newDeleteButton.textContent = "관심 전공 삭제하기";
         newDeleteButton.className = "delete-majors-btn";
-  
+
         const majorsContainer = app.querySelector(".majors-container");
         majorsContainer.insertAdjacentElement("afterend", newDeleteButton);
-  
+
         newDeleteButton.addEventListener("click", () => {
           deleteMode = true;
           renderMajors();
@@ -186,7 +179,7 @@ export function render() {
       if (deleteButton) {
         deleteButton.style.display = "none";
       }
-  
+
       const footer = document.createElement("div");
       footer.className = "delete-footer";
       footer.innerHTML = `
@@ -194,35 +187,37 @@ export function render() {
         <button id="confirm-delete" class="confirm-delete-btn">선택 삭제</button>
       `;
       app.appendChild(footer);
-  
+
       document.getElementById("cancel-delete").addEventListener("click", () => {
         deleteMode = false;
         renderMajors();
       });
-  
+
       document.getElementById("confirm-delete").addEventListener("click", () => {
         const selectedIndexes = Array.from(
           document.querySelectorAll(".delete-checkbox:checked")
         ).map((checkbox) => parseInt(checkbox.dataset.index, 10));
-  
+
         interestMajors = interestMajors.filter(
           (_, index) => !selectedIndexes.includes(index)
         );
-  
+
+        localStorage.setItem("interest_majors", JSON.stringify(interestMajors)); // 로컬 스토리지 업데이트
+
         alert("선택한 관심 전공이 삭제되었습니다.");
         deleteMode = false;
         renderMajors();
       });
     }
-  
+
     // 관심 전공 카드 클릭 이벤트 설정
     setupMajorCardEvents();
-  
+
     // 버튼 이벤트 설정 (렌더링 이후로 이동)
     setupNavigation("home-btn", "#main", "css/pages/mypage.css", "css/pages/main.css", false);
     setupNavigation("logo-button", "#main", "css/pages/mypage.css", "css/pages/main.css", false);
   };
-  
+
   // 초기 렌더링
   renderMajors();
 
