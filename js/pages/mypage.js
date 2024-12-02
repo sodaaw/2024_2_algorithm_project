@@ -109,7 +109,6 @@ function createDeleteModeTemplate(interestMajors) {
 }
 
 // 메인 렌더링 함수
-// 메인 렌더링 함수
 export function render() {
   // 이전 CSS 제거 및 새 CSS 로드
   removeCSS("css/pages/roadmap.css");
@@ -135,76 +134,72 @@ export function render() {
   let deleteMode = false;
 
   // HTML 렌더링 함수
-const renderMajors = () => {
-  const majorContent = deleteMode
-    ? createDeleteModeTemplate(interestMajors)
-    : createMajorCards(interestMajors);
+  const renderMajors = () => {
+    const majorContent = deleteMode
+      ? createDeleteModeTemplate(interestMajors)
+      : createMajorCards(interestMajors);
 
-  app.innerHTML = renderTemplate(nickname, profileImage, majorContent);
+    app.innerHTML = renderTemplate(nickname, profileImage, majorContent);
 
-  // "관심 전공 삭제하기" 버튼을 major-cards 아래에 추가
-  if (!document.getElementById("delete-majors-btn")) {
-    const deleteButton = document.createElement("button");
-    deleteButton.id = "delete-majors-btn";
-    deleteButton.textContent = "관심 전공 삭제하기";
-    deleteButton.className = "delete-majors-btn";
+    const deleteButton = document.getElementById("delete-majors-btn");
 
-    const majorsContainer = app.querySelector(".majors-container");
-    majorsContainer.insertAdjacentElement("afterend", deleteButton); // major-cards 아래에 삽입
+    if (!deleteMode) {
+      // "관심 전공 삭제하기" 버튼 생성
+      if (!deleteButton) {
+        const newDeleteButton = document.createElement("button");
+        newDeleteButton.id = "delete-majors-btn";
+        newDeleteButton.textContent = "관심 전공 삭제하기 ";
+        newDeleteButton.className = "delete-majors-btn";
 
-    // 관심 전공 삭제 모드 활성화 이벤트
-    deleteButton.addEventListener("click", () => {
-      deleteMode = true;
-      renderMajors();
-    });
-  }
+        const majorsContainer = app.querySelector(".majors-container");
+        majorsContainer.insertAdjacentElement("afterend", newDeleteButton);
 
-  if (!deleteMode) {
-    // 전공 카드 클릭 이벤트 추가
-    const majorCards = document.querySelectorAll(".major-card");
-    majorCards.forEach((card) => {
-      card.addEventListener("click", () => {
-        const engName = card.getAttribute("data-eng-name");
-        if (engName) {
-          navigateTo(`#roadmap/${engName}`);
-        } else {
-          alert("해당 전공의 URL 정보를 찾을 수 없습니다.");
-        }
+        // 버튼 클릭 이벤트 추가
+        newDeleteButton.addEventListener("click", () => {
+          deleteMode = true;
+          renderMajors();
+        });
+      } else {
+        deleteButton.style.display = "block"; // 버튼 표시
+      }
+    } else {
+      // 삭제 모드에서는 버튼 숨김
+      if (deleteButton) {
+        deleteButton.style.display = "none";
+      }
+
+      // 선택 삭제 버튼 추가
+      const footer = document.createElement("div");
+      footer.className = "delete-footer";
+      footer.innerHTML = `
+        <button id="cancel-delete" class="cancel-delete-btn">취소</button>
+        <button id="confirm-delete" class="confirm-delete-btn">선택 삭제</button>
+      `;
+      app.appendChild(footer);
+
+      // 삭제 취소 버튼 이벤트
+      document.getElementById("cancel-delete").addEventListener("click", () => {
+        deleteMode = false;
+        renderMajors();
       });
-    });
-  } else {
-    // 선택 삭제 버튼 추가
-    const footer = document.createElement("div");
-    footer.className = "delete-footer";
-    footer.innerHTML = `
-      <button id="cancel-delete" class="cancel-delete-btn">취소</button>
-      <button id="confirm-delete" class="confirm-delete-btn">선택 삭제</button>
-    `;
-    app.appendChild(footer);
 
-    // 삭제 취소 버튼 이벤트
-    document.getElementById("cancel-delete").addEventListener("click", () => {
-      deleteMode = false;
-      renderMajors();
-    });
+      // 삭제 확인 버튼 이벤트
+      document.getElementById("confirm-delete").addEventListener("click", () => {
+        const selectedIndexes = Array.from(
+          document.querySelectorAll(".delete-checkbox:checked")
+        ).map((checkbox) => parseInt(checkbox.dataset.index, 10));
 
-    // 삭제 확인 버튼 이벤트
-    document.getElementById("confirm-delete").addEventListener("click", () => {
-      const selectedIndexes = Array.from(
-        document.querySelectorAll(".delete-checkbox:checked")
-      ).map((checkbox) => parseInt(checkbox.dataset.index, 10));
+        // 선택된 전공 삭제
+        interestMajors = interestMajors.filter(
+          (_, index) => !selectedIndexes.includes(index)
+        );
 
-      // 선택된 전공 삭제
-      interestMajors = interestMajors.filter(
-        (_, index) => !selectedIndexes.includes(index)
-      );
-
-      alert("선택한 관심 전공이 삭제되었습니다.");
-      deleteMode = false;
-      renderMajors();
-    });
-  }
-};
+        alert("선택한 관심 전공이 삭제되었습니다.");
+        deleteMode = false;
+        renderMajors();
+      });
+    }
+  };
 
   // 초기 렌더링
   renderMajors();
