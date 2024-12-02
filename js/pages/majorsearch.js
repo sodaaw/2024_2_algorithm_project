@@ -126,7 +126,7 @@ function setupNavigationButtons() {
   }
 }
 
-// 메인 렌더링 함수
+// 메인 렌더링 함수 
 export async function render(decodedMajor) {
   const majors = await loadMajors();
   const selectedMajor = majors.find((major) => major.major === decodedMajor);

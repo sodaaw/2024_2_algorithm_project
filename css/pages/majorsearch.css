@@ -41,7 +41,7 @@
 }
 
 /* 헤더에 앱 로고 추가 */
-.app-logo {
+#logo-button {
   width: 140px; /* 로고 크기 */
   height: auto;
   margin-left: 0.3vw;
