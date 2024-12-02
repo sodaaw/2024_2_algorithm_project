@@ -74,7 +74,7 @@ function renderTemplate() {
           <div class="cta">
             <button id="login-btn" class="button-md-sec">로그인</button>
             <button id="signup-btn" class="button-md-sec">회원가입</button>
-            <button id="juststart" class="button-md-sec">비회원 이용</button>
+            
           </div>
         </div>
         <div class="right-container">
@@ -98,6 +98,6 @@ export function render() {
     // Setup navigation
     setupNavigation("login-btn", "#login");
     setupNavigation("signup-btn", "#login");
-    setupNavigation("juststart", "#main");
+    //setupNavigation("juststart", "#main");
   }
 }
