@@ -189,6 +189,12 @@ export function render(selectedMajorEng) {
   });
 
   document.getElementById("back-btn").addEventListener("click", () => {
+    // 현재 CSS 제거
+    CSSManager.remove("css/pages/roadmap.css?ver=1");
+    // mypage.js의 CSS 로드
+    CSSManager.load("css/pages/mypage.css");
+  
+    // 페이지 이동
     window.location.hash = "#mypage";
   });
 
