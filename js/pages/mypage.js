@@ -14,20 +14,30 @@ if (typeof Kakao !== "undefined") {
   console.error("Kakao SDK가 로드되지 않았습니다.");
 }
 
-// CSS 파일 로드 및 제거 함수
+// CSS 파일 로드 및 제거 함수 (버전 쿼리 추가)
 function loadCSS(href) {
-  const existingLink = document.querySelector(`link[rel="stylesheet"][href="${href}"]`);
+  const versionedHref = `${href}?ver=${Date.now()}`; // 캐시 문제를 방지하기 위해 쿼리 추가
+  const existingLink = document.querySelector(`link[rel="stylesheet"][href="${versionedHref}"]`);
   if (!existingLink) {
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = href;
+    link.href = versionedHref;
     document.head.appendChild(link);
   }
 }
 
 function removeCSS(href) {
-  const links = document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`);
-  links.forEach((link) => link.remove());
+  const links = document.querySelectorAll(`link[rel="stylesheet"]`);
+  links.forEach((link) => {
+    if (link.href.includes(href)) {
+      link.remove();
+    }
+  });
+}
+
+function ensureCSSLoaded(href) {
+  removeCSS(href); // 기존 CSS 제거
+  loadCSS(href); // 새 CSS 로드
 }
 
 // 관심 전공 HTML 템플릿 생성
@@ -80,8 +90,7 @@ function setupNavigation(buttonId, targetHash, currentCSS, nextCSS, shouldReload
     button.addEventListener("click", () => {
       // CSS 변경이 필요한 경우에만 실행
       if (currentCSS !== nextCSS) {
-        removeCSS(currentCSS);
-        loadCSS(nextCSS);
+        ensureCSSLoaded(nextCSS);
       }
 
       navigateTo(targetHash);
@@ -115,26 +124,38 @@ function createDeleteModeTemplate(interestMajors) {
 }
 
 // 관심 전공 카드 클릭 이벤트 설정 함수
-function setupMajorCardEvents() {
+function setupMajorCardEvents(deleteMode) {
   const majorCards = document.querySelectorAll(".major-card");
   majorCards.forEach((card) => {
-    card.addEventListener("click", () => {
-      const engName = card.getAttribute("data-eng-name"); // 영어 이름 속성 가져오기
-      if (engName) {
-        console.log(`${engName} 로드맵 페이지로 이동합니다.`);
-        navigateTo(`#roadmap/${engName}`); // 로드맵 페이지로 이동
-      } else {
-        console.error("영어 이름 데이터가 없습니다.");
+    const checkbox = card.querySelector(".delete-checkbox");
+
+    if (deleteMode) {
+      // 삭제 모드에서는 체크박스 클릭만 허용
+      if (checkbox) {
+        card.addEventListener("click", (e) => {
+          e.stopPropagation(); // 이벤트 전파 차단
+          checkbox.checked = !checkbox.checked; // 체크박스 상태 토글
+        });
       }
-    });
+    } else {
+      // 삭제 모드가 아닐 때만 전공 카드 클릭 이벤트 추가
+      card.addEventListener("click", () => {
+        const engName = card.getAttribute("data-eng-name"); // 영어 이름 속성 가져오기
+        if (engName) {
+          console.log(`${engName} 로드맵 페이지로 이동합니다.`);
+          navigateTo(`#roadmap/${engName}`); // 로드맵 페이지로 이동
+        } else {
+          console.error("영어 이름 데이터가 없습니다.");
+        }
+      });
+    }
   });
 }
 
 // 메인 렌더링 함수
 export function render() {
-  // 이전 CSS 제거 및 새 CSS 로드
-  removeCSS("css/pages/roadmap.css");
-  loadCSS("css/pages/mypage.css?ver=1");
+  // CSS 순서 보장 및 로드
+  ensureCSSLoaded("css/pages/mypage.css");
 
   const app = document.getElementById("app");
 
@@ -211,7 +232,7 @@ export function render() {
     }
 
     // 관심 전공 카드 클릭 이벤트 설정
-    setupMajorCardEvents();
+    setupMajorCardEvents(deleteMode);
 
     // 버튼 이벤트 설정 (렌더링 이후로 이동)
     setupNavigation("home-btn", "#main", "css/pages/mypage.css", "css/pages/main.css", false);
