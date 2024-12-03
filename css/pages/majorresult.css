@@ -293,3 +293,55 @@
     transform: translateY(0);
   }
 }
+
+@media (max-width: 1024px) {
+  .mypage-header {
+      flex-wrap: wrap; /* 헤더가 좁은 화면에서 줄바꿈 */
+  }
+  
+  .header-left, .header-right {
+      flex: 1 1 100%; /* 헤더 요소가 한 줄에 배치 */
+      justify-content: center;
+  }
+
+  .div-wrapper .div {
+      padding: 15px;
+  }
+
+  .major-card {
+      flex: 1 1 calc(50% - 10px); /* 카드 너비를 2등분 */
+  }
+}
+
+@media (max-width: 768px) {
+  .logout-btn, .home-btn, .mypage-btn {
+      font-size: 0.7rem; /* 버튼 텍스트 크기 축소 */
+      padding: 8px 10px;
+  }
+
+  .major-card {
+      flex: 1 1 calc(100% - 20px); /* 카드 한 줄에 한 개씩 배치 */
+      min-width: 100px;
+  }
+
+  .card-container {
+      width: 90%;
+      height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .mypage-header {
+      flex-direction: column; /* 헤더 요소를 수직 정렬 */
+      gap: 10px;
+  }
+
+  .app-logo {
+      width: 100px; /* 로고 크기 축소 */
+  }
+  
+  .logout-btn, .home-btn, .mypage-btn {
+      font-size: 0.6rem;
+      padding: 6px 8px;
+  }
+}
