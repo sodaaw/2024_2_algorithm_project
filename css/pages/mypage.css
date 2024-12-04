@@ -12,6 +12,19 @@
   z-index: 1000;
 }
 
+/*관심 전공 없을때 뜰 창*/
+.no-majors {
+  display: flex; /* 플렉스 박스 사용 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  height: 100px; /* 메시지 컨테이너 높이 */
+  font-size: 1.2rem; /* 글꼴 크기 */
+  font-weight: bold; /* 글꼴 두께 */
+  color: #666; /* 글꼴 색상 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+  margin-right: -130px;
+}
+
 .header-left {
   display: flex;
   align-items: center;
@@ -222,6 +235,10 @@
 
   .card-text span {
     font-size: 1rem; /* 화살표 크기 줄이기 */
+  }
+
+  .no-majors {
+    margin-right: -90px;
   }
 }
 
