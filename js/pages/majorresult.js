@@ -25,6 +25,54 @@ function removeCSS(href) {
   links.forEach((link) => link.remove());
 }
 
+function showModal(similarMajors, index = 0, navigateCallback, cancelCallback) {
+  const app = document.getElementById("app");
+  const currentMajor = similarMajors[index];
+  const isLastMajor = index === similarMajors.length - 1;
+
+  // Create modal overlay
+  const modalOverlay = document.createElement("div");
+  modalOverlay.className = "modal-overlay";
+
+  // Create modal content
+  const modal = document.createElement("div");
+  modal.className = "modal";
+  modal.innerHTML = `
+    <h2>유사 전공 추천</h2>
+    <p>현재 전공의 적합도가 낮아 유사 전공 ${currentMajor}을(를) 추천합니다.<br>탐색하시겠습니까?</p>
+    <div class="modal-buttons">
+      <button id="confirm-modal-btn" class="btn-confirm">예</button>
+      <button id="cancel-modal-btn" class="btn-cancel">아니오</button>
+      ${
+        !isLastMajor
+          ? `<button id="next-modal-btn" class="btn-next">다른 전공</button>`
+          : ""
+      }
+    </div>
+  `;
+
+  modalOverlay.appendChild(modal);
+  app.appendChild(modalOverlay);
+
+  // Add event listeners to buttons
+  document.getElementById("confirm-modal-btn").addEventListener("click", () => {
+    app.removeChild(modalOverlay);
+    if (navigateCallback) navigateCallback(currentMajor);
+  });
+
+  document.getElementById("cancel-modal-btn").addEventListener("click", () => {
+    app.removeChild(modalOverlay);
+    if (cancelCallback) cancelCallback();
+  });
+
+  if (!isLastMajor) {
+    document.getElementById("next-modal-btn").addEventListener("click", () => {
+      app.removeChild(modalOverlay);
+      showModal(similarMajors, index + 1, navigateCallback, cancelCallback);
+    });
+  }
+}
+
 // 결과 페이지 렌더링 함수 수정
 function renderResultPage(result) {
   const majorScore = ~~sessionStorage.getItem("majorScore");
@@ -197,13 +245,20 @@ export function render() {
   if (recommendMajors) {
     const similarMajors = relatedMajors[majorName] || [];
     if (similarMajors.length > 0) {
-      const firstSimilarMajor = similarMajors[0];
-      const confirmNavigation = confirm(
-        `현재 전공의 적합도가 낮아 유사 전공 ${firstSimilarMajor}을(를) 추천합니다. 탐색하시겠습니까?`
+      showModal(
+        similarMajors,
+        0,
+        (selectedMajor) => {
+          // Navigate to the selected major
+          window.location.hash = `#majorsearch?major=${encodeURIComponent(
+            selectedMajor
+          )}`;
+        },
+        () => {
+          // Navigate to MyPage if canceled
+          navigateTo("#mypage");
+        }
       );
-      if (confirmNavigation) {
-        window.location.hash = `#majorsearch?major=${encodeURIComponent(firstSimilarMajor)}`;
-      }
     }
   }
 }

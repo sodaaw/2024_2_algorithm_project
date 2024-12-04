@@ -293,3 +293,76 @@
     transform: translateY(0);
   }
 }
+
+/* 모달 창 스타일 */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px; /* 모달 창 너비 */
+  max-width: 90%; /* 작은 화면에서도 잘 보이도록 제한 */
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  padding: 20px;
+  text-align: center;
+}
+
+.modal h2 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #19552D; /* 메인 색상 */
+}
+
+.modal p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.modal button {
+  background-color: #19552D;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.modal button:hover {
+  background-color: #143b1f;
+}
+
+.modal button:active {
+  background-color: #0e2a15;
+}
+
+/* 모달 배경 흐림 효과 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* 흐림 효과 */
+  z-index: 1000;
+  backdrop-filter: blur(4px); /* 배경 흐리게 처리 */
+}
+
+/* 반응형: 화면 크기가 작을 때 */
+@media (max-width: 480px) {
+  .modal {
+    width: 90%;
+    font-size: 0.9rem; /* 작은 화면에서 글자 크기 줄이기 */
+  }
+
+  .modal button {
+    font-size: 0.9rem; /* 버튼 글자 크기 줄이기 */
+    padding: 8px 16px; /* 버튼 크기 줄이기 */
+  }
+}

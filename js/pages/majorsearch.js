@@ -8,18 +8,41 @@ let majorWeightYSum = 0; // "예"를 눌렀을 때 weight 합산
 let majorWeightTotalSum = 0; // 전체 weight 합산
 let noCount = 0; // "아니요" 클릭 횟수
 
+function showModal(message, callback) {
+  const app = document.getElementById("app");
+
+  const modalOverlay = document.createElement("div");
+  modalOverlay.className = "modal-overlay";
+
+  const modal = document.createElement("div");
+  modal.className = "modal";
+  modal.innerHTML = `
+    <h2>유사 전공 추천</h2>
+    <p>${message}</p>
+    <button id="confirm-modal-btn">확인</button>
+  `;
+
+  modalOverlay.appendChild(modal);
+  app.appendChild(modalOverlay);
+
+  document.getElementById("confirm-modal-btn").addEventListener("click", () => {
+    app.removeChild(modalOverlay);
+    if (callback) callback();
+  });
+}
+
 // 백트래킹 함수 수정
 function backtrackMajorCompatibility(major, questionIndex, majorWeightYSum, majorWeightTotalSum) {
   const currentScore = (100 * majorWeightYSum) / majorWeightTotalSum;
 
-  // "아니요" 클릭 횟수가 MAX_NO_COUNT 이상이면 적합하지 않음 처리
   if (noCount >= MAX_NO_COUNT) {
-    alert(`현재 전공(${major.major})의 적합도가 낮습니다. 다른 전공을 고려해보세요.`);
-    navigateTo("#majorchoice"); // 다른 전공 선택 화면으로 이동
+    showModal(
+      `현재 전공(${major.major})의 적합도가 낮습니다. 다른 전공을 고려해보세요.`,
+      () => navigateTo("#majorchoice")
+    );
     return false;
   }
 
-  // 모든 질문에 답변을 완료하면 최종 결과로 이동
   if (questionIndex === 10) {
     const finalScore = (100 * majorWeightYSum) / majorWeightTotalSum;
     sessionStorage.setItem("majorScore", finalScore);
@@ -28,7 +51,7 @@ function backtrackMajorCompatibility(major, questionIndex, majorWeightYSum, majo
     return true;
   }
 
-  return true; // 탐색 계속 진행
+  return true;
 }
 
 // JSON 파일에서 전공과 질문 데이터를 불러오기
