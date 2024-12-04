@@ -14,9 +14,9 @@ if (typeof Kakao !== "undefined") {
   console.error("Kakao SDK가 로드되지 않았습니다.");
 }
 
-// CSS 파일 로드 및 제거 함수 (버전 쿼리 추가)
+// CSS 파일 로드 및 제거 함수
 function loadCSS(href) {
-  const versionedHref = `${href}?ver=${Date.now()}`; // 캐시 문제를 방지하기 위해 쿼리 추가
+  const versionedHref = `${href}?ver=${Date.now()}`;
   const existingLink = document.querySelector(`link[rel="stylesheet"][href="${versionedHref}"]`);
   if (!existingLink) {
     const link = document.createElement("link");
@@ -36,8 +36,8 @@ function removeCSS(href) {
 }
 
 function ensureCSSLoaded(href) {
-  removeCSS(href); // 기존 CSS 제거
-  loadCSS(href); // 새 CSS 로드
+  removeCSS(href);
+  loadCSS(href);
 }
 
 // 관심 전공 HTML 템플릿 생성
@@ -55,7 +55,29 @@ function createMajorCards(interestMajors) {
             </div>`;
         })
         .join("")
-    : `<p class="no-majors">등록한 관심 전공이 없습니다.</p>`;
+    : `
+      <div class="no-majors-container">
+        <p class="no-majors">등록한 관심 전공이 없습니다.</p>
+        <button id="explore-majors-btn" class="explore-majors-btn">전공 탐색하러 가기</button>
+      </div>`;
+}
+
+// 관심 전공 삭제 템플릿 생성
+function createDeleteModeTemplate(interestMajors) {
+  return interestMajors.length > 0
+    ? interestMajors
+        .map((major, index) => {
+          const engName = departments[major]?.eng_name || "";
+          return `
+            <div class="major-card delete-mode" data-eng-name="${engName}" data-index="${index}">
+              <div class="card-text">
+                <input type="checkbox" class="delete-checkbox" data-index="${index}">
+                <p>${major}</p>
+              </div>
+            </div>`;
+        })
+        .join("")
+    : `<p class="no-majors">삭제할 관심 전공이 없습니다.</p>`;
 }
 
 // HTML 템플릿 생성
@@ -83,67 +105,34 @@ function renderTemplate(nickname, profileImage, majorContent) {
   `;
 }
 
-// 버튼 이벤트 설정 함수
-function setupNavigation(buttonId, targetHash, currentCSS, nextCSS, shouldReload = false) {
-  const button = document.getElementById(buttonId);
-  if (button) {
-    button.addEventListener("click", () => {
-      // CSS 변경이 필요한 경우에만 실행
-      if (currentCSS !== nextCSS) {
-        ensureCSSLoaded(nextCSS);
-      }
-
-      navigateTo(targetHash);
-
-      // 새로고침 여부 확인
-      if (shouldReload) {
-        setTimeout(() => {
-          window.location.reload(); // 강제로 새로고침
-        }, 100); // 약간의 딜레이를 추가해 navigateTo가 완료된 후 새로고침
-      }
-    });
-  }
-}
-
-// 관심 전공 삭제 HTML 템플릿 생성
-function createDeleteModeTemplate(interestMajors) {
-  return interestMajors.length > 0
-    ? interestMajors
-        .map((major, index) => {
-          const engName = departments[major]?.eng_name || "";
-          return `
-            <div class="major-card delete-mode" data-eng-name="${engName}" data-index="${index}">
-              <div class="card-text">
-                <input type="checkbox" class="delete-checkbox" data-index="${index}">
-                <p>${major}</p>
-              </div>
-            </div>`;
-        })
-        .join("")
-    : `<p class="no-majors">삭제할 관심 전공이 없습니다.</p>`;
-}
-
-// 관심 전공 카드 클릭 이벤트 설정 함수
+// 관심 전공 카드 클릭 이벤트 설정
+// 관심 전공 카드 클릭 이벤트 설정
 function setupMajorCardEvents(deleteMode) {
   const majorCards = document.querySelectorAll(".major-card");
   majorCards.forEach((card) => {
     const checkbox = card.querySelector(".delete-checkbox");
 
     if (deleteMode) {
-      // 삭제 모드에서는 체크박스 클릭만 허용
+      // 카드 전체를 클릭했을 때도 체크박스를 토글
+      card.addEventListener("click", (e) => {
+        e.stopPropagation(); // 이벤트 전파 차단
+        if (checkbox) {
+          checkbox.checked = !checkbox.checked;
+        }
+      });
+
+      // 체크박스 클릭 시 이벤트 처리 (중복 이벤트 방지)
       if (checkbox) {
-        card.addEventListener("click", (e) => {
-          e.stopPropagation(); // 이벤트 전파 차단
-          checkbox.checked = !checkbox.checked; // 체크박스 상태 토글
+        checkbox.addEventListener("click", (e) => {
+          e.stopPropagation(); // 부모 요소로 이벤트 전파 방지
         });
       }
     } else {
-      // 삭제 모드가 아닐 때만 전공 카드 클릭 이벤트 추가
+      // 삭제 모드가 아닐 때는 카드 클릭 시 로드맵 페이지로 이동
       card.addEventListener("click", () => {
-        const engName = card.getAttribute("data-eng-name"); // 영어 이름 속성 가져오기
+        const engName = card.getAttribute("data-eng-name");
         if (engName) {
-          console.log(`${engName} 로드맵 페이지로 이동합니다.`);
-          navigateTo(`#roadmap/${engName}`); // 로드맵 페이지로 이동
+          navigateTo(`#roadmap/${engName}`);
         } else {
           console.error("영어 이름 데이터가 없습니다.");
         }
@@ -152,97 +141,88 @@ function setupMajorCardEvents(deleteMode) {
   });
 }
 
+// 관심 전공 렌더링 함수
+function renderMajors(app, nickname, profileImage, interestMajors, deleteMode, render) {
+  const majorContent = deleteMode
+    ? createDeleteModeTemplate(interestMajors)
+    : createMajorCards(interestMajors);
+
+  app.innerHTML = renderTemplate(nickname, profileImage, majorContent);
+
+  // "전공 탐색하러 가기" 버튼 클릭 이벤트
+  const exploreMajorsButton = document.getElementById("explore-majors-btn");
+  if (exploreMajorsButton) {
+    exploreMajorsButton.addEventListener("click", () => navigateTo("#main"));
+  }
+
+  // 관심 전공 삭제 버튼 조건부 생성
+  if (interestMajors.length > 0 && !deleteMode) {
+    const deleteButton = document.getElementById("delete-majors-btn");
+    if (!deleteButton) {
+      const newDeleteButton = document.createElement("button");
+      newDeleteButton.id = "delete-majors-btn";
+      newDeleteButton.textContent = "관심 전공 삭제하기";
+      newDeleteButton.className = "delete-majors-btn";
+
+      const majorsContainer = app.querySelector(".majors-container");
+      majorsContainer.insertAdjacentElement("afterend", newDeleteButton);
+
+      newDeleteButton.addEventListener("click", () => {
+        deleteMode = true;
+        renderMajors(app, nickname, profileImage, interestMajors, deleteMode, render);
+      });
+    }
+  } else {
+    const deleteButton = document.getElementById("delete-majors-btn");
+    if (deleteButton) {
+      deleteButton.remove();
+    }
+  }
+
+  // 삭제 모드 UI
+  if (deleteMode) {
+    const footer = document.createElement("div");
+    footer.className = "delete-footer";
+    footer.innerHTML = `
+      <button id="cancel-delete" class="cancel-delete-btn">취소</button>
+      <button id="confirm-delete" class="confirm-delete-btn">선택 삭제</button>
+    `;
+    app.appendChild(footer);
+
+    document.getElementById("cancel-delete").addEventListener("click", () => {
+      deleteMode = false;
+      renderMajors(app, nickname, profileImage, interestMajors, deleteMode, render);
+    });
+
+    document.getElementById("confirm-delete").addEventListener("click", () => {
+      const selectedIndexes = Array.from(
+        document.querySelectorAll(".delete-checkbox:checked")
+      ).map((checkbox) => parseInt(checkbox.dataset.index, 10));
+
+      const updatedMajors = interestMajors.filter((_, index) => !selectedIndexes.includes(index));
+      localStorage.setItem("interest_majors", JSON.stringify(updatedMajors));
+
+      alert("선택한 관심 전공이 삭제되었습니다.");
+      deleteMode = false;
+      renderMajors(app, nickname, profileImage, updatedMajors, deleteMode, render);
+    });
+  }
+
+  setupMajorCardEvents(deleteMode);
+}
+
 // 메인 렌더링 함수
 export function render() {
-  // CSS 순서 보장 및 로드
   ensureCSSLoaded("css/pages/mypage.css");
 
   const app = document.getElementById("app");
-
-  // 사용자 데이터 가져오기
   const nickname = localStorage.getItem("nickname") || "사용자";
   const profileImage = localStorage.getItem("profile_image") || "images/default_profile.png";
+  const interestMajors = JSON.parse(localStorage.getItem("interest_majors")) || [];
+  const deleteMode = false;
 
-  // 로컬 스토리지에서 관심 전공 데이터 가져오기
-  let interestMajors = JSON.parse(localStorage.getItem("interest_majors")) || [];
+  renderMajors(app, nickname, profileImage, interestMajors, deleteMode, render);
 
-  // 관심 전공 삭제 모드 활성화 상태
-  let deleteMode = false;
-
-  // HTML 렌더링 함수
-  const renderMajors = () => {
-    const majorContent = deleteMode
-      ? createDeleteModeTemplate(interestMajors)
-      : createMajorCards(interestMajors);
-
-    app.innerHTML = renderTemplate(nickname, profileImage, majorContent);
-
-    const deleteButton = document.getElementById("delete-majors-btn");
-
-    if (!deleteMode) {
-      if (!deleteButton) {
-        const newDeleteButton = document.createElement("button");
-        newDeleteButton.id = "delete-majors-btn";
-        newDeleteButton.textContent = "관심 전공 삭제하기";
-        newDeleteButton.className = "delete-majors-btn";
-
-        const majorsContainer = app.querySelector(".majors-container");
-        majorsContainer.insertAdjacentElement("afterend", newDeleteButton);
-
-        newDeleteButton.addEventListener("click", () => {
-          deleteMode = true;
-          renderMajors();
-        });
-      } else {
-        deleteButton.style.display = "block"; // 버튼 표시
-      }
-    } else {
-      if (deleteButton) {
-        deleteButton.style.display = "none";
-      }
-
-      const footer = document.createElement("div");
-      footer.className = "delete-footer";
-      footer.innerHTML = `
-        <button id="cancel-delete" class="cancel-delete-btn">취소</button>
-        <button id="confirm-delete" class="confirm-delete-btn">선택 삭제</button>
-      `;
-      app.appendChild(footer);
-
-      document.getElementById("cancel-delete").addEventListener("click", () => {
-        deleteMode = false;
-        renderMajors();
-      });
-
-      document.getElementById("confirm-delete").addEventListener("click", () => {
-        const selectedIndexes = Array.from(
-          document.querySelectorAll(".delete-checkbox:checked")
-        ).map((checkbox) => parseInt(checkbox.dataset.index, 10));
-
-        interestMajors = interestMajors.filter(
-          (_, index) => !selectedIndexes.includes(index)
-        );
-
-        localStorage.setItem("interest_majors", JSON.stringify(interestMajors)); // 로컬 스토리지 업데이트
-
-        alert("선택한 관심 전공이 삭제되었습니다.");
-        deleteMode = false;
-        renderMajors();
-      });
-    }
-
-    // 관심 전공 카드 클릭 이벤트 설정
-    setupMajorCardEvents(deleteMode);
-
-    // 버튼 이벤트 설정 (렌더링 이후로 이동)
-    setupNavigation("home-btn", "#main", "css/pages/mypage.css", "css/pages/main.css", false);
-    setupNavigation("logo-button", "#main", "css/pages/mypage.css", "css/pages/main.css", false);
-  };
-
-  // 초기 렌더링
-  renderMajors();
-
-  // 로그아웃 버튼 이벤트 추가
   const logoutButton = document.getElementById("logout-btn");
   if (logoutButton) {
     logoutButton.addEventListener("click", () => {
@@ -252,8 +232,6 @@ export function render() {
           localStorage.clear();
           navigateTo("");
         });
-      } else {
-        alert("Kakao 로그아웃 기능을 사용할 수 없습니다.");
       }
     });
   }

@@ -322,6 +322,54 @@
   text-decoration: underline; /* 호버 시 밑줄 */
 }
 
+/* 모달 창 스타일 */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  padding: 20px;
+  text-align: center;
+}
+
+.modal h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.modal p {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.modal button {
+  background-color: #19552D;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.modal button:hover {
+  background-color: #143b1f;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+
 @media screen and (max-width: 1024px) {
   .mypage-header {
     padding: 10px;
@@ -381,4 +429,5 @@
   .logout-btn, .home-btn, .mypage-btn {
     padding: 5px 8px;
   }
+
 }

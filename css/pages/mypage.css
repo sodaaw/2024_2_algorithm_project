@@ -12,6 +12,54 @@
   z-index: 1000;
 }
 
+/* 관심 전공이 없을 때 메시지 및 버튼 스타일 */
+.no-majors-container {
+  display: flex;
+  flex-direction: column; /* 수직 배치 */
+  align-items: center; /* 가로 중앙 정렬 */
+  justify-content: center; /* 세로 중앙 정렬 */
+  text-align: center; /* 텍스트 및 버튼 중앙 정렬 */
+  width: 100%; /* 컨테이너 가로 크기 설정 */
+  height: 200px; /* 높이 설정 */
+  position: relative; /* 부모 컨테이너를 기준으로 위치 지정 가능 */
+  transform: translate(100%, 0%);
+}
+
+.no-majors {
+  color: #666;
+  margin-bottom: 20px; /* 버튼과 간격 */
+}
+
+.no-majors-container p {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 20px; /* 버튼과 간격 */
+}
+
+/* 버튼 위치 고정 */
+.explore-majors-btn {
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #19552D;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative; /* 위치 조정 가능 */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.explore-majors-btn:hover {
+  background-color: #143b1f;
+  transform: translateY(-1px); /* 버튼이 위로 살짝 올라가는 효과 */
+}
+
+.explore-majors-btn:active {
+  background-color: #0e2a15;
+  transform: translateY(0); /* 클릭 시 원래 위치로 돌아감 */
+}
+
 .header-left {
   display: flex;
   align-items: center;
@@ -245,6 +293,37 @@
   .card-text span {
     font-size: 0.9rem; /* 화살표 크기 더 줄이기 */
   }
+
+  .delete-footer {
+    flex-direction: column; /* 버튼을 세로로 배치 */
+    gap: 10px; /* 버튼 간격 */
+  }
+
+  .cancel-delete-btn,
+  .confirm-delete-btn {
+    width: 100%; /* 버튼 너비를 가득 채우기 */
+  }
+
+  .majors-container {
+    grid-template-columns: repeat(2, 1fr); /* 2열 */
+  }
+
+  .no-majors-container {
+    height: 180px; /* 화면이 좁아졌을 때 높이 감소 */
+  }
+
+  .no-majors {
+    font-size: 12px; /* 글자 크기 감소 */
+  }
+
+  .explore-majors-btn {
+    font-size: 12px; /* 버튼 글자 크기 감소 */
+    padding: 8px 16px; /* 버튼 내부 여백 감소 */
+  }
+
+  .explore-majors-btn:hover {
+    background-color: #143b1f;
+  }
 }
 
 /* 관심 전공 삭제 모드 스타일 */
@@ -312,19 +391,6 @@
   background-color: #143b1f;
 }
 
-/* 반응형: 삭제 모드에서 반응형 지원 */
-@media (max-width: 768px) {
-  .delete-footer {
-    flex-direction: column; /* 버튼을 세로로 배치 */
-    gap: 10px; /* 버튼 간격 */
-  }
-
-  .cancel-delete-btn,
-  .confirm-delete-btn {
-    width: 100%; /* 버튼 너비를 가득 채우기 */
-  }
-}
-
 /* 관심 전공 삭제하기 버튼 스타일 */
 .delete-majors-btn {
   display: block; /* 전체 너비에 맞게 배치 */
@@ -359,14 +425,22 @@
   justify-content: center;
 }
 
-@media (max-width: 768px) {
-  .majors-container {
-    grid-template-columns: repeat(2, 1fr); /* 2열 */
-  }
-}
-
 @media (max-width: 480px) {
-  .majors-container {
-    grid-template-columns: repeat(1, 1fr); /* 1열 */
+  .no-majors-container {
+    height: 150px; /* 화면이 더 좁아졌을 때 높이 감소 */
+  }
+
+  .no-majors {
+    font-size: 12px; /* 글자 크기 더 감소 */
+  }
+
+  .explore-majors-btn {
+    font-size: 0.8rem; /* 버튼 글자 크기 더 감소 */
+    padding: 6px 12px; /* 버튼 내부 여백 더 감소 */
+  }
+
+  .explore-majors-btn:hover {
+    background-color: #143b1f;
+    transform: translateY(-1px); /* 버튼이 위로 살짝 올라가는 효과 */
   }
 }
