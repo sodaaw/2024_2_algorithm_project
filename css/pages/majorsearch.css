@@ -369,4 +369,65 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+
+@media screen and (max-width: 1024px) {
+  .mypage-header {
+    padding: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .logout-btn, .home-btn, .mypage-btn {
+    font-size: 0.7rem;
+    margin-left: 2px;
+    padding: 8px 10px;
+  }
+
+  .div-wrapper .div {
+    width: 95%;
+    height: 90vh;
+  }
+
+  .div-wrapper .overlap, 
+  .div-wrapper .overlap-group {
+    width: 50%;
+  }
+
+  #logo-button {
+    width: 20%;
+    max-width: 120px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header-left, .header-right {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .logout-btn, .home-btn, .mypage-btn {
+    font-size: 0.6rem;
+  }
+
+  .div-wrapper .sub-headline-sec, 
+  .div-wrapper .h-sub-headline-sec {
+    font-size: calc(0.8rem + 1vw);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .div-wrapper .div {
+    width: 100%;
+    height: auto;
+  }
+
+  .div-wrapper .sub-headline-sec, 
+  .div-wrapper .h-sub-headline-sec {
+    font-size: calc(0.7rem + 1vw);
+  }
+
+  .logout-btn, .home-btn, .mypage-btn {
+    padding: 5px 8px;
+  }
+
 }
