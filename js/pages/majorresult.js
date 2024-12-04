@@ -256,7 +256,7 @@ export function render() {
         },
         () => {
           // Navigate to MyPage if canceled
-          navigateTo("#mypage");
+          navigateTo("#majorresult");
         }
       );
     }
