@@ -223,6 +223,11 @@ export function render() {
 
   renderMajors(app, nickname, profileImage, interestMajors, deleteMode, render);
 
+  const homeButton = document.getElementById("home-btn");
+  if (homeButton) {
+    homeButton.addEventListener("click", () => navigateTo("#main"));
+  }
+
   const logoutButton = document.getElementById("logout-btn");
   if (logoutButton) {
     logoutButton.addEventListener("click", () => {
