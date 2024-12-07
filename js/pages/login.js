@@ -63,7 +63,6 @@ export function render() {
         <img src="images/login/kakao_icon.png" alt="카카오 아이콘" class="kakao-icon">
         카카오 1초 로그인/회원가입
       </button>
-      <button id="guest-login" class="guest-login">비회원으로 시작하기</button>
     </div>
   `;
 
@@ -71,18 +70,6 @@ export function render() {
   const kakaoLoginButton = document.querySelector(".kakao-login");
   if (kakaoLoginButton) {
     kakaoLoginButton.addEventListener("click", loginWithKakao);
-  }
-
-  // 비회원 로그인 버튼 클릭 이벤트
-  const guestLoginButton = document.getElementById("guest-login");
-  if (guestLoginButton) {
-    guestLoginButton.addEventListener("click", () => {
-      console.log("비회원 로그인 버튼 클릭됨"); // 디버깅용 로그
-      ensureCSSLoaded("css/pages/main.css"); // Main 페이지 CSS 보장
-      navigateTo("#main");
-    });
-  } else {
-    console.error("비회원 로그인 버튼을 찾을 수 없습니다."); // 버튼이 제대로 렌더링되었는지 확인
   }
 }
 

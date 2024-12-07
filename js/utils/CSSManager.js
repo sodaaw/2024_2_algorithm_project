@@ -40,3 +40,24 @@ export function ensureCSSLoaded(href) {
     loadCSS(href);
   }
 }
+
+export function removeUnusedCSS(validCSSFiles) {
+  const currentCSSFiles = Array.from(loadedCSSFiles);
+  currentCSSFiles.forEach((href) => {
+    if (!validCSSFiles.includes(href)) {
+      removeCSS(href);
+    }
+  });
+}
+
+// 페이지 전환 시 필요 없는 CSS를 제거하고 필요한 CSS만 유지
+export function updatePageCSS(currentCSS, allCSS) {
+  // 1. 현재 페이지 CSS 로드
+  ensureCSSLoaded(currentCSS);
+
+  // 2. 불필요한 CSS 제거
+  const otherCSS = allCSS.filter((css) => css !== currentCSS);
+  removeUnusedCSS(otherCSS);
+
+  console.log(`Updated CSS: Loaded ${currentCSS}, Removed others.`);
+}

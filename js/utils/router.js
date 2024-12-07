@@ -1,3 +1,19 @@
+import { ensureCSSLoaded, removeUnusedCSS } from "../utils/CSSManager.js"; // CSS 관리 모듈
+
+// 페이지별 CSS 매핑
+const cssMap = {
+  "": "css/pages/home.css",
+  "#login": "css/pages/login.css",
+  "#main": "css/pages/main.css",
+  "#mypage": "css/pages/mypage.css",
+  "#roadmap": "css/pages/roadmap.css",
+  "#recommendations": "css/pages/recommendations.css",
+  "#majorresult": "css/pages/majorresult.css",
+  "#humanities": "css/pages/humanities.css",
+  "#sciences": "css/pages/sciences.css",
+  "#majorsearch": "css/pages/majorsearch.css",
+};
+
 // routes 객체 정의
 const routes = {
   "": () => import("../pages/home.js").then((module) => module.render()), // 기본 페이지
@@ -5,7 +21,6 @@ const routes = {
   "#main": () => import("../pages/main.js").then((module) => module.render()),
   "#mypage": () => import("../pages/mypage.js").then((module) => module.render()),
   "#roadmap": (field) => {
-    // 동적 필드 처리
     return import("../pages/roadmap.js").then((module) => {
       if (module.render) {
         module.render(field); // render에 동적 데이터 전달
@@ -61,7 +76,15 @@ export function router() {
     return;
   }
 
-  route(dynamicSegment) // 동적 데이터를 route에 전달
+  // CSS 로드 및 제거 로직
+  const currentCSS = cssMap[path];
+  if (currentCSS) {
+    ensureCSSLoaded(currentCSS); // 필요한 CSS만 로드
+    removeUnusedCSS(Object.values(cssMap).filter((css) => css !== currentCSS)); // 불필요한 CSS 제거
+  }
+
+  // 페이지 모듈 로드
+  route(dynamicSegment)
     .then(() => {
       console.log(`[Router] Successfully loaded route for path: ${path}`);
     })
@@ -88,3 +111,4 @@ window.addEventListener("load", () => {
 });
 
 window.addEventListener("hashchange", router);
+
