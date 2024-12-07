@@ -1,34 +1,42 @@
-// CSSManager.js
-let currentPage = ''; // 현재 페이지 상태 추적
+// 제발이번엔성공하게해줘
 
-export function loadCSS(cssPath, pageName) {
-    if (!pageName) {
-      console.warn("loadCSS 호출 시 pageName이 누락되었습니다.");
-      return;
-    }
-  
-    // 이미 같은 페이지의 CSS라면 다시 로드하지 않음
-    if (currentPage === pageName) return;
-  
-    // 기존 페이지 CSS 제거
-    const existingPageCSS = document.querySelector(`link[data-page="${currentPage}"]`);
-    if (existingPageCSS) {
-      existingPageCSS.remove();
-    }
-  
-    // 새로운 CSS 로드
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = cssPath;
-    link.dataset.page = pageName; // 페이지 식별자 추가
-    document.head.appendChild(link);
-  
-    // 현재 페이지 업데이트
-    currentPage = pageName;
-  }  
+// 이미 로드된 CSS 파일을 추적하기 위한 Set
+const loadedCSSFiles = new Set();
 
-export function removeAllCSS() {
-  const stylesheets = document.querySelectorAll('link[data-page]');
-  stylesheets.forEach(sheet => sheet.remove());
-  currentPage = ''; // 페이지 상태 초기화
+// CSS 파일 로드 함수 (이미 로드된 경우 로드하지 않음)
+export function loadCSS(href) {
+  if (loadedCSSFiles.has(href)) {
+    console.log(`CSS already loaded: ${href}`);
+    return;
+  }
+
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = href;
+
+  link.onload = () => {
+    loadedCSSFiles.add(href);
+    console.log(`CSS loaded: ${href}`);
+  };
+
+  document.head.appendChild(link);
+}
+
+// CSS 파일을 제거하는 함수
+export function removeCSS(href) {
+  const links = document.querySelectorAll(`link[rel="stylesheet"]`);
+  links.forEach((link) => {
+    if (link.href.includes(href)) {
+      link.remove();
+      loadedCSSFiles.delete(href);
+      console.log(`CSS removed: ${href}`);
+    }
+  });
+}
+
+// 특정 CSS를 재확인하여 로드 보장
+export function ensureCSSLoaded(href) {
+  if (!loadedCSSFiles.has(href)) {
+    loadCSS(href);
+  }
 }

@@ -1,5 +1,5 @@
 import { navigateTo } from "../utils/router.js";
-import { loadCSS, removeAllCSS } from "../utils/CSSManager.js";
+import { ensureCSSLoaded } from "../utils/CSSManager.js"; // CSSManager.js에서 함수 임포트
 import relatedMajors from "./data/recommendation.js"; // 유사 전공 데이터 임포트
 
 const MIN_SCORE_THRESHOLD = 70; // 적합성 점수 임계값
@@ -37,11 +37,9 @@ function showModalWithSimilarMajors(similarMajors, index = 0, navigateCallback, 
   const currentMajor = similarMajors[index];
   const isLastMajor = index === similarMajors.length - 1;
 
-  // Modal overlay
   const modalOverlay = document.createElement("div");
   modalOverlay.className = "modal-overlay";
 
-  // Modal content
   const modal = document.createElement("div");
   modal.className = "modal";
   modal.innerHTML = `
@@ -61,7 +59,6 @@ function showModalWithSimilarMajors(similarMajors, index = 0, navigateCallback, 
   modalOverlay.appendChild(modal);
   app.appendChild(modalOverlay);
 
-  // Event listeners
   document.getElementById("confirm-modal-btn").addEventListener("click", () => {
     app.removeChild(modalOverlay);
     if (navigateCallback) navigateCallback(currentMajor);
@@ -91,16 +88,14 @@ function backtrackMajorCompatibility(
   const currentScore = (100 * majorWeightYSum) / majorWeightTotalSum;
   const similarMajors = relatedMajors[major.major] || [];
 
-  // "아니오"를 6번 이상 누른 경우 처리
   if (noCount >= MAX_NO_COUNT) {
     if (questionIndex < 10) {
-      // 1. 모든 질문이 끝나지 않은 경우
       if (similarMajors.length > 0) {
         showModalWithSimilarMajors(
           similarMajors,
           0,
           (selectedMajor) => navigateTo(`#majorsearch?major=${encodeURIComponent(selectedMajor)}`),
-          () => navigateTo("#mypage") // '아니오'를 누르면 MyPage로 이동
+          () => navigateTo("#mypage")
         );
       } else {
         showModal(
@@ -110,13 +105,12 @@ function backtrackMajorCompatibility(
       }
       return false;
     } else {
-      // 2. 모든 질문이 끝난 경우
       if (similarMajors.length > 0) {
         showModalWithSimilarMajors(
           similarMajors,
           0,
           (selectedMajor) => navigateTo(`#majorsearch?major=${encodeURIComponent(selectedMajor)}`),
-          () => navigateTo("#majorresult") // '아니오'를 누르면 majorchoice 페이지로 이동
+          () => navigateTo("#majorresult")
         );
       } else {
         showModal(
@@ -128,7 +122,6 @@ function backtrackMajorCompatibility(
     }
   }
 
-  // 모든 질문에 답변을 완료했을 경우
   if (questionIndex === 10) {
     const finalScore = (100 * majorWeightYSum) / majorWeightTotalSum;
     sessionStorage.setItem("majorScore", finalScore);
@@ -137,7 +130,7 @@ function backtrackMajorCompatibility(
     return true;
   }
 
-  return true; // 탐색 계속 진행
+  return true;
 }
 
 // JSON 파일에서 전공과 질문 데이터를 불러오기
@@ -191,7 +184,6 @@ function renderQuestions(major, questionIndex, majorWeightYSum = 0, majorWeightT
     </div>
   `;
 
-  // 버튼 클릭 이벤트 리스너
   const optionButtons = document.querySelectorAll(".option-button");
   optionButtons.forEach((button) => {
     button.addEventListener("click", (event) => {
@@ -207,7 +199,6 @@ function renderQuestions(major, questionIndex, majorWeightYSum = 0, majorWeightT
       }
       newMajorWeightTotalSum += questionData.weight;
 
-      // 백트래킹 로직 실행
       if (
         backtrackMajorCompatibility(
           major,
@@ -230,26 +221,24 @@ function renderQuestions(major, questionIndex, majorWeightYSum = 0, majorWeightT
     });
   });
 
-  // 버튼 이벤트 설정
   setupNavigationButtons();
 }
 
 // 버튼 이벤트 설정 함수
 function setupNavigationButtons() {
-  const setupButton = (id, targetHash, nextCSS, pageName) => {
+  const setupButton = (id, targetHash, cssPath) => {
     const button = document.getElementById(id);
     if (button) {
       button.addEventListener("click", () => {
-        removeAllCSS();
-        loadCSS(nextCSS, pageName);
+        ensureCSSLoaded(cssPath); // CSS 보장
         navigateTo(targetHash);
       });
     }
   };
 
-  setupButton("home-btn", "#main", "css/pages/main.css", "main");
-  setupButton("logo-button", "#main", "css/pages/main.css", "main");
-  setupButton("mypage-btn", "#mypage", "css/pages/mypage.css", "mypage");
+  setupButton("home-btn", "#main", "css/pages/main.css");
+  setupButton("logo-button", "#main", "css/pages/main.css");
+  setupButton("mypage-btn", "#mypage", "css/pages/mypage.css");
 
   const logoutButton = document.getElementById("logout-btn");
   if (logoutButton) {
@@ -258,7 +247,6 @@ function setupNavigationButtons() {
         Kakao.Auth.logout(() => {
           alert("로그아웃 되었습니다.");
           localStorage.clear();
-          removeAllCSS();
           navigateTo("");
         });
       } else {
@@ -278,8 +266,7 @@ export async function render(decodedMajor) {
     return;
   }
 
-  removeAllCSS();
-  loadCSS("css/pages/majorsearch.css", "majorsearch");
+  ensureCSSLoaded("css/pages/majorsearch.css"); // CSS 보장
 
   sessionStorage.setItem("majorName", selectedMajor.major);
   renderQuestions(selectedMajor, 0);

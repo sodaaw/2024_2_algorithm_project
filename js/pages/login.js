@@ -1,5 +1,6 @@
 import { KAKAO_API_KEY } from '../apikey.js';
 import { navigateTo } from "../utils/router.js";
+import { ensureCSSLoaded } from "../utils/CSSManager.js"; // CSSManager에서 함수 임포트
 
 function initializeKakao() {
   Kakao.init(KAKAO_API_KEY);
@@ -37,6 +38,7 @@ function getUserInfo() {
       localStorage.setItem('profile_image', profileImage);
       
       // 로그인 성공 후 mypage로 이동
+      ensureCSSLoaded("css/pages/mypage.css"); // Mypage CSS 보장
       navigateTo("#mypage");
     },
     fail: function(error) {
@@ -47,6 +49,8 @@ function getUserInfo() {
 
 export function render() {
   const app = document.getElementById("app");
+  ensureCSSLoaded("css/pages/login.css"); // Login 페이지 CSS 로드 보장
+
   app.innerHTML = `
     <div class="loginBox">
       <div class="text-login">로그인/회원가입</div>
@@ -59,6 +63,7 @@ export function render() {
         <img src="images/login/kakao_icon.png" alt="카카오 아이콘" class="kakao-icon">
         카카오 1초 로그인/회원가입
       </button>
+      <button id="guest-login" class="guest-login">비회원으로 시작하기</button>
     </div>
   `;
 
@@ -67,15 +72,21 @@ export function render() {
   if (kakaoLoginButton) {
     kakaoLoginButton.addEventListener("click", loginWithKakao);
   }
+
+  // 비회원 로그인 버튼 클릭 이벤트
+  const guestLoginButton = document.getElementById("guest-login");
+  if (guestLoginButton) {
+    guestLoginButton.addEventListener("click", () => {
+      console.log("비회원 로그인 버튼 클릭됨"); // 디버깅용 로그
+      ensureCSSLoaded("css/pages/main.css"); // Main 페이지 CSS 보장
+      navigateTo("#main");
+    });
+  } else {
+    console.error("비회원 로그인 버튼을 찾을 수 없습니다."); // 버튼이 제대로 렌더링되었는지 확인
+  }
 }
 
-const guestLoginButton = document.getElementById("guest-login");
-if (guestLoginButton) {
-  guestLoginButton.addEventListener("click", () => {
-    console.log("비회원 로그인 버튼 클릭됨"); // 디버깅용 로그
-    navigateTo("#main");
-  });
-} else {
-  console.error("비회원 로그인 버튼을 찾을 수 없습니다."); // 버튼이 제대로 렌더링되었는지 확인
-}
-
+// DOMContentLoaded 이벤트에서 render 함수 실행
+document.addEventListener("DOMContentLoaded", () => {
+  render();
+});

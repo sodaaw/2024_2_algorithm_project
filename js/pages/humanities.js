@@ -1,11 +1,11 @@
-// 데이터를 humanities_major.js에서 가져옴
 import { humanitiesData } from "./data/humanities_major.js";
+import { ensureCSSLoaded } from "../utils/CSSManager.js"; // CSSManager.js에서 함수 임포트
 
 // 배경 이미지 설정 함수
 function setBackground(imagePath) {
   const app = document.getElementById("app");
   if (app) {
-    app.style.backgroundImage = `url('../../images/main/P1290908.jpg')`;
+    app.style.backgroundImage = `url('${imagePath}')`;
     app.style.backgroundSize = "cover";
     app.style.backgroundPosition = "center";
     app.style.backgroundRepeat = "no-repeat";
@@ -98,48 +98,23 @@ export function render() {
   // 데이터 렌더링
   renderTree(treeContainer);
 
-  // CSS 관리를 위한 현재 페이지 상태 추적 변수 추가
-  let currentPage = 'humanities';
-
-  // 개선된 CSS 로드 함수
-  const loadCSS = (cssPath, pageName) => {
-    // 이미 같은 페이지의 CSS라면 다시 로드하지 않음
-    if (currentPage === pageName) return;
-
-    // 기존 페이지 CSS 제거
-    const existingPageCSS = document.querySelector(`link[data-page="${currentPage}"]`);
-    if (existingPageCSS) {
-      existingPageCSS.remove();
-    }
-
-    // 새로운 CSS 로드
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = cssPath;
-    link.dataset.page = pageName; // 페이지 식별자 추가
-    document.head.appendChild(link);
-
-    // 현재 페이지 업데이트
-    currentPage = pageName;
-  };
-
-  // 버튼에 이벤트 리스너 추가 (개선)
-  const setupButton = (id, hash, cssPath, pageName) => {
+  // 버튼에 이벤트 리스너 추가
+  const setupButton = (id, hash, cssPath) => {
     const button = document.getElementById(id);
     if (button) {
       button.addEventListener("click", () => {
-        loadCSS(cssPath, pageName); // CSS 로드 방식 변경
-        window.location.hash = hash;
+        ensureCSSLoaded(cssPath); // CSS 보장
+        window.location.hash = hash; // 해시 변경으로 페이지 전환
       });
     }
   };
 
-  // 버튼 이벤트 설정 (페이지 이름 추가)
-  setupButton("home-btn", "#main", "./css/pages/main.css", "main");
-  setupButton("mypage-btn", "#mypage", "./css/pages/mypage.css", "mypage");
-  setupButton("logo-button", "#main", "./css/pages/main.css", "main");
+  // 버튼 이벤트 설정
+  setupButton("home-btn", "#main", "./css/pages/main.css");
+  setupButton("mypage-btn", "#mypage", "./css/pages/mypage.css");
+  setupButton("logo-button", "#main", "./css/pages/main.css");
 
-  // 로그아웃 버튼 이벤트 (기존 코드 유지)
+  // 로그아웃 버튼 이벤트
   const logoutButton = document.getElementById("logout-btn");
   if (logoutButton) {
     logoutButton.addEventListener("click", () => {
@@ -149,11 +124,11 @@ export function render() {
           localStorage.removeItem("nickname");
           localStorage.removeItem("profile_image");
           localStorage.removeItem("interest_majors");
-          
+
           // CSS 초기화
-          const existingCSS = document.querySelector('link[data-page]');
-          if (existingCSS) existingCSS.remove();
-          
+          const existingCSS = document.querySelectorAll('link[rel="stylesheet"]');
+          existingCSS.forEach((link) => link.remove());
+
           window.location.hash = ""; // 로그인 페이지로 이동
         });
       } else {
@@ -164,4 +139,7 @@ export function render() {
 }
 
 // 해시 변경 시 render 함수 재호출
-window.addEventListener("hashchange", render);
+window.addEventListener("hashchange", () => {
+  ensureCSSLoaded("./css/pages/humanities.css"); // Humanities 페이지 CSS 보장
+  render();
+});

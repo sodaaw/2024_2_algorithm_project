@@ -1,5 +1,6 @@
-// 데이터를 humanities_major.js에서 가져옴
+// 데이터를 sciences_major.js에서 가져옴
 import { sciencesData } from "./data/sciences_major.js";
+import { ensureCSSLoaded } from "../utils/CSSManager.js"; // CSSManager에서 함수 임포트
 
 export function render() {
   const app = document.getElementById("app");
@@ -53,48 +54,26 @@ export function render() {
     treeContainer.appendChild(collegeElement);
   });
 
-  // CSS 관리를 위한 현재 페이지 상태 추적 변수 추가
-  let currentPage = 'sciences';
-
-  // 개선된 CSS 로드 함수
-  const loadCSS = (cssPath, pageName) => {
-    // 이미 같은 페이지의 CSS라면 다시 로드하지 않음
-    if (currentPage === pageName) return;
-
-    // 기존 페이지 CSS 제거
-    const existingPageCSS = document.querySelector(`link[data-page="${currentPage}"]`);
-    if (existingPageCSS) {
-      existingPageCSS.remove();
-    }
-
-    // 새로운 CSS 로드
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = cssPath;
-    link.dataset.page = pageName; // 페이지 식별자 추가
-    document.head.appendChild(link);
-
-    // 현재 페이지 업데이트
-    currentPage = pageName;
-  };
+  // CSS 관리: 현재 페이지의 CSS를 로드
+  ensureCSSLoaded("./css/pages/sciences.css");
 
   // 버튼에 이벤트 리스너 추가 (개선)
-  const setupButton = (id, hash, cssPath, pageName) => {
+  const setupButton = (id, hash, cssPath) => {
     const button = document.getElementById(id);
     if (button) {
       button.addEventListener("click", () => {
-        loadCSS(cssPath, pageName); // CSS 로드 방식 변경
+        ensureCSSLoaded(cssPath); // CSSManager로 CSS 로드 보장
         window.location.hash = hash;
       });
     }
   };
 
-  // 버튼 이벤트 설정 (페이지 이름 추가)
-  setupButton("home-btn", "#main", "./css/pages/main.css", "main");
-  setupButton("mypage-btn", "#mypage", "./css/pages/mypage.css", "mypage");
-  setupButton("logo-button", "#main", "./css/pages/main.css", "main");
+  // 버튼 이벤트 설정
+  setupButton("home-btn", "#main", "./css/pages/main.css");
+  setupButton("mypage-btn", "#mypage", "./css/pages/mypage.css");
+  setupButton("logo-button", "#main", "./css/pages/main.css");
 
-  // 로그아웃 버튼 이벤트 (기존 코드 유지)
+  // 로그아웃 버튼 이벤트
   const logoutButton = document.getElementById("logout-btn");
   if (logoutButton) {
     logoutButton.addEventListener("click", () => {
@@ -104,11 +83,11 @@ export function render() {
           localStorage.removeItem("nickname");
           localStorage.removeItem("profile_image");
           localStorage.removeItem("interest_majors");
-          
-          // CSS 초기화
-          const existingCSS = document.querySelector('link[data-page]');
-          if (existingCSS) existingCSS.remove();
-          
+
+          // CSS 초기화 (로그아웃 시 모든 로드된 CSS 제거)
+          const existingCSS = document.querySelectorAll('link[rel="stylesheet"]');
+          existingCSS.forEach((link) => link.remove());
+
           window.location.hash = ""; // 로그인 페이지로 이동
         });
       } else {

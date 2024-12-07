@@ -1,5 +1,6 @@
 import { navigateTo } from "../utils/router.js";
 import { KAKAO_API_KEY } from "../apikey.js";
+import { ensureCSSLoaded } from "../utils/CSSManager.js"; // CSSManager에서 함수 임포트
 import relatedMajors from "./data/recommendation.js"; // 비슷한 전공 데이터 불러오기
 
 // MIN_SCORE_THRESHOLD 정의
@@ -9,20 +10,6 @@ const MIN_SCORE_THRESHOLD = 70; // 적합성 점수 임계값
 if (typeof Kakao !== "undefined" && !Kakao.isInitialized()) {
   Kakao.init(KAKAO_API_KEY); // 카카오 API 키로 초기화
   console.log("Kakao SDK Initialized:", Kakao.isInitialized());
-}
-
-// CSS 파일을 동적으로 로드하는 함수
-function loadCSS(href) {
-  const link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.href = href;
-  document.head.appendChild(link);
-}
-
-// CSS 파일을 제거하는 함수
-function removeCSS(href) {
-  const links = document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`);
-  links.forEach((link) => link.remove());
 }
 
 function showModal(similarMajors, index = 0, navigateCallback, cancelCallback) {
@@ -112,11 +99,8 @@ export function render() {
   // 결과 페이지 렌더링 로직 수정
   const { resultText, recommendMajors } = renderResultPage(result);
 
-  // 이전 CSS 제거
-  removeCSS("css/pages/majorsearch.css");
-
-  // 새로운 CSS 로드
-  loadCSS("css/pages/majorresult.css?ver=1");
+  // CSS 업데이트
+  ensureCSSLoaded("css/pages/majorresult.css"); // CSSManager.js로 관리
 
   const app = document.getElementById("app");
   app.innerHTML = `

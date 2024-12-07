@@ -1,20 +1,5 @@
 import { navigateTo } from "../utils/router.js"; // navigateTo 함수 임포트
-
-// CSS 관리 객체
-const CSSManager = {
-  load: (href) => {
-    if (!document.querySelector(`link[rel="stylesheet"][href="${href}"]`)) {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = href;
-      document.head.appendChild(link);
-    }
-  },
-  remove: (href) => {
-    const links = document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`);
-    links.forEach((link) => link.remove());
-  }
-};
+import { ensureCSSLoaded } from "../utils/CSSManager.js"; // CSSManager.js에서 함수 임포트
 
 function resetStyles() {
   const app = document.getElementById("app");
@@ -41,20 +26,15 @@ function applyTextAnimation(containerId, textArray) {
   }
 }
 
-function setupNavigation(buttonId, targetHash) {
+function setupNavigation(buttonId, targetHash, cssPath) {
   const button = document.getElementById(buttonId);
   if (button) {
     button.addEventListener("click", () => {
       console.log(`Navigating to ${targetHash} page...`);
       resetStyles();
 
-      if (targetHash === "#login") {
-        CSSManager.remove("css/pages/home.css");
-        CSSManager.load("css/pages/login.css?ver=1");
-      } else if (targetHash === "#main") {
-        CSSManager.remove("css/pages/mypage.css");
-        CSSManager.load("css/pages/home.css?ver=1");
-      }
+      // CSS 로드 보장
+      ensureCSSLoaded(cssPath);
 
       // Delay rendering to allow CSS to apply
       setTimeout(() => {
@@ -74,7 +54,6 @@ function renderTemplate() {
           <div class="cta">
             <button id="login-btn" class="button-md-sec">로그인</button>
             <button id="signup-btn" class="button-md-sec">회원가입</button>
-            
           </div>
         </div>
         <div class="right-container">
@@ -87,8 +66,7 @@ function renderTemplate() {
 
 export function render() {
   // CSS 업데이트
-  CSSManager.remove("css/pages/previous.css"); // 이전 CSS 제거 (예: 이전 페이지 CSS)
-  CSSManager.load("css/pages/home.css?ver=1"); // 현재 페이지 CSS 로드
+  ensureCSSLoaded("css/pages/home.css"); // 현재 페이지 CSS 로드 보장
 
   const app = document.getElementById("app");
   if (app) {
@@ -96,8 +74,8 @@ export function render() {
     applyTextAnimation("animated-text", ["성균관대 전공", "추천 프로그램"]);
 
     // Setup navigation
-    setupNavigation("login-btn", "#login");
-    setupNavigation("signup-btn", "#login");
-    //setupNavigation("juststart", "#main");
+    setupNavigation("login-btn", "#login", "css/pages/login.css");
+    setupNavigation("signup-btn", "#login", "css/pages/login.css");
+    //setupNavigation("juststart", "#main", "css/pages/main.css");
   }
 }

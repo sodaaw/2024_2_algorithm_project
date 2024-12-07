@@ -1,6 +1,7 @@
 import { navigateTo } from "../utils/router.js"; // navigateTo 함수 임포트
 import { KAKAO_API_KEY } from "../apikey.js";
 import departments from "./data/link_data.js"; // 데이터 파일 불러오기
+import { ensureCSSLoaded } from "../utils/CSSManager.js"; // CSS 관리 함수 임포트
 
 // Kakao SDK 초기화
 if (typeof Kakao !== "undefined") {
@@ -12,32 +13,6 @@ if (typeof Kakao !== "undefined") {
   }
 } else {
   console.error("Kakao SDK가 로드되지 않았습니다.");
-}
-
-// CSS 파일 로드 및 제거 함수
-function loadCSS(href) {
-  const versionedHref = `${href}?ver=${Date.now()}`;
-  const existingLink = document.querySelector(`link[rel="stylesheet"][href="${versionedHref}"]`);
-  if (!existingLink) {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = versionedHref;
-    document.head.appendChild(link);
-  }
-}
-
-function removeCSS(href) {
-  const links = document.querySelectorAll(`link[rel="stylesheet"]`);
-  links.forEach((link) => {
-    if (link.href.includes(href)) {
-      link.remove();
-    }
-  });
-}
-
-function ensureCSSLoaded(href) {
-  removeCSS(href);
-  loadCSS(href);
 }
 
 // 관심 전공 HTML 템플릿 생성
@@ -105,7 +80,6 @@ function renderTemplate(nickname, profileImage, majorContent) {
   `;
 }
 
-// 관심 전공 카드 클릭 이벤트 설정
 // 관심 전공 카드 클릭 이벤트 설정
 function setupMajorCardEvents(deleteMode) {
   const majorCards = document.querySelectorAll(".major-card");
@@ -213,6 +187,7 @@ function renderMajors(app, nickname, profileImage, interestMajors, deleteMode, r
 
 // 메인 렌더링 함수
 export function render() {
+  // ensureCSSLoaded를 사용하여 CSS 로드 보장
   ensureCSSLoaded("css/pages/mypage.css");
 
   const app = document.getElementById("app");
