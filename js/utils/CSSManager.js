@@ -82,7 +82,7 @@ export function applyStylesImmediately() {
 export function ensureCSSLoadedWithCallback(href, callback) {
   if (loadedCSSFiles.has(href)) {
     console.log(`CSS already loaded: ${href}`);
-    callback(); // CSS가 이미 로드된 경우 바로 콜백 실행
+    callback();
     return;
   }
 
@@ -93,7 +93,12 @@ export function ensureCSSLoadedWithCallback(href, callback) {
   link.onload = () => {
     loadedCSSFiles.add(href);
     console.log(`CSS loaded: ${href}`);
-    callback(); // CSS 로드 완료 후 콜백 실행
+    callback();
+  };
+
+  link.onerror = () => {
+    console.error(`Failed to load CSS: ${href}`);
+    callback(); // 오류가 발생해도 계속 진행
   };
 
   document.head.appendChild(link);

@@ -127,30 +127,32 @@ export function render() {
               : ""
           }
           
-          <button id="interestedMajorAdd-btn">
-            <div class="button-md-sec">
-              <div class="btn-text">관심 전공 추가하기</div>
+          <div class="div-wrapper">
+            <div class="div">
+              
+              <p class="n">
+                <span class="text-wrapper-4">당신은 </span>
+                <span class="text-wrapper-5">${majorName}</span>
+                <span class="text-wrapper-4">에 대해</span>
+                <span class="text-wrapper-6">${majorScore}</span>
+                <span class="text-wrapper-4">점입니다!</span>
+              </p>
+
+              <p class="p">
+                <span class="span">탐색 결과는<br /></span>
+                ${resultText}
+                <span class="span">입니다.</span>
+              </p>
+
+              <!-- 버튼을 텍스트 아래에 배치 -->
+              <button id="interestedMajorAdd-btn" class="button-md-sec">
+                관심 전공 추가하기
+              </button>
+              <button id="similarMajorSearch-btn" class="btn-text-wrapper">
+                유사 전공 탐색하기
+              </button>
             </div>
-          </button>
-          <button id="similarMajorSearch-btn">
-            <div class="btn-text-wrapper">
-              <div class="text-wrapper">유사 전공 탐색하기</div>
-            </div>
-          </button>
-          
-          <p class="p">
-            <span class="span">탐색 결과는<br /></span>
-            ${resultText}
-            <span class="span">입니다.</span>
-          </p>
-          
-          <p class="n">
-            <span class="text-wrapper-4">당신은 </span>
-            <span class="text-wrapper-5">${majorName}</span>
-            <span class="text-wrapper-4">에 대해</span>
-            <span class="text-wrapper-6">${majorScore}</span>
-            <span class="text-wrapper-4">점입니다!</span>
-          </p>
+          </div>
         </div>
       </div>
     </div>

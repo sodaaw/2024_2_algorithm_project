@@ -1,4 +1,4 @@
-import { ensureCSSLoadedWithCallback, applyStylesImmediately } from "../utils/CSSManager.js"; // CSSManager.js에서 함수 임포트
+import { ensureCSSLoadedWithCallback, ensureCSSLoaded } from "../utils/CSSManager.js";
 
 // 페이지별 CSS 매핑
 const cssMap = {
@@ -76,17 +76,30 @@ export function router() {
     return;
   }
 
-  // CSS 로드 및 제거 로직
+  // 로딩 CSS 로드
+  ensureCSSLoaded("css/pages/loading.css");
+
+  // 로딩 스피너 추가
+  const app = document.getElementById("app");
+  app.innerHTML = `
+    <div id="loading-spinner" class="loading-spinner">
+      <p>Loading...</p>
+    </div>
+  `;
+
+  // CSS 로드 및 페이지 전환
   const currentCSS = cssMap[path];
   if (currentCSS) {
     ensureCSSLoadedWithCallback(currentCSS, () => {
       route(dynamicSegment) // 동적 데이터 전달
         .then(() => {
-          applyStylesImmediately(); // 강제 Reflow 및 Repaint
           console.log(`[Router] Successfully loaded route for path: ${path}`);
         })
         .catch((err) => {
           console.error(`[Router] Failed to load module for path: ${path}`, err);
+        })
+        .finally(() => {
+          document.getElementById("loading-spinner")?.remove(); // 로딩 스피너 제거
         });
     });
   } else {
@@ -97,6 +110,9 @@ export function router() {
       })
       .catch((err) => {
         console.error(`[Router] Failed to load module for path: ${path}`, err);
+      })
+      .finally(() => {
+        document.getElementById("loading-spinner")?.remove(); // 로딩 스피너 제거
       });
   }
 }
@@ -119,5 +135,3 @@ window.addEventListener("load", () => {
 });
 
 window.addEventListener("hashchange", router);
-
-
