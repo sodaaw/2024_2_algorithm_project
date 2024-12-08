@@ -188,7 +188,7 @@
 
 /* major 텍스트 스타일 */
 .card-text p {
-  font-size: 1.1rem;
+  font-size: 16px;
   font-weight: bold;
   color: #333;
   margin: 0; /* 기본 여백 제거 */
