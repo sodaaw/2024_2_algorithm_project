@@ -61,3 +61,40 @@ export function updatePageCSS(currentCSS, allCSS) {
 
   console.log(`Updated CSS: Loaded ${currentCSS}, Removed others.`);
 }
+
+export function ensureCSSLoadedWithReflow(href) {
+  if (!loadedCSSFiles.has(href)) {
+    loadCSS(href);
+  }
+  // 강제 Reflow를 트리거
+  document.body.offsetHeight; // Reflow 트리거용
+  console.log(`Reflow triggered for ${href}`);
+}
+
+export function applyStylesImmediately() {
+  // 강제로 Reflow와 Repaint를 트리거
+  document.body.style.display = "none";
+  document.body.offsetHeight; // Reflow 트리거
+  document.body.style.display = ""; // 다시 표시
+  console.log("Forced reflow and repaint triggered.");
+}
+
+export function ensureCSSLoadedWithCallback(href, callback) {
+  if (loadedCSSFiles.has(href)) {
+    console.log(`CSS already loaded: ${href}`);
+    callback(); // CSS가 이미 로드된 경우 바로 콜백 실행
+    return;
+  }
+
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = href;
+
+  link.onload = () => {
+    loadedCSSFiles.add(href);
+    console.log(`CSS loaded: ${href}`);
+    callback(); // CSS 로드 완료 후 콜백 실행
+  };
+
+  document.head.appendChild(link);
+}

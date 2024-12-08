@@ -1,4 +1,5 @@
 import { ensureCSSLoaded, removeUnusedCSS } from "../utils/CSSManager.js"; // CSS 관리 모듈
+import { ensureCSSLoadedWithCallback, applyStylesImmediately } from "../utils/CSSManager.js";
 
 // 페이지별 CSS 매핑
 const cssMap = {
@@ -79,8 +80,16 @@ export function router() {
   // CSS 로드 및 제거 로직
   const currentCSS = cssMap[path];
   if (currentCSS) {
-    ensureCSSLoaded(currentCSS); // 필요한 CSS만 로드
-    removeUnusedCSS(Object.values(cssMap).filter((css) => css !== currentCSS)); // 불필요한 CSS 제거
+    ensureCSSLoadedWithCallback(currentCSS, () => {
+      route()
+        .then(() => {
+          applyStylesImmediately(); // Reflow 및 Repaint 강제 트리거
+          console.log(`[Router] Successfully loaded route for path: ${path}`);
+        })
+        .catch((err) => {
+          console.error(`[Router] Failed to load module for path: ${path}`, err);
+        });
+    });
   }
 
   // 페이지 모듈 로드
