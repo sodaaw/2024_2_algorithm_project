@@ -126,6 +126,10 @@ function backtrackMajorCompatibility(
     const finalScore = (100 * majorWeightYSum) / majorWeightTotalSum;
     sessionStorage.setItem("majorScore", finalScore);
     sessionStorage.setItem("majorResult", finalScore >= MIN_SCORE_THRESHOLD ? "1" : "0");
+
+    // 디버깅
+    console.log("[Debug] Major Score:", finalScore);
+    console.log("[Debug] Major Result:", finalScore >= MIN_SCORE_THRESHOLD ? "1" : "0");
     navigateTo("#majorresult");
     return true;
   }
@@ -184,6 +188,8 @@ function renderQuestions(major, questionIndex, majorWeightYSum = 0, majorWeightT
     </div>
   `;
 
+  setupNavigationButtons();
+
   const optionButtons = document.querySelectorAll(".option-button");
   optionButtons.forEach((button) => {
     button.addEventListener("click", (event) => {
@@ -220,8 +226,6 @@ function renderQuestions(major, questionIndex, majorWeightYSum = 0, majorWeightT
       }
     });
   });
-
-  setupNavigationButtons();
 }
 
 // 버튼 이벤트 설정 함수
@@ -229,10 +233,13 @@ function setupNavigationButtons() {
   const setupButton = (id, targetHash, cssPath) => {
     const button = document.getElementById(id);
     if (button) {
+      console.log(`[Debug] Setting up button: ${id} -> ${targetHash}`);
       button.addEventListener("click", () => {
-        ensureCSSLoaded(cssPath); // CSS 보장
+        if (cssPath) ensureCSSLoaded(cssPath); // CSS 보장
         navigateTo(targetHash);
       });
+    } else {
+      console.warn(`[Warning] Button with ID "${id}" not found.`);
     }
   };
 

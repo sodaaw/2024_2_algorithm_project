@@ -71,6 +71,14 @@ button:hover {
   color: var(--btn-hover-text-color);
 }
 
+.text-wrapper-2 {
+  color: var(--highlight-blue);
+}
+
+.text-wrapper-3 {
+  color: var(--highlight-red);
+}
+
 .div-wrapper {
   background-color: #ffffff;
   display: flex;
@@ -98,10 +106,15 @@ button:hover {
 .n {
   text-align: center;
   margin: 5px 0; /* 텍스트 아래 여백 추가 */
-  font-size: 1.5rem; /* 글씨 크기 확대 */
+  font-size: 2rem; /* 글씨 크기 확대 */
   font-weight: bold; /* 볼드체 */
   line-height: 2rem; /* 줄 간격 */
   color: var(--header-text-color); /* 기본 텍스트 색상 */
+}
+
+.p {
+  margin-bottom: 30px;
+  line-height: 1.3;
 }
 
 .button-md-sec,
@@ -123,7 +136,7 @@ button:hover {
   font-family: var(--btn-font-family);
   font-weight: var(--btn-font-weight);
   font-size: var(--btn-font-size);
-  margin: 3px 0; /* 버튼 상하 여백 추가 */
+  margin: -3px 0; /* 버튼 상하 여백 추가 */
 }
 
 .button-md-sec:hover,
@@ -143,14 +156,6 @@ button:hover {
 
 .span {
   color: var(--header-text-color);
-}
-
-.text-wrapper-2 {
-  color: var(--highlight-blue);
-}
-
-.text-wrapper-3 {
-  color: var(--highlight-red);
 }
 
 .text-wrapper-4 {

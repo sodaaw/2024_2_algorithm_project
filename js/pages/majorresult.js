@@ -96,6 +96,17 @@ export function render() {
   const [majorName, majorScore] = renderMajorData();
   const result = sessionStorage.getItem("majorResult");
 
+  // 값이 없을 경우 대기
+  if (!majorName || !majorScore || !result) {
+    console.warn("SessionStorage 값이 없습니다. 다시 시도합니다...");
+    setTimeout(render, 100); // 100ms 후 다시 호출
+    return;
+  }
+
+  console.log("[Debug] Major Name:", majorName);
+  console.log("[Debug] Major Score:", majorScore);
+  console.log("[Debug] Result:", result);
+
   // 결과 페이지 렌더링 로직 수정
   const { resultText, recommendMajors } = renderResultPage(result);
 
@@ -157,6 +168,7 @@ export function render() {
       </div>
     </div>
   `;
+
 
   // 관심 전공 추가하기 버튼
   const interestedMajorAddBtn = document.getElementById("interestedMajorAdd-btn");
