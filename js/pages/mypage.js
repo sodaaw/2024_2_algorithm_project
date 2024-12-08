@@ -1,7 +1,7 @@
 import { navigateTo } from "../utils/router.js"; // navigateTo 함수 임포트
 import { KAKAO_API_KEY } from "../apikey.js";
 import departments from "./data/link_data.js"; // 데이터 파일 불러오기
-import { ensureCSSLoaded } from "../utils/CSSManager.js"; // CSS 관리 함수 임포트
+import { ensureCSSLoadedWithCallback } from "../utils/CSSManager.js"; // CSS 관리 함수 임포트
 
 // Kakao SDK 초기화
 if (typeof Kakao !== "undefined") {
@@ -87,7 +87,6 @@ function setupMajorCardEvents(deleteMode) {
     const checkbox = card.querySelector(".delete-checkbox");
 
     if (deleteMode) {
-      // 카드 전체를 클릭했을 때도 체크박스를 토글
       card.addEventListener("click", (e) => {
         e.stopPropagation(); // 이벤트 전파 차단
         if (checkbox) {
@@ -95,14 +94,12 @@ function setupMajorCardEvents(deleteMode) {
         }
       });
 
-      // 체크박스 클릭 시 이벤트 처리 (중복 이벤트 방지)
       if (checkbox) {
         checkbox.addEventListener("click", (e) => {
           e.stopPropagation(); // 부모 요소로 이벤트 전파 방지
         });
       }
     } else {
-      // 삭제 모드가 아닐 때는 카드 클릭 시 로드맵 페이지로 이동
       card.addEventListener("click", () => {
         const engName = card.getAttribute("data-eng-name");
         if (engName) {
@@ -123,13 +120,11 @@ function renderMajors(app, nickname, profileImage, interestMajors, deleteMode, r
 
   app.innerHTML = renderTemplate(nickname, profileImage, majorContent);
 
-  // "전공 탐색하러 가기" 버튼 클릭 이벤트
   const exploreMajorsButton = document.getElementById("explore-majors-btn");
   if (exploreMajorsButton) {
     exploreMajorsButton.addEventListener("click", () => navigateTo("#main"));
   }
 
-  // 관심 전공 삭제 버튼 조건부 생성
   if (interestMajors.length > 0 && !deleteMode) {
     const deleteButton = document.getElementById("delete-majors-btn");
     if (!deleteButton) {
@@ -153,7 +148,6 @@ function renderMajors(app, nickname, profileImage, interestMajors, deleteMode, r
     }
   }
 
-  // 삭제 모드 UI
   if (deleteMode) {
     const footer = document.createElement("div");
     footer.className = "delete-footer";
@@ -187,32 +181,31 @@ function renderMajors(app, nickname, profileImage, interestMajors, deleteMode, r
 
 // 메인 렌더링 함수
 export function render() {
-  // ensureCSSLoaded를 사용하여 CSS 로드 보장
-  ensureCSSLoaded("css/pages/mypage.css");
+  ensureCSSLoadedWithCallback("css/pages/mypage.css", () => {
+    const app = document.getElementById("app");
+    const nickname = localStorage.getItem("nickname") || "사용자";
+    const profileImage = localStorage.getItem("profile_image") || "images/default_profile.png";
+    const interestMajors = JSON.parse(localStorage.getItem("interest_majors")) || [];
+    const deleteMode = false;
 
-  const app = document.getElementById("app");
-  const nickname = localStorage.getItem("nickname") || "사용자";
-  const profileImage = localStorage.getItem("profile_image") || "images/default_profile.png";
-  const interestMajors = JSON.parse(localStorage.getItem("interest_majors")) || [];
-  const deleteMode = false;
+    renderMajors(app, nickname, profileImage, interestMajors, deleteMode, render);
 
-  renderMajors(app, nickname, profileImage, interestMajors, deleteMode, render);
+    const homeButton = document.getElementById("home-btn");
+    if (homeButton) {
+      homeButton.addEventListener("click", () => navigateTo("#main"));
+    }
 
-  const homeButton = document.getElementById("home-btn");
-  if (homeButton) {
-    homeButton.addEventListener("click", () => navigateTo("#main"));
-  }
-
-  const logoutButton = document.getElementById("logout-btn");
-  if (logoutButton) {
-    logoutButton.addEventListener("click", () => {
-      if (Kakao.Auth) {
-        Kakao.Auth.logout(() => {
-          alert("로그아웃 되었습니다.");
-          localStorage.clear();
-          navigateTo("");
-        });
-      }
-    });
-  }
+    const logoutButton = document.getElementById("logout-btn");
+    if (logoutButton) {
+      logoutButton.addEventListener("click", () => {
+        if (Kakao.Auth) {
+          Kakao.Auth.logout(() => {
+            alert("로그아웃 되었습니다.");
+            localStorage.clear();
+            navigateTo("");
+          });
+        }
+      });
+    }
+  });
 }

@@ -1,5 +1,4 @@
-import { ensureCSSLoaded, removeUnusedCSS } from "../utils/CSSManager.js"; // CSS 관리 모듈
-import { ensureCSSLoadedWithCallback, applyStylesImmediately } from "../utils/CSSManager.js";
+import { ensureCSSLoadedWithCallback, applyStylesImmediately } from "../utils/CSSManager.js"; // CSSManager.js에서 함수 임포트
 
 // 페이지별 CSS 매핑
 const cssMap = {
@@ -65,7 +64,7 @@ export function router() {
   // 동적 경로 처리
   let dynamicSegment = null;
   if (path.startsWith("#roadmap/")) {
-    dynamicSegment = path.replace("#roadmap/", ""); // 동적 세그먼트 추출
+    dynamicSegment = decodeURIComponent(path.replace("#roadmap/", "")); // 동적 세그먼트 추출
     path = "#roadmap"; // 기본 경로로 매핑
     console.log("[Router] Dynamic segment extracted:", dynamicSegment);
   }
@@ -81,25 +80,25 @@ export function router() {
   const currentCSS = cssMap[path];
   if (currentCSS) {
     ensureCSSLoadedWithCallback(currentCSS, () => {
-      route()
+      route(dynamicSegment) // 동적 데이터 전달
         .then(() => {
-          applyStylesImmediately(); // Reflow 및 Repaint 강제 트리거
+          applyStylesImmediately(); // 강제 Reflow 및 Repaint
           console.log(`[Router] Successfully loaded route for path: ${path}`);
         })
         .catch((err) => {
           console.error(`[Router] Failed to load module for path: ${path}`, err);
         });
     });
+  } else {
+    // CSS가 정의되지 않았을 경우, 단순히 모듈 로드
+    route(dynamicSegment)
+      .then(() => {
+        console.log(`[Router] Successfully loaded route for path: ${path}`);
+      })
+      .catch((err) => {
+        console.error(`[Router] Failed to load module for path: ${path}`, err);
+      });
   }
-
-  // 페이지 모듈 로드
-  route(dynamicSegment)
-    .then(() => {
-      console.log(`[Router] Successfully loaded route for path: ${path}`);
-    })
-    .catch((err) => {
-      console.error(`[Router] Failed to load module for path: ${path}`, err);
-    });
 }
 
 // 페이지 이동 함수
@@ -120,4 +119,5 @@ window.addEventListener("load", () => {
 });
 
 window.addEventListener("hashchange", router);
+
 

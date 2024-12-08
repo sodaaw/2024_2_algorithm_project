@@ -2,7 +2,6 @@ import departments from './data/link_data.js'; // 학과 데이터 불러오기
 import roadmapImages from './data/roadmap_img.js'; // 로드맵 이미지 불러오기
 import relatedMajors from './data/recommendation.js'; // 비슷한 전공 데이터 불러오기
 import { KAKAO_API_KEY } from '../apikey.js';
-import { ensureCSSLoaded } from '../utils/CSSManager.js'; // CSSManager.js에서 로드
 
 // Kakao SDK 초기화
 if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
@@ -10,9 +9,26 @@ if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
   console.log('Kakao SDK Initialized:', Kakao.isInitialized());
 }
 
+// CSS 관리 함수
+const CSSManager = {
+  load: (href) => {
+    if (!document.querySelector(`link[rel="stylesheet"][href="${href}"]`)) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = href;
+      document.head.appendChild(link);
+    }
+  },
+  remove: (href) => {
+    const links = document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`);
+    links.forEach((link) => link.remove());
+  }
+};
+
 export function render(selectedMajorEng) {
-  // CSS 업데이트: 로드맵 페이지 CSS 로드
-  ensureCSSLoaded("css/pages/roadmap.css");
+  // CSS 업데이트
+  CSSManager.remove("css/pages/mypage.css");
+  CSSManager.load("css/pages/roadmap.css?ver=1");
 
   const app = document.getElementById("app");
 
@@ -27,6 +43,10 @@ export function render(selectedMajorEng) {
 
   // 학과를 찾지 못한 경우 처리
   if (!selectedMajor) {
+    console.error(`[Render Error] Selected major not found: ${selectedMajorEng}`);
+    console.log(`[Debug Info] Available majors in departments:`, Object.keys(departments));
+    console.log(`[Debug Info] departments object:`, departments);
+
     app.innerHTML = `<p>존재하지 않는 학과입니다. 올바른 URL을 입력해주세요.</p>`;
     return;
   }
@@ -173,17 +193,20 @@ export function render(selectedMajorEng) {
   });
 
   document.getElementById("back-btn").addEventListener("click", () => {
-    ensureCSSLoaded("css/pages/mypage.css"); // Mypage CSS 로드
+    // 현재 CSS 제거
+    CSSManager.remove("css/pages/roadmap.css?ver=1");
+    // mypage.js의 CSS 로드
+    CSSManager.load("css/pages/mypage.css");
+  
+    // 페이지 이동
     window.location.hash = "#mypage";
   });
 
   document.getElementById("logo-button").addEventListener("click", () => {
-    ensureCSSLoaded("css/pages/main.css"); // Main CSS 로드
     window.location.hash = "#main";
   });
 
   document.getElementById("home-btn").addEventListener("click", () => {
-    ensureCSSLoaded("css/pages/main.css"); // Main CSS 로드
     window.location.hash = "#main";
   });
 
